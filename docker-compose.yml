@@ -1,0 +1,128 @@
+version: "3.7"
+x-logging: &logging
+  logging:
+    driver: json-file
+    options:
+      max-size: 1000m
+
+# Environment variable definitions
+x-pg-pass: &pg_pass ${POSTGRES_PASSWORD:-test123}
+x-pg-user: &pg_user ${POSTGRES_USER:-postgres}
+
+x-pg-environment: &pg_env
+  environment:
+    POSTGRES_USER: *pg_user
+    POSTGRES_PASSWORD: *pg_pass
+
+x-pg-exporter-env: &pg_exp_env
+  environment:
+    POSTGRES_PASSWORD: *pg_pass
+    DATA_SOURCE_URI: postgres?sslmode=disable
+    DATA_SOURCE_USER: *pg_user
+    DATA_SOURCE_PASS: *pg_pass
+    PG_EXPORTER_EXTEND_QUERY_PATH: /etc/pgexporter/queries.yml
+
+# Services definitions
+services:
+  nwaku:
+    # Provide the image using any of these methods
+
+    # Method 1. Custom build
+    # For a custom build, requires building your image
+    # from nwaku repo: docker build -t nwaku:mytag .
+    #image: nwaku:mytag
+
+    # Method 2. Pre-built image (master commit)
+    # For a pre-built image, use the firt 8 digits of the commit hash
+    # all commits in nwaku master al built and pushed to dockerhub
+    # See: hub.docker.com/r/statusteam/nim-waku
+    #image: statusteam/nim-waku:982cd282
+
+    # Method 3. Pre-built release
+    # For a pre-built release. See available releases:
+    # github.com/waku-org/nwaku/releases
+
+    image: statusteam/nim-waku:v0.19.0-rc.0
+    restart: on-failure
+    ports:
+      - 30304:30304/tcp
+      - 30304:30304/udp
+      - 8545:8545/tcp
+      - 9005:9005/udp
+      - 8003:8003
+    <<:
+      - *logging
+      - *pg_env
+    volumes:
+      - ./run_node.sh:/opt/run_node.sh:Z
+    entrypoint: sh
+    command:
+      - /opt/run_node.sh
+    depends_on:
+      - postgres
+
+  prometheus:
+    image: docker.io/prom/prometheus:latest
+    volumes:
+      - ./monitoring/prometheus-config.yml:/etc/prometheus/prometheus.yml:Z
+    command:
+      - --config.file=/etc/prometheus/prometheus.yml
+    ports:
+      - 9090:9090
+    restart: on-failure
+    depends_on:
+      - postgres-exporter
+      - nwaku
+
+  grafana:
+    image: docker.io/grafana/grafana:latest
+    env_file:
+      - ./monitoring/configuration/grafana-plugins.env
+    volumes:
+      - ./monitoring/configuration/grafana.ini:/etc/grafana/grafana.ini:Z
+      - ./monitoring/configuration/dashboards.yaml:/etc/grafana/provisioning/dashboards/dashboards.yaml:Z
+      - ./monitoring/configuration/datasources.yaml:/etc/grafana/provisioning/datasources/datasources.yaml:Z
+      - ./monitoring/configuration/dashboards:/var/lib/grafana/dashboards/:Z
+      - ./monitoring/configuration/customizations/custom-logo.svg:/usr/share/grafana/public/img/grafana_icon.svg:Z
+      - ./monitoring/configuration/customizations/custom-logo.svg:/usr/share/grafana/public/img/grafana_typelogo.svg:Z
+      - ./monitoring/configuration/customizations/custom-logo.png:/usr/share/grafana/public/img/fav32.png:Z
+    ports:
+      - 3000:3000
+    restart: on-failure
+    depends_on:
+      - prometheus
+
+  postgres:
+    # This service is used when the Waku node has the 'store' protocol enabled
+    # and the store-message-db-url is set to use Postgres
+    image: postgres:alpine3.18
+    restart: on-failure
+    <<: *pg_env
+    volumes:
+      - ./postgres_cfg/postgresql.conf:/etc/postgresql/postgresql.conf
+      - ./postgres_cfg/db.sql:/docker-entrypoint-initdb.d/db.sql
+    command: postgres -c config_file=/etc/postgresql/postgresql.conf
+    ports:
+      - 5432:5432
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready", "-d", "db_prod"]
+      interval: 30s
+      timeout: 60s
+      retries: 5
+      start_period: 80s
+
+  postgres-exporter:
+    # Service aimed to scrape information from Postgres and post it to Prometeus
+    image: quay.io/prometheuscommunity/postgres-exporter:v0.12.0
+    restart: on-failure
+    <<: *pg_exp_env
+    volumes:
+      - ./monitoring/configuration/postgres-exporter.yml:/etc/pgexporter/postgres-exporter.yml
+      - ./monitoring/configuration/pg-exporter-queries.yml:/etc/pgexporter/queries.yml
+    ports:
+      - 9187:9187
+    command:
+      # Both the config file and 'DATA_SOURCE_NAME' should contain valid connection info
+      - --config.file=/etc/pgexporter/postgres-exporter.yml
+    depends_on:
+      - postgres
