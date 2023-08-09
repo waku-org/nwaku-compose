@@ -102,8 +102,6 @@ services:
       - ./postgres_cfg/postgresql.conf:/etc/postgresql/postgresql.conf
       - ./postgres_cfg/db.sql:/docker-entrypoint-initdb.d/db.sql
     command: postgres -c config_file=/etc/postgresql/postgresql.conf
-    ports:
-      - 5432:5432
     healthcheck:
       test: ["CMD-SHELL", "pg_isready", "-d", "db_prod"]
       interval: 30s
@@ -119,8 +117,6 @@ services:
     volumes:
       - ./monitoring/configuration/postgres-exporter.yml:/etc/pgexporter/postgres-exporter.yml
       - ./monitoring/configuration/pg-exporter-queries.yml:/etc/pgexporter/queries.yml
-    ports:
-      - 9187:9187
     command:
       # Both the config file and 'DATA_SOURCE_NAME' should contain valid connection info
       - --config.file=/etc/pgexporter/postgres-exporter.yml
