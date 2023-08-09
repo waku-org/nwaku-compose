@@ -9,7 +9,7 @@ Note that you must have installed `docker-compose` and `git`.
 Get the code:
 
 ```console
-git clone https://github.com/alrevuelta/nwaku-compose.git
+git clone git@github.com:waku-org/nwaku-compose.git
 cd nwaku-compose
 ```
 
