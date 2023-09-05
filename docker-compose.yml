@@ -10,7 +10,6 @@ x-pg-pass: &pg_pass ${POSTGRES_PASSWORD:-test123}
 x-pg-user: &pg_user ${POSTGRES_USER:-postgres}
 
 x-pg-environment: &pg_env
-  environment:
     POSTGRES_USER: *pg_user
     POSTGRES_PASSWORD: *pg_pass
 
@@ -42,7 +41,7 @@ services:
     # For a pre-built release. See available releases:
     # github.com/waku-org/nwaku/releases
 
-    image: statusteam/nim-waku:v0.19.0-rc.0
+    image: ${NWAKU_IMAGE:-statusteam/nim-waku:v0.19.0}
     restart: on-failure
     ports:
       - 30304:30304/tcp
@@ -50,11 +49,18 @@ services:
       - 127.0.0.1:8545:8545/tcp
       - 9005:9005/udp
       - 127.0.0.1:8003:8003
+      - 80:80 #Let's Encrypt
+      - 8000:8000/tcp #WSS
     <<:
       - *logging
-      - *pg_env
+    environment:
+      DOMAIN: ${DOMAIN}
+      NODEKEY: ${NODEKEY}
+      EXTRA_ARGS: ${EXTRA_ARGS}
+      <<: *pg_env
     volumes:
       - ./run_node.sh:/opt/run_node.sh:Z
+      - ./certs:/etc/letsencrypt/:Z
     entrypoint: sh
     command:
       - /opt/run_node.sh
@@ -97,13 +103,14 @@ services:
     # and the store-message-db-url is set to use Postgres
     image: postgres:alpine3.18
     restart: on-failure
-    <<: *pg_env
+    environment:
+      <<: *pg_env
     volumes:
-      - ./postgres_cfg/postgresql.conf:/etc/postgresql/postgresql.conf
-      - ./postgres_cfg/db.sql:/docker-entrypoint-initdb.d/db.sql
+      - ./postgres_cfg/postgresql.conf:/etc/postgresql/postgresql.conf:Z
+      - ./postgres_cfg/db.sql:/docker-entrypoint-initdb.d/db.sql:Z
     command: postgres -c config_file=/etc/postgresql/postgresql.conf
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready", "-d", "db_prod"]
+      test: ["CMD-SHELL", "pg_isready -d db_prod"]
       interval: 30s
       timeout: 60s
       retries: 5
@@ -115,8 +122,8 @@ services:
     restart: on-failure
     <<: *pg_exp_env
     volumes:
-      - ./monitoring/configuration/postgres-exporter.yml:/etc/pgexporter/postgres-exporter.yml
-      - ./monitoring/configuration/pg-exporter-queries.yml:/etc/pgexporter/queries.yml
+      - ./monitoring/configuration/postgres-exporter.yml:/etc/pgexporter/postgres-exporter.yml:Z
+      - ./monitoring/configuration/pg-exporter-queries.yml:/etc/pgexporter/queries.yml:Z
     command:
       # Both the config file and 'DATA_SOURCE_NAME' should contain valid connection info
       - --config.file=/etc/pgexporter/postgres-exporter.yml
