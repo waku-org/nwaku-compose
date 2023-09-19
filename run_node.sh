@@ -3,6 +3,43 @@
 echo "I am a nwaku node"
 
 MY_EXT_IP=$(wget -qO- https://api4.ipify.org)
+DNS_WSS_CMD=
+
+if [ -n "${DOMAIN}" ]; then
+
+    LETSENCRYPT_PATH=/etc/letsencrypt/live/${DOMAIN}
+
+    if ! [ -d "${LETSENCRYPT_PATH}" ]; then
+        apk add --no-cache certbot
+
+        certbot certonly\
+            --non-interactive\
+            --agree-tos\
+            --no-eff-email\
+            --no-redirect\
+            --email admin@${DOMAIN}\
+            -d ${DOMAIN}\
+            --standalone
+    fi
+
+    if ! [ -e "${LETSENCRYPT_PATH}/privkey.pem" ]; then
+        echo "The certificate does not exist"
+        sleep 60
+        exit 1
+    fi
+
+    WS_SUPPORT="--websocket-support=true"
+    WSS_SUPPORT="--websocket-secure-support=true"
+    WSS_KEY="--websocket-secure-key-path=${LETSENCRYPT_PATH}/privkey.pem"
+    WSS_CERT="--websocket-secure-cert-path=${LETSENCRYPT_PATH}/cert.pem"
+    DNS4_DOMAIN="--dns4-domain-name=${DOMAIN}"
+
+    DNS_WSS_CMD="${WS_SUPPORT} ${WSS_SUPPORT} ${WSS_CERT} ${WSS_KEY} ${DNS4_DOMAIN}"
+fi
+
+if [ "${NODEKEY}" != "" ]; then
+    NODEKEY=--nodekey=${NODEKEY}
+fi
 
 exec /usr/bin/wakunode\
   --relay=true\
@@ -28,4 +65,8 @@ exec /usr/bin/wakunode\
   --nat=extip:"${MY_EXT_IP}"\
   --store=true\
   --store-message-db-url="postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:5432/postgres"\
-  --store-message-retention-policy=time:86400
+  --store-message-retention-policy=time:86400\
+  ${DNS_WSS_CMD}\
+  ${NODEKEY}\
+  ${EXTRA_ARGS}
+
