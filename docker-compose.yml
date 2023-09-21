@@ -55,7 +55,7 @@ services:
         - *rln_env
     volumes:
       - ./run_node.sh:/opt/run_node.sh:Z
-      - ./certs:/etc/letsencrypt/:Z
+      - ${CERTS_DIR:-./certs}:/etc/letsencrypt/:Z
       - ./rln_tree:/etc/rln_tree/:Z
       - ./keystore/keystore.json:/keystore/keystore.json/:Z
     entrypoint: sh
