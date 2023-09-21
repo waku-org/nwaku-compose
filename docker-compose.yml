@@ -57,6 +57,8 @@ services:
     environment:
       DOMAIN: ${DOMAIN}
       NODEKEY: ${NODEKEY}
+      RLN_RELAY_CONTRACT_ADDRESS: ${RLN_RELAY_CONTRACT_ADDRESS:-0xF471d71E9b1455bBF4b85d475afb9BB0954A29c4}
+      ETH_CLIENT_ADDRESS: ${ETH_CLIENT_ADDRESS}
       EXTRA_ARGS: ${EXTRA_ARGS}
       <<: *pg_env
     volumes:
