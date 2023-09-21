@@ -15,6 +15,20 @@ cd nwaku-compose
 
 Edit the environment variables present at the beginning of the `docker-compose.yml` file.
 
+Get a node's URL:
+
+It is required to set the `ETH_CLIENT_ADDRESS` environment variable before starting the instance.
+
+`ETH_CLIENT_ADDRESS` must be a WebSockets URL for your Ethereum Node.
+For the current default contract, it must a node for the Sepolia network.
+In case you're not running your own node, you can get it from [Infura](https://www.infura.io/)
+
+You can set the environment variable from inside the `docker-compose.yml` file or you can simply run
+
+```console
+export ETH_CLIENT_ADDRESS=<your_eth_client_address_here>
+```
+
 Start everything: `nwaku`, `postgres`, `prometheus`, and `grafana`.
 ```console
 docker-compose up -d
