@@ -41,6 +41,12 @@ if [ "${NODEKEY}" != "" ]; then
     NODEKEY=--nodekey=${NODEKEY}
 fi
 
+RLN_RELAY_CONTRACT_ADDRESS="0xF471d71E9b1455bBF4b85d475afb9BB0954A29c4" # Sepolia Testnet
+RLN_TREE_PATH="/etc/rln_tree"
+ETH_CLIENT_ADDRESS= # Add a WebSockets endpoint to your Eth Node or an Infura WebSockets URL
+                    # https://docs.infura.io/networks/ethereum/how-to/choose-a-network
+                    # Make sure to use an URL for the same network than the relay contract
+
 exec /usr/bin/wakunode\
   --relay=true\
   --topic=/waku/2/default-waku/proto\
@@ -69,6 +75,11 @@ exec /usr/bin/wakunode\
   --store=true\
   --store-message-db-url="postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:5432/postgres"\
   --store-message-retention-policy=time:86400\
+  --rln-relay=true\
+  --rln-relay-dynamic=true\
+  --rln-relay-eth-contract-address="${RLN_RELAY_CONTRACT_ADDRESS}"\
+  --rln-relay-eth-client-address="${ETH_CLIENT_ADDRESS}"\
+  --rln-relay-tree-path="${RLN_TREE_PATH}"\
   ${DNS_WSS_CMD}\
   ${NODEKEY}\
   ${EXTRA_ARGS}

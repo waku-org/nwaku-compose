@@ -10,8 +10,8 @@ x-pg-pass: &pg_pass ${POSTGRES_PASSWORD:-test123}
 x-pg-user: &pg_user ${POSTGRES_USER:-postgres}
 
 x-pg-environment: &pg_env
-    POSTGRES_USER: *pg_user
-    POSTGRES_PASSWORD: *pg_pass
+  POSTGRES_USER: *pg_user
+  POSTGRES_PASSWORD: *pg_pass
 
 x-pg-exporter-env: &pg_exp_env
   environment:
@@ -62,6 +62,7 @@ services:
     volumes:
       - ./run_node.sh:/opt/run_node.sh:Z
       - ./certs:/etc/letsencrypt/:Z
+      - ./rln_tree:/etc/rln_tree/:Z
     entrypoint: sh
     command:
       - /opt/run_node.sh
