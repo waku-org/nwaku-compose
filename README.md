@@ -44,6 +44,8 @@ There are multiple environment variables you can configure to modify behaviour o
 * `NODEKEY` - this env variable allows you to provide a node key as described in [operators documentation](https://github.com/waku-org/nwaku/blob/master/docs/operators/how-to/configure-key.md) (e.g. `NODEKEY=9f439983aa4851346cfe6e17585e426f482871a43626812e23490895cd602c11`)
 * `RLN_RELAY_CONTRACT_ADDRESS` - address of the RLN Relay Contract. It defaults to `0xF471d71E9b1455bBF4b85d475afb9BB0954A29c4` on Sepolia testnet
 * `ETH_CLIENT_ADDRESS` (**mandatory**) - URL to a WebSockets Ethereum node URL on the same network as the contract address. If you're not running your own node, you can get the URL at Infura with the following [instructions](https://docs.infura.io/networks/ethereum/how-to/choose-a-network)
+* `RLN_RELAY_CRED_PATH` - path for peristing rln-relay credential
+* `RLN_RELAY_CRED_PASSWORD` - password for encrypting RLN credentials
 * `EXTRA_ARGS` - this variable allows you to specify additional or overriding CLI option for the Waku node which will be appended to the `wakunode2` command. (e.g. `EXTRA_ARGS="--store=false --max-connections=3000`)
 
 ## Log monitoring and troubleshooting
