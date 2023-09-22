@@ -3,7 +3,7 @@
 echo "I am a nwaku node"
 
 if [ -z "${ETH_CLIENT_ADDRESS}" ]; then
-    echo -e "Missing Eth client address, please refer to README.md for detailed instructions"
+    echo "Missing Eth client address, please refer to README.md for detailed instructions"
     exit 1
 fi
 
@@ -42,8 +42,16 @@ if [ -n "${DOMAIN}" ]; then
     DNS_WSS_CMD="${WS_SUPPORT} ${WSS_SUPPORT} ${WSS_CERT} ${WSS_KEY} ${DNS4_DOMAIN}"
 fi
 
-if [ "${NODEKEY}" != "" ]; then
+if [ -n "${NODEKEY}" ]; then
     NODEKEY=--nodekey=${NODEKEY}
+fi
+
+if [ -n "${RLN_RELAY_CRED_PATH}" ]; then
+    RLN_RELAY_CRED_PATH=--rln-relay-cred-path=${RLN_RELAY_CRED_PATH}
+fi
+
+if [ -n "${RLN_RELAY_CRED_PASSWORD}" ]; then
+    RLN_RELAY_CRED_PASSWORD=--rln-relay-cred-password=${RLN_RELAY_CRED_PASSWORD}
 fi
 
 exec /usr/bin/wakunode\
@@ -81,5 +89,7 @@ exec /usr/bin/wakunode\
   --rln-relay-tree-path="/etc/rln_tree"\
   ${DNS_WSS_CMD}\
   ${NODEKEY}\
+  ${RLN_RELAY_CRED_PATH}\
+  ${RLN_RELAY_CRED_PASSWORD}\
   ${EXTRA_ARGS}
 
