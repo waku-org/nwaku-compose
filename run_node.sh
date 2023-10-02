@@ -62,6 +62,9 @@ exec /usr/bin/wakunode\
   --metrics-server=True\
   --metrics-server-port=8003\
   --metrics-server-address=0.0.0.0\
+  --rest=true\
+  --rest-address=0.0.0.0\
+  --rest-port=8645\
   --nat=extip:"${MY_EXT_IP}"\
   --store=true\
   --store-message-db-url="postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:5432/postgres"\
