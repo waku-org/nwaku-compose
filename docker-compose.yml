@@ -42,7 +42,7 @@ services:
     # github.com/waku-org/nwaku/releases
 
     image: ${NWAKU_IMAGE:-statusteam/nim-waku:v0.20.0}
-    restart: on-failure
+    restart: on-failure:5 # Retry up to 5 times
     ports:
       - 30304:30304/tcp
       - 30304:30304/udp
@@ -75,7 +75,7 @@ services:
       - --config.file=/etc/prometheus/prometheus.yml
     ports:
       - 127.0.0.1:9090:9090
-    restart: on-failure
+    restart: on-failure:5
     depends_on:
       - postgres-exporter
       - nwaku
@@ -94,7 +94,7 @@ services:
       - ./monitoring/configuration/customizations/custom-logo.png:/usr/share/grafana/public/img/fav32.png:Z
     ports:
       - 127.0.0.1:3000:3000
-    restart: on-failure
+    restart: on-failure:5
     depends_on:
       - prometheus
 
@@ -102,7 +102,7 @@ services:
     # This service is used when the Waku node has the 'store' protocol enabled
     # and the store-message-db-url is set to use Postgres
     image: postgres:15.4-alpine3.18
-    restart: on-failure
+    restart: on-failure:5
     environment:
       <<: *pg_env
     volumes:
@@ -119,7 +119,7 @@ services:
   postgres-exporter:
     # Service aimed to scrape information from Postgres and post it to Prometeus
     image: quay.io/prometheuscommunity/postgres-exporter:v0.12.0
-    restart: on-failure
+    restart: on-failure:5
     <<: *pg_exp_env
     volumes:
       - ./monitoring/configuration/postgres-exporter.yml:/etc/pgexporter/postgres-exporter.yml:Z
