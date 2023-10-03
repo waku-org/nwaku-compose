@@ -51,6 +51,7 @@ services:
       - 127.0.0.1:8003:8003
       - 80:80 #Let's Encrypt
       - 8000:8000/tcp #WSS
+      - 127.0.0.1:8645:8645
     <<:
       - *logging
     environment:
