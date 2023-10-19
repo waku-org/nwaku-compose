@@ -49,13 +49,13 @@ To check the status of the node, visit [http://localhost:8003/health](http://loc
 For real-time logs of the 'nwaku' service, use the following command:
 
 ```console
-docker-compose logs nwaku -f
+docker-compose logs -f nwaku
 ```
 
 In general, to view logs of any service running on Docker Compose, execute:
 
 ```console
-docker-compose logs <service> -f
+docker-compose logs -f <service>
 ```
 
 To identify different services currently running, refer to the "SERVICE" column displayed when executing:
