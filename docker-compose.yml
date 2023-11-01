@@ -66,8 +66,9 @@ services:
       NODEKEY: ${NODEKEY}
       ETH_CLIENT_ADDRESS: *eth_client_address
       EXTRA_ARGS: ${EXTRA_ARGS}
-      <<: *pg_env
-      <<: *rln_env
+      <<:
+        - *pg_env
+        - *rln_env
     volumes:
       - ./run_node.sh:/opt/run_node.sh:Z
       - ./certs:/etc/letsencrypt/:Z

@@ -63,6 +63,7 @@ exec /usr/bin/wakunode\
   --rpc-admin=true\
   --keep-alive=true\
   --max-connections=150\
+  --cluster-id=1\
   --dns-discovery=true\
   --dns-discovery-url=enrtree://ANEDLO25QVUGJOUTQFRYKWX6P4Z4GKVESBMHML7DZ6YK4LGS5FC5O@prod.wakuv2.nodes.status.im\
   --discv5-discovery=true\
