@@ -26,7 +26,7 @@ docker-compose up -d
 **4. Register your RLN membership**
 If you just want to relay traffic in the network, you are all set. But if you want to publish messages, you need an RLN membership. Its a simple onchain transaction, you need:
 * A wallet with some Sepolia Eth, <0.1 Eth.
-* Go to [localhost:4000](http://localhost:4000) and `Register Credentials`. Set a `password`` and `Export` it as `keystore.json`
+* Go to [localhost:4000](http://localhost:4000) and `Register Credentials`. Set a `password` and `Export` it as `keystore.json`
 * In your nwaku node, set. TODO: Improve manual process.
   * `rln-relay-cred-password` to the `password` you chose.
   * `rln-relay-cred-path` to `keystore.json`
