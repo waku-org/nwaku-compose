@@ -2,6 +2,11 @@
 
 echo "I am a nwaku node"
 
+if [ -z "${ETH_CLIENT_ADDRESS}" ]; then
+    echo "Missing Eth client address, please refer to README.md for detailed instructions"
+    exit 1
+fi
+
 MY_EXT_IP=$(wget -qO- https://api4.ipify.org)
 DNS_WSS_CMD=
 
@@ -37,8 +42,16 @@ if [ -n "${DOMAIN}" ]; then
     DNS_WSS_CMD="${WS_SUPPORT} ${WSS_SUPPORT} ${WSS_CERT} ${WSS_KEY} ${DNS4_DOMAIN}"
 fi
 
-if [ "${NODEKEY}" != "" ]; then
+if [ -n "${NODEKEY}" ]; then
     NODEKEY=--nodekey=${NODEKEY}
+fi
+
+if [ -n "${RLN_RELAY_CRED_PATH}" ]; then
+    RLN_RELAY_CRED_PATH=--rln-relay-cred-path=${RLN_RELAY_CRED_PATH}
+fi
+
+if [ -n "${RLN_RELAY_CRED_PASSWORD}" ]; then
+    RLN_RELAY_CRED_PASSWORD=--rln-relay-cred-password=${RLN_RELAY_CRED_PASSWORD}
 fi
 
 exec /usr/bin/wakunode\
@@ -50,6 +63,7 @@ exec /usr/bin/wakunode\
   --rpc-admin=true\
   --keep-alive=true\
   --max-connections=150\
+  --cluster-id=1\
   --dns-discovery=true\
   --dns-discovery-url=enrtree://ANEDLO25QVUGJOUTQFRYKWX6P4Z4GKVESBMHML7DZ6YK4LGS5FC5O@prod.wakuv2.nodes.status.im\
   --discv5-discovery=true\
@@ -69,6 +83,13 @@ exec /usr/bin/wakunode\
   --store=true\
   --store-message-db-url="postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:5432/postgres"\
   --store-message-retention-policy=time:86400\
+  --rln-relay=true\
+  --rln-relay-dynamic=true\
+  --rln-relay-eth-contract-address="${RLN_RELAY_CONTRACT_ADDRESS}"\
+  --rln-relay-eth-client-address="${ETH_CLIENT_ADDRESS}"\
+  --rln-relay-tree-path="/etc/rln_tree"\
+  ${RLN_RELAY_CRED_PATH}\
+  ${RLN_RELAY_CRED_PASSWORD}\
   ${DNS_WSS_CMD}\
   ${NODEKEY}\
   ${EXTRA_ARGS}
