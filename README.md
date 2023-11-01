@@ -18,12 +18,12 @@ Waku needs an Ethereum Sepolia node, either yours or from a third party. Provide
 export ETH_CLIENT_ADDRESS=wss://sepolia.infura.io/ws/v3/USE_YOUR_INFURA_KEY_HERE
 ```
 
-Start everything.
+**3. Start everything**
 ```console
 docker-compose up -d
 ```
 
-**3. Register your RLN membership**
+**4. Register your RLN membership**
 If you just want to relay traffic in the network, you are all set. But if you want to publish messages, you need an RLN membership. Its a simple onchain transaction, you need:
 * A wallet with some Sepolia Eth, <0.1 Eth.
 * Go to [localhost:4000](http://localhost:4000) and `Register Credentials`. Set a `password`` and `Export` it as `keystore.json`
@@ -31,7 +31,7 @@ If you just want to relay traffic in the network, you are all set. But if you wa
   * `rln-relay-cred-password` to the `password` you chose.
   * `rln-relay-cred-path` to `keystore.json`
 
-**4. Interact with your nwaku node**
+**5. Interact with your nwaku node**
 * See [localhost:4000](http://localhost:4000) to interact with your node
 * See [localhost:3000](http://localhost:3000) for advanced metrics.
 
