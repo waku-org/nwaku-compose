@@ -63,6 +63,17 @@ services:
     depends_on:
       - postgres
 
+  # TODO: Commented until ready
+  #waku-frontend:
+  #  # TODO: migrate to waku-org
+  #  image: docker.io/alrevuelta/waku-frontend:latest
+  #  #command:
+  #  #  - xxx
+  #  ports:
+  #    - 127.0.0.1:4000:3000
+  #  restart: on-failure:5
+  #  depends_on:
+  #    - nwaku
 
   prometheus:
     image: docker.io/prom/prometheus:latest
