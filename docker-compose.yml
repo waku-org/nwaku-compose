@@ -31,23 +31,6 @@ x-pg-exporter-env: &pg_exp_env
 # Services definitions
 services:
   nwaku:
-    # Provide the image using any of these methods
-
-    # Method 1. Custom build
-    # For a custom build, requires building your image
-    # from nwaku repo: docker build -t nwaku:mytag .
-    #image: nwaku:mytag
-
-    # Method 2. Pre-built image (master commit)
-    # For a pre-built image, use the firt 8 digits of the commit hash
-    # all commits in nwaku master al built and pushed to dockerhub
-    # See: hub.docker.com/r/statusteam/nim-waku
-    #image: statusteam/nim-waku:982cd282
-
-    # Method 3. Pre-built release
-    # For a pre-built release. See available releases:
-    # github.com/waku-org/nwaku/releases
-
     image: ${NWAKU_IMAGE:-wakuorg/nwaku:v0.21.2-rc.0}
     restart: on-failure
     ports:
@@ -64,6 +47,7 @@ services:
     environment:
       DOMAIN: ${DOMAIN}
       NODEKEY: ${NODEKEY}
+      KEYSTORE_PASSWORD: ${KEYSTORE_PASSWORD}
       ETH_CLIENT_ADDRESS: *eth_client_address
       EXTRA_ARGS: ${EXTRA_ARGS}
       <<:
@@ -73,22 +57,24 @@ services:
       - ./run_node.sh:/opt/run_node.sh:Z
       - ./certs:/etc/letsencrypt/:Z
       - ./rln_tree:/etc/rln_tree/:Z
+      - ./keystore/keystore.json:/keystore/keystore.json/:Z
     entrypoint: sh
     command:
       - /opt/run_node.sh
     depends_on:
       - postgres
 
-  waku-frontend:
-    # TODO: migrate to waku-org
-    image: docker.io/alrevuelta/waku-frontend:latest
-    #command:
-    #  - xxx
-    ports:
-      - 127.0.0.1:4000:3000
-    restart: on-failure:5
-    depends_on:
-      - nwaku
+  # TODO: Commented until ready
+  #waku-frontend:
+  #  # TODO: migrate to waku-org
+  #  image: docker.io/alrevuelta/waku-frontend:latest
+  #  #command:
+  #  #  - xxx
+  #  ports:
+  #    - 127.0.0.1:4000:3000
+  #  restart: on-failure:5
+  #  depends_on:
+  #    - nwaku
 
   prometheus:
     image: docker.io/prom/prometheus:latest
@@ -133,6 +119,8 @@ services:
       - ./postgres_cfg/db.sql:/docker-entrypoint-initdb.d/db.sql:Z
       - ${PG_DATA_DIR:-./postgresql}:/var/lib/postgresql/data:Z
     command: postgres -c config_file=/etc/postgresql/postgresql.conf
+    ports:
+      - 127.0.0.1:5432:5432
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -d db_prod"]
       interval: 30s

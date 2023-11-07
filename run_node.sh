@@ -56,8 +56,14 @@ fi
 
 exec /usr/bin/wakunode\
   --relay=true\
-  --topic=/waku/2/default-waku/proto\
-  --topic=/waku/2/dev-waku/proto\
+  --topic=/waku/2/rs/1/0\
+  --topic=/waku/2/rs/1/1\
+  --topic=/waku/2/rs/1/2\
+  --topic=/waku/2/rs/1/3\
+  --topic=/waku/2/rs/1/4\
+  --topic=/waku/2/rs/1/5\
+  --topic=/waku/2/rs/1/6\
+  --topic=/waku/2/rs/1/7\
   --filter=true\
   --lightpush=true\
   --rpc-admin=true\
@@ -89,6 +95,8 @@ exec /usr/bin/wakunode\
   --rln-relay-eth-contract-address="${RLN_RELAY_CONTRACT_ADDRESS}"\
   --rln-relay-eth-client-address="${ETH_CLIENT_ADDRESS}"\
   --rln-relay-tree-path="/etc/rln_tree"\
+  --rln-relay-cred-password="${KEYSTORE_PASSWORD}"\
+  --rln-relay-cred-path="/keystore/keystore.json"\
   ${RLN_RELAY_CRED_PATH}\
   ${RLN_RELAY_CRED_PASSWORD}\
   ${DNS_WSS_CMD}\
