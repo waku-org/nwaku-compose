@@ -28,9 +28,9 @@ The RLN membership is your access key to The Waku Network. Its registration is d
 ./register_rln.sh
 ```
 
-**🖥️ 2. Start everything**
+**🖥️ 2. Start your node**
 
-Start all processes. Your RLN membership is loaded into nwaku under the hood.
+Start all processes: nwaku node, database and grafana for metrics. Your RLN membership is loaded into nwaku under the hood.
 ```console
 docker-compose up -d
 ```
