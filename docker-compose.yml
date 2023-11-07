@@ -73,22 +73,13 @@ services:
       - ./run_node.sh:/opt/run_node.sh:Z
       - ./certs:/etc/letsencrypt/:Z
       - ./rln_tree:/etc/rln_tree/:Z
+      - ./keystore.json:/keystore.json/:Z
     entrypoint: sh
     command:
       - /opt/run_node.sh
     depends_on:
       - postgres
 
-  waku-frontend:
-    # TODO: migrate to waku-org
-    image: docker.io/alrevuelta/waku-frontend:latest
-    #command:
-    #  - xxx
-    ports:
-      - 127.0.0.1:4000:3000
-    restart: on-failure:5
-    depends_on:
-      - nwaku
 
   prometheus:
     image: docker.io/prom/prometheus:latest
