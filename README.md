@@ -50,7 +50,7 @@ curl http://127.0.0.1:8645/debug/v1/version
 curl http://127.0.0.1:8645/debug/v1/info
 ```
 
-You can publish a message to a `contentTopic` that everyone subscribed to it will receive. Note that `payload` is base64 encoded.
+**Publish a message to a `contentTopic`**. Everyone subscribed to it will receive it. Note that `payload` is base64 encoded.
 
 ```
 curl -X POST "http://127.0.0.1:8645/relay/v1/auto/messages" \
@@ -58,7 +58,7 @@ curl -X POST "http://127.0.0.1:8645/relay/v1/auto/messages" \
  -d '{"payload":"XaaabsQ==","contentTopic":"/my-app/2/chatroom-1/proto"}'
 ```
 
-You can fetch all messages sent in that topic.
+**Get messages sent to a `contentTopic`**. Note that any store node in the network is used to reply.
 ```
 curl -X GET "http://127.0.0.1:8645/store/v1/messages?contentTopics=%2Fmy-app%2F2%2Fchatroom-1%2Fproto&pageSize=50&ascending=true" \
  -H "accept: application/json"

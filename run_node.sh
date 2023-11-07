@@ -95,7 +95,7 @@ exec /usr/bin/wakunode\
   --rln-relay-eth-contract-address="${RLN_RELAY_CONTRACT_ADDRESS}"\
   --rln-relay-eth-client-address="${ETH_CLIENT_ADDRESS}"\
   --rln-relay-tree-path="/etc/rln_tree"\
-  --rln-relay-cred-password="password"\
+  --rln-relay-cred-password="${KEYSTORE_PASSWORD}"\
   --rln-relay-cred-path="/keystore/keystore.json"\
   ${RLN_RELAY_CRED_PATH}\
   ${RLN_RELAY_CRED_PASSWORD}\
