@@ -1,38 +1,67 @@
 # nwaku-compose
 
-Ready to use docker-compose to run your own [nwaku](https://github.com/waku-org/nwaku) full node. Description:
+Ready to use docker-compose to run your own [nwaku](https://github.com/waku-org/nwaku) full node:
 * nwaku node running relay and store protocols with RLN enabled.
 * Simple frontend to interact with your node and the network, to publish and receive messages.
 * Grafana dashboard for advanced users or node operators.
 * Requires `docker-compose` and `git`.
 
-**1. Get the code:**
-```console
-git clone git@github.com:waku-org/nwaku-compose.git
-cd nwaku-compose
+
+**📝 0. Prerequisites**
+
+You need:
+* Ethereum Sepolia ws endpoint. Get one free from [Infura](https://www.infura.io/).
+* Ethereum Sepolia account with some balance <0.01 Eth. Get some [here](https://www.infura.io/faucet/sepolia).
+* A password to protect your rln membership.
+
+```
+export ETH_CLIENT_ADDRESS=wss://sepolia.infura.io/ws/v3/YOUR_INFURA_KEY
+export ETH_TESTNET_KEY=REPLACE_BY_YOUR_KEY
+export KEYSTORE_PASSWORD=PICK_A_PASSWORD
 ```
 
-**2. Provide your Ethereum node**
-Waku needs an Ethereum Sepolia node, either yours or from a third party. Provide a websockets endpoint. You can get one for free from [Infura](https://www.infura.io/).
+**🔑 1. Register RLN membership**
+
+The RLN membership is your access key to The Waku Network. Its registration is done onchain, and allows your nwaku node to publish messages in a decentralized and private way, respecting some rate limits. This command will register it and store in `keystore/keystore.json`. Note that if you just want to relay traffic (not publish), you don't need one.
+
 ```
-export ETH_CLIENT_ADDRESS=wss://sepolia.infura.io/ws/v3/USE_YOUR_INFURA_KEY_HERE
+./register_rln.sh
 ```
 
-**3. Start everything**
+**🖥️ 2. Start everything**
+
+Start all processes. Your RLN membership is loaded into nwaku under the hood.
 ```console
 docker-compose up -d
 ```
 
-**4. Register your RLN membership**
-If you just want to relay traffic in the network, you are all set. But if you want to publish messages, you need an RLN membership. Its a simple onchain transaction, you need:
-* A wallet with some Sepolia Eth, <0.1 Eth.
-* Go to [localhost:4000](http://localhost:4000) and `Register Credentials`. Set a `password` and `Export` it as `keystore.json`
-* In your nwaku node, set. TODO: Improve manual process.
-  * `rln-relay-cred-password` to the `password` you chose.
-  * `rln-relay-cred-path` to `keystore.json`
+**🏄🏼‍♂️ 3. Interact with your nwaku node**
+* See [localhost:3000](http://localhost:3000) for node metrics.
+* See [localhost:4000](http://localhost:4000). Under development 🚧
 
-**5. Interact with your nwaku node**
-* See [localhost:4000](http://localhost:4000) to interact with your node
-* See [localhost:3000](http://localhost:3000) for advanced metrics.
+**📬 4. Use the REST API**
+
+Your nwaku node exposes a [REST API](https://waku-org.github.io/waku-rest-api/) to interact with it.
+
+```
+# get nwaku version
+curl http://127.0.0.1:8645/debug/v1/version
+# get nwaku info
+curl http://127.0.0.1:8645/debug/v1/info
+```
+
+You can publish a message to a `contentTopic` that everyone subscribed to it will receive. Note that `payload` is base64 encoded.
+
+```
+curl -X POST "http://127.0.0.1:8645/relay/v1/auto/messages" \
+ -H "content-type: application/json" \
+ -d '{"payload":"XaaabsQ==","contentTopic":"/my-app/2/chatroom-1/proto"}'
+```
+
+You can fetch all messages sent in that topic.
+```
+curl -X GET "http://127.0.0.1:8645/store/v1/messages?contentTopics=%2Fmy-app%2F2%2Fchatroom-1%2Fproto&pageSize=50&ascending=true" \
+ -H "accept: application/json"
+```
 
 For advanced documentation, refer to [ADVANCED.md](https://github.com/waku-org/nwaku-compose/blob/master/ADVANCED.md).

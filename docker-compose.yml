@@ -31,23 +31,6 @@ x-pg-exporter-env: &pg_exp_env
 # Services definitions
 services:
   nwaku:
-    # Provide the image using any of these methods
-
-    # Method 1. Custom build
-    # For a custom build, requires building your image
-    # from nwaku repo: docker build -t nwaku:mytag .
-    #image: nwaku:mytag
-
-    # Method 2. Pre-built image (master commit)
-    # For a pre-built image, use the firt 8 digits of the commit hash
-    # all commits in nwaku master al built and pushed to dockerhub
-    # See: hub.docker.com/r/statusteam/nim-waku
-    #image: statusteam/nim-waku:982cd282
-
-    # Method 3. Pre-built release
-    # For a pre-built release. See available releases:
-    # github.com/waku-org/nwaku/releases
-
     image: ${NWAKU_IMAGE:-wakuorg/nwaku:v0.21.2-rc.0}
     restart: on-failure
     ports:
@@ -73,7 +56,7 @@ services:
       - ./run_node.sh:/opt/run_node.sh:Z
       - ./certs:/etc/letsencrypt/:Z
       - ./rln_tree:/etc/rln_tree/:Z
-      - ./keystore.json:/keystore.json/:Z
+      - ./keystore/keystore.json:/keystore/keystore.json/:Z
     entrypoint: sh
     command:
       - /opt/run_node.sh
