@@ -48,5 +48,5 @@ RLN is the technology used to achieve the rate limiting feature, which combines 
 proofs, hashing, Merkle tree, Blockchain, etc.
 
 Deeper technical details can be found in:
-[RLN-V1 spec](https://rfc.vac.dev/spec/32/)
-[RLN-V2 spec](https://rfc.vac.dev/spec/58/)
+* [RLN-V1 spec](https://rfc.vac.dev/spec/32/)
+* [RLN-V2 spec](https://rfc.vac.dev/spec/58/)
