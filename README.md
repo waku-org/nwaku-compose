@@ -38,6 +38,10 @@ Start all processes: nwaku node, database and grafana for metrics. Your RLN memb
 ```console
 docker-compose up -d
 ```
+or
+```console
+docker compose up -d
+```
 
 **🏄🏼‍♂️ 3. Interact with your nwaku node**
 * See [localhost:3000](http://localhost:3000) for node metrics.
