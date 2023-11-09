@@ -22,8 +22,8 @@ export KEYSTORE_PASSWORD=PICK_A_PASSWORD
 
 **🔑 1. Register RLN membership**
 
-The RLN membership is your access key to The Waku Network. Its registration is done onchain, and allows your nwaku node to publish messages in a decentralized and private way, respecting some [rate limits](https://rfc.vac.dev/spec/64/#rate-limit-exceeded). Messages published
-in a too high rate will not be relayed to other peers.
+The RLN membership is your access key to The Waku Network. Its registration is done onchain, and allows your nwaku node to publish messages in a decentralized and private way, respecting some [rate limits](https://rfc.vac.dev/spec/64/#rate-limit-exceeded).
+Messages exceeding the rate limit won't be relayed by other peers.
 
 This command will register your membership and store it in `keystore/keystore.json`.
 Note that if you just want to relay traffic (not publish), you don't need one.
