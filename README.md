@@ -36,7 +36,7 @@ docker-compose up -d
 ```
 
 **🏄🏼‍♂️ 3. Interact with your nwaku node**
-* See [localhost:3000](http://localhost:3000) for node metrics.
+* See [http://localhost:3000/d/yns_4vFVk/nwaku-monitoring](http://localhost:3000/d/yns_4vFVk/nwaku-monitoring) for node metrics.
 * See [localhost:4000](http://localhost:4000). Under development 🚧
 
 **📬 4. Use the REST API**
