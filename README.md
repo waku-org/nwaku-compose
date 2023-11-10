@@ -10,7 +10,7 @@ Ready to use docker-compose to run your own [nwaku](https://github.com/waku-org/
 **📝 0. Prerequisites**
 
 You need:
-* Ethereum Sepolia ws endpoint. Get one free from [Infura](https://www.infura.io/).
+* Ethereum Sepolia WebSocket endpoint. Get one free from [Infura](https://www.infura.io/).
 * Ethereum Sepolia account with some balance <0.01 Eth. Get some [here](https://www.infura.io/faucet/sepolia).
 * A password to protect your rln membership.
 
@@ -22,7 +22,11 @@ export KEYSTORE_PASSWORD=PICK_A_PASSWORD
 
 **🔑 1. Register RLN membership**
 
-The RLN membership is your access key to The Waku Network. Its registration is done onchain, and allows your nwaku node to publish messages in a decentralized and private way, respecting some rate limits. This command will register it and store in `keystore/keystore.json`. Note that if you just want to relay traffic (not publish), you don't need one.
+The RLN membership is your access key to The Waku Network. Its registration is done onchain, and allows your nwaku node to publish messages in a decentralized and private way, respecting some [rate limits](https://rfc.vac.dev/spec/64/#rate-limit-exceeded).
+Messages exceeding the rate limit won't be relayed by other peers.
+
+This command will register your membership and store it in `keystore/keystore.json`.
+Note that if you just want to relay traffic (not publish), you don't need one.
 
 ```
 ./register_rln.sh
