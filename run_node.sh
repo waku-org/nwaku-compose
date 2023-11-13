@@ -56,14 +56,14 @@ fi
 
 exec /usr/bin/wakunode\
   --relay=true\
-  --topic=/waku/2/rs/1/0\
-  --topic=/waku/2/rs/1/1\
-  --topic=/waku/2/rs/1/2\
-  --topic=/waku/2/rs/1/3\
-  --topic=/waku/2/rs/1/4\
-  --topic=/waku/2/rs/1/5\
-  --topic=/waku/2/rs/1/6\
-  --topic=/waku/2/rs/1/7\
+  --pubsub-topic=/waku/2/rs/1/0\
+  --pubsub-topic=/waku/2/rs/1/1\
+  --pubsub-topic=/waku/2/rs/1/2\
+  --pubsub-topic=/waku/2/rs/1/3\
+  --pubsub-topic=/waku/2/rs/1/4\
+  --pubsub-topic=/waku/2/rs/1/5\
+  --pubsub-topic=/waku/2/rs/1/6\
+  --pubsub-topic=/waku/2/rs/1/7\
   --filter=true\
   --lightpush=true\
   --rpc-admin=true\
