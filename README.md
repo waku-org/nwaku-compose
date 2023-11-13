@@ -14,19 +14,14 @@ You need:
 * Ethereum Sepolia account with some balance <0.01 Eth. Get some [here](https://www.infura.io/faucet/sepolia).
 * A password to protect your rln membership.
 
-You can either export the environment variable (keep in mind that this will expose your secrets in your shell history)
-
-```
-export ETH_CLIENT_ADDRESS=wss://sepolia.infura.io/ws/v3/YOUR_INFURA_KEY
-export ETH_TESTNET_KEY=REPLACE_BY_YOUR_KEY
-export RLN_RELAY_CRED_PASSWORD=PICK_A_PASSWORD
-```
-
-Or you can use `.env` file - copy the example and edit the variables inside
+There is `.env.example` available for you as a template to use for providing the above values. The process when working with `.env` files is to copy the `.env.example`, store it as `.env` and edit the values there.
 
 ```
 cp .env.example .env
+${EDITOR} .env
 ```
+
+Make sure to **NOT** place any secrets into `.env.example`, as they might be unintentionally published in the Git repository.
 
 **🔑 1. Register RLN membership**
 
