@@ -17,7 +17,7 @@ You need:
 ```
 export ETH_CLIENT_ADDRESS=wss://sepolia.infura.io/ws/v3/YOUR_INFURA_KEY
 export ETH_TESTNET_KEY=REPLACE_BY_YOUR_KEY
-export KEYSTORE_PASSWORD=PICK_A_PASSWORD
+export RLN_RELAY_CRED_PASSWORD=PICK_A_PASSWORD
 ```
 
 **🔑 1. Register RLN membership**
