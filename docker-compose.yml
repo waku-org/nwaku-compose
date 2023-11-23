@@ -30,8 +30,8 @@ x-pg-exporter-env: &pg_exp_env
 
 # Services definitions
 services:
-  nwaku:
-    image: ${NWAKU_IMAGE:-wakuorg/nwaku:v0.22.0-rc.0}
+  go-waku:
+    image: ${GO_WAKU_IMAGE:-wakuorg/go-waku:v0.9.0}
     restart: on-failure
     ports:
       - 30304:30304/tcp
@@ -74,7 +74,7 @@ services:
   #    - 127.0.0.1:4000:3000
   #  restart: on-failure:5
   #  depends_on:
-  #    - nwaku
+  #    - go-waku
 
   prometheus:
     image: docker.io/prom/prometheus:latest
@@ -87,7 +87,7 @@ services:
     restart: on-failure:5
     depends_on:
       - postgres-exporter
-      - nwaku
+      - go-waku
 
   grafana:
     image: docker.io/grafana/grafana:latest

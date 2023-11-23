@@ -1,6 +1,6 @@
 #!/bin/sh
 
-echo "I am a nwaku node"
+echo "I am a go-waku node"
 
 if [ -z "${ETH_CLIENT_ADDRESS}" ]; then
     echo "Missing Eth client address, please refer to README.md for detailed instructions"
@@ -54,7 +54,7 @@ if [ -n "${RLN_RELAY_CRED_PASSWORD}" ]; then
     RLN_RELAY_CRED_PASSWORD=--rln-relay-cred-password=${RLN_RELAY_CRED_PASSWORD}
 fi
 
-exec /usr/bin/wakunode\
+exec /usr/bin/waku\
   --relay=true\
   --pubsub-topic=/waku/2/rs/1/0\
   --pubsub-topic=/waku/2/rs/1/1\
@@ -67,7 +67,6 @@ exec /usr/bin/wakunode\
   --filter=true\
   --lightpush=true\
   --rpc-admin=true\
-  --keep-alive=true\
   --max-connections=150\
   --cluster-id=1\
   --discv5-bootstrap-node="enr:-QESuEC1p_s3xJzAC_XlOuuNrhVUETmfhbm1wxRGis0f7DlqGSw2FM-p2Ugl_r25UHQJ3f1rIRrpzxJXSMaJe4yk1XFSAYJpZIJ2NIJpcISygI2rim11bHRpYWRkcnO4XAArNiZub2RlLTAxLmRvLWFtczMud2FrdS50ZXN0LnN0YXR1c2ltLm5ldAZ2XwAtNiZub2RlLTAxLmRvLWFtczMud2FrdS50ZXN0LnN0YXR1c2ltLm5ldAYfQN4DgnJzkwABCAAAAAEAAgADAAQABQAGAAeJc2VjcDI1NmsxoQJATXRSRSUyTw_QLB6H_U3oziVQgNRgrXpK7wp2AMyNxYN0Y3CCdl-DdWRwgiMohXdha3UyDw"\
@@ -76,7 +75,7 @@ exec /usr/bin/wakunode\
   --discv5-discovery=true\
   --discv5-udp-port=9005\
   --discv5-enr-auto-update=True\
-  --log-level=DEBUG\
+  --log-level=INFO\
   --rpc-port=8545\
   --rpc-address=0.0.0.0\
   --tcp-port=30304\
@@ -89,7 +88,7 @@ exec /usr/bin/wakunode\
   --nat=extip:"${MY_EXT_IP}"\
   --store=true\
   --store-message-db-url="postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:5432/postgres"\
-  --store-message-retention-policy=time:86400\
+  --store-message-retention-time=24h0m0s\
   --rln-relay=true\
   --rln-relay-dynamic=true\
   --rln-relay-eth-contract-address="${RLN_RELAY_CONTRACT_ADDRESS}"\
