@@ -7,6 +7,8 @@ if [ -z "${ETH_CLIENT_ADDRESS}" ]; then
     exit 1
 fi
 
+apt install -y wget
+
 MY_EXT_IP=$(wget -qO- https://api4.ipify.org)
 DNS_WSS_CMD=
 
@@ -83,6 +85,7 @@ exec /usr/bin/waku\
   --metrics-server-port=8003\
   --metrics-server-address=0.0.0.0\
   --rest=true\
+  --rest-admin=false\
   --rest-address=0.0.0.0\
   --rest-port=8645\
   --nat=extip:"${MY_EXT_IP}"\
