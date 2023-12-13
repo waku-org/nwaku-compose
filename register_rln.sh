@@ -1,10 +1,12 @@
 #!/bin/sh
 
 if test -f ./keystore/keystore.json; then
-  echo "keystore/keystore.json alredy exists. Use it instead of creating a new one."
+  echo "keystore/keystore.json already exists. Use it instead of creating a new one."
   echo "Exiting"
   exit 1
 fi
+
+mkdir ./keystore
 
 # TODO: Set nwaku release when ready instead of quay
 
