@@ -20,6 +20,8 @@ export ETH_TESTNET_KEY=REPLACE_BY_YOUR_KEY
 export KEYSTORE_PASSWORD=PICK_A_PASSWORD
 ```
 
+`docker-compose` [will read the `./.env` file](https://docs.docker.com/compose/environment-variables/set-environment-variables/#additional-information-3) from the filesystem, so feel free to save these value in a `.env` file.
+
 **🔑 1. Register RLN membership**
 
 The RLN membership is your access key to The Waku Network. Its registration is done onchain, and allows your nwaku node to publish messages in a decentralized and private way, respecting some [rate limits](https://rfc.vac.dev/spec/64/#rate-limit-exceeded).

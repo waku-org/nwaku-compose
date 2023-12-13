@@ -1,4 +1,5 @@
 **/.DS_Store
+.env
 keystore
 postgresql
 rln_tree
