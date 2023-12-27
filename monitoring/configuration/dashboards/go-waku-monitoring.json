@@ -385,7 +385,7 @@
             "uid": "PBFA97CFB590B2093"
           },
           "editorMode": "code",
-          "expr": "(increase(waku_node_messages_total[1m]))/60",
+          "expr": "(increase(waku_node_messages[1m]))/60",
           "legendFormat": "{{instance}}",
           "range": true,
           "refId": "A"
@@ -579,22 +579,45 @@
         "type": "prometheus",
         "uid": "PBFA97CFB590B2093"
       },
+      "description": "",
       "fieldConfig": {
         "defaults": {
           "color": {
-            "mode": "thresholds"
+            "mode": "continuous-GrYlRd"
           },
-          "mappings": [],
+          "custom": {
+            "fillOpacity": 70,
+            "lineWidth": 0,
+            "spanNulls": true
+          },
+          "mappings": [
+            {
+              "options": {
+                "0": {
+                  "color": "yellow",
+                  "index": 0,
+                  "text": "Unknown"
+                },
+                "1": {
+                  "color": "green",
+                  "index": 1,
+                  "text": "Public"
+                },
+                "2": {
+                  "color": "purple",
+                  "index": 2,
+                  "text": "Private"
+                }
+              },
+              "type": "value"
+            }
+          ],
           "thresholds": {
             "mode": "absolute",
             "steps": [
               {
                 "color": "green",
                 "value": null
-              },
-              {
-                "color": "red",
-                "value": 80
               }
             ]
           }
@@ -602,54 +625,42 @@
         "overrides": []
       },
       "gridPos": {
-        "h": 5,
-        "w": 3,
+        "h": 7,
+        "w": 18,
         "x": 3,
         "y": 16
       },
-      "id": 22,
+      "id": 2,
       "options": {
-        "colorMode": "value",
-        "graphMode": "area",
-        "justifyMode": "auto",
-        "orientation": "auto",
-        "reduceOptions": {
-          "calcs": [
-            "lastNotNull"
-          ],
-          "fields": "",
-          "values": false
+        "alignValue": "center",
+        "legend": {
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
         },
-        "textMode": "auto"
+        "mergeValues": true,
+        "rowHeight": 0.9,
+        "showValue": "auto",
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
       },
-      "pluginVersion": "10.2.0",
       "targets": [
         {
           "datasource": {
             "type": "prometheus",
             "uid": "PBFA97CFB590B2093"
           },
-          "editorMode": "code",
-          "expr": "libp2p_autonat_reachability_confidence",
-          "legendFormat": "{{reachability}}",
+          "editorMode": "builder",
+          "expr": "libp2p_autonat_reachability_status{instance=~\"$instance\"}",
+          "legendFormat": " ",
           "range": true,
           "refId": "A"
         }
       ],
-      "title": "Reachability",
-      "transformations": [
-        {
-          "id": "reduce",
-          "options": {
-            "includeTimeField": false,
-            "mode": "reduceFields",
-            "reducers": [
-              "max"
-            ]
-          }
-        }
-      ],
-      "type": "stat"
+      "title": "Reachability Status",
+      "type": "state-timeline"
     },
     {
       "datasource": {
@@ -850,7 +861,7 @@
             "uid": "PBFA97CFB590B2093"
           },
           "editorMode": "builder",
-          "expr": "libp2p_peers",
+          "expr": "libp2p_rcmgr_peer_connections_count",
           "legendFormat": "__auto",
           "range": true,
           "refId": "A"
