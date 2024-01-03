@@ -46,12 +46,12 @@ if [ -n "${NODEKEY}" ]; then
     NODEKEY=--nodekey=${NODEKEY}
 fi
 
-if [ -n "${RLN_RELAY_CRED_PATH}" ]; then
-    RLN_RELAY_CRED_PATH=--rln-relay-cred-path=${RLN_RELAY_CRED_PATH}
-fi
+
+RLN_RELAY_CRED_PATH=--rln-relay-cred-path=${RLN_RELAY_CRED_PATH:-/keystore/keystore.json}
+
 
 if [ -n "${RLN_RELAY_CRED_PASSWORD}" ]; then
-    RLN_RELAY_CRED_PASSWORD=--rln-relay-cred-password=${RLN_RELAY_CRED_PASSWORD}
+    RLN_RELAY_CRED_PASSWORD=--rln-relay-cred-password="'"${RLN_RELAY_CRED_PASSWORD}"'"
 fi
 
 exec /usr/bin/wakunode\
@@ -95,8 +95,6 @@ exec /usr/bin/wakunode\
   --rln-relay-eth-contract-address="${RLN_RELAY_CONTRACT_ADDRESS}"\
   --rln-relay-eth-client-address="${ETH_CLIENT_ADDRESS}"\
   --rln-relay-tree-path="/etc/rln_tree"\
-  --rln-relay-cred-password="${KEYSTORE_PASSWORD}"\
-  --rln-relay-cred-path="/keystore/keystore.json"\
   ${RLN_RELAY_CRED_PATH}\
   ${RLN_RELAY_CRED_PASSWORD}\
   ${DNS_WSS_CMD}\
