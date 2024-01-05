@@ -47,7 +47,7 @@ services:
     environment:
       DOMAIN: ${DOMAIN}
       NODEKEY: ${NODEKEY}
-      KEYSTORE_PASSWORD: ${KEYSTORE_PASSWORD}
+      KEYSTORE_PASSWORD: "${KEYSTORE_PASSWORD}"
       ETH_CLIENT_ADDRESS: *eth_client_address
       EXTRA_ARGS: ${EXTRA_ARGS}
       <<:
@@ -119,8 +119,8 @@ services:
       - ./postgres_cfg/db.sql:/docker-entrypoint-initdb.d/db.sql:Z
       - ${PG_DATA_DIR:-./postgresql}:/var/lib/postgresql/data:Z
     command: postgres -c config_file=/etc/postgresql/postgresql.conf
-    ports:
-      - 127.0.0.1:5432:5432
+    ports: []
+    #  - 127.0.0.1:5432:5432
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -d db_prod"]
       interval: 30s

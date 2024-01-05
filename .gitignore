@@ -3,3 +3,4 @@
 keystore
 postgresql
 rln_tree
+.env
