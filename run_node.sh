@@ -51,7 +51,7 @@ RLN_RELAY_CRED_PATH=--rln-relay-cred-path=${RLN_RELAY_CRED_PATH:-/keystore/keyst
 
 
 if [ -n "${RLN_RELAY_CRED_PASSWORD}" ]; then
-    RLN_RELAY_CRED_PASSWORD=--rln-relay-cred-password="'"${RLN_RELAY_CRED_PASSWORD}"'"
+    RLN_RELAY_CRED_PASSWORD=--rln-relay-cred-password="${RLN_RELAY_CRED_PASSWORD}"
 fi
 
 exec /usr/bin/wakunode\
@@ -84,6 +84,7 @@ exec /usr/bin/wakunode\
   --metrics-server-port=8003\
   --metrics-server-address=0.0.0.0\
   --rest=true\
+  --rest-admin=true\
   --rest-address=0.0.0.0\
   --rest-port=8645\
   --nat=extip:"${MY_EXT_IP}"\
