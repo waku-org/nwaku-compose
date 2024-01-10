@@ -31,7 +31,7 @@ x-pg-exporter-env: &pg_exp_env
 # Services definitions
 services:
   nwaku:
-    image: ${NWAKU_IMAGE:-wakuorg/nwaku:v0.22.0-rc.0}
+    image: ${NWAKU_IMAGE:-harbor.status.im/wakuorg/nwaku:v0.23.0}
     restart: on-failure
     ports:
       - 30304:30304/tcp
@@ -47,7 +47,7 @@ services:
     environment:
       DOMAIN: ${DOMAIN}
       NODEKEY: ${NODEKEY}
-      KEYSTORE_PASSWORD: "${KEYSTORE_PASSWORD}"
+      RLN_RELAY_CRED_PASSWORD: "${RLN_RELAY_CRED_PASSWORD}"
       ETH_CLIENT_ADDRESS: *eth_client_address
       EXTRA_ARGS: ${EXTRA_ARGS}
       <<:
