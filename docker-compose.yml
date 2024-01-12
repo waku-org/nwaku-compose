@@ -47,7 +47,7 @@ services:
     environment:
       DOMAIN: ${DOMAIN}
       NODEKEY: ${NODEKEY}
-      KEYSTORE_PASSWORD: "${KEYSTORE_PASSWORD}"
+      RLN_RELAY_CRED_PASSWORD: "${RLN_RELAY_CRED_PASSWORD}"
       ETH_CLIENT_ADDRESS: *eth_client_address
       EXTRA_ARGS: ${EXTRA_ARGS}
       <<:
@@ -55,9 +55,9 @@ services:
         - *rln_env
     volumes:
       - ./run_node.sh:/opt/run_node.sh:Z
-      - ./certs:/etc/letsencrypt/:Z
+      - ${CERTS_DIR:-./certs}:/etc/letsencrypt/:Z
       - ./rln_tree:/etc/rln_tree/:Z
-      - ./keystore/keystore.json:/keystore/keystore.json/:Z
+      - ./keystore/keystore.json:/keystore/keystore.json:Z
     entrypoint: sh
     command:
       - /opt/run_node.sh

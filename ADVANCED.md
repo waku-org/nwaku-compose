@@ -14,6 +14,7 @@ There are multiple environment variables you can configure to modify behaviour o
 * `RLN_RELAY_CRED_PATH` - path for peristing rln-relay credential
 * `RLN_RELAY_CRED_PASSWORD` - password for encrypting RLN credentials
 * `EXTRA_ARGS` - this variable allows you to specify additional or overriding CLI option for the Waku node which will be appended to the `wakunode2` command. (e.g. `EXTRA_ARGS="--store=false --max-connections=3000`)
+* `CERTS_DIR` - allows you to define a path where SSL certificates are/will be stored. It needs to follow the directory structure produced by Certbot in `/etc/letsencrypt`
 
 ## Log monitoring and troubleshooting
 
