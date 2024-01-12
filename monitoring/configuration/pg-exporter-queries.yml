@@ -272,3 +272,4 @@ pg_tb_stats:
     - messages:
         usage: "GAUGE"
         description: "Number of messages for the given pubsub topic"
+
