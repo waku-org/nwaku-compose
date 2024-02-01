@@ -1,10 +1,14 @@
 #!/bin/sh
 
-if test -f $(pwd)/keystore/keystore.json; then
-  echo "keystore/keystore.json alredy exists. Use it instead of creating a new one."
+
+if test -f ./keystore/keystore.json; then
+  echo "keystore/keystore.json already exists. Use it instead of creating a new one."
   echo "Exiting"
   exit 1
 fi
+
+
+mkdir -p ./keystore
 
 if test -f .env; then
   echo "Using .env file"  
