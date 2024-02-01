@@ -261,3 +261,14 @@ pg_process_idle:
     - seconds:
         usage: "HISTOGRAM"
         description: "Idle time of server processes"
+
+pg_tb_stats:
+  query: |
+    select pubsubtopic, count(*) AS messages FROM (SELECT id, array_agg(pubsubtopic ORDER BY pubsubtopic) AS pubsubtopic FROM messages GROUP BY id) sub GROUP BY pubsubtopic ORDER BY pubsubtopic;
+  metrics:
+    - pubsubtopic:
+        usage: "LABEL"
+        description: "pubsubtopic"
+    - messages:
+        usage: "GAUGE"
+        description: "Number of messages for the given pubsub topic"
