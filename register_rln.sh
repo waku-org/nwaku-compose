@@ -8,8 +8,6 @@ if test -f ./keystore/keystore.json; then
 fi
 
 
-mkdir -p ./keystore
-
 if test -f .env; then
   echo "Using .env file"  
   . $(pwd)/.env
@@ -19,7 +17,7 @@ fi
 
 
 
-docker run -v $(pwd)/keystore:/keystore/:Z wakuorg/nwaku:v0.21.3 generateRlnKeystore \
+docker run -v $(pwd)/keystore:/keystore/:Z wakuorg/nwaku:v0.24.0 generateRlnKeystore \
 --rln-relay-eth-client-address=${ETH_CLIENT_ADDRESS} \
 --rln-relay-eth-private-key=${ETH_TESTNET_KEY} \
 --rln-relay-eth-contract-address=0xF471d71E9b1455bBF4b85d475afb9BB0954A29c4 \
