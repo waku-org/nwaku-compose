@@ -8,8 +8,6 @@ if test -f ./keystore/keystore.json; then
 fi
 
 
-mkdir -p ./keystore
-
 if test -f .env; then
   echo "Using .env file"  
   . $(pwd)/.env
