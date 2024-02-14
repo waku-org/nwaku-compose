@@ -57,7 +57,7 @@ services:
       - ./run_node.sh:/opt/run_node.sh:Z
       - ${CERTS_DIR:-./certs}:/etc/letsencrypt/:Z
       - ./rln_tree:/etc/rln_tree/:Z
-      - ./keystore/keystore.json:/keystore/keystore.json:Z
+      - ./keystore:/keystore:Z
     entrypoint: sh
     command:
       - /opt/run_node.sh
