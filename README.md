@@ -63,7 +63,7 @@ curl http://127.0.0.1:8645/debug/v1/info
 ```
 curl -X POST "http://127.0.0.1:8645/relay/v1/auto/messages" \
  -H "content-type: application/json" \
- -d '{"payload":"'$(echo -n "Hello Waku Network - from Anonymous User" | base64)'","contentTopic":"/my-app/2/chatroom-1/proto","timestamp":`$(date +%s%N)`}'
+ -d '{"payload":"'$(echo -n "Hello Waku Network - from Anonymous User" | base64)'","contentTopic":"/my-app/2/chatroom-1/proto","timestamp":'$(date +%s%N)'}'
 ```
 
 **Get messages sent to a `contentTopic`**. Note that any store node in the network is used to reply.
