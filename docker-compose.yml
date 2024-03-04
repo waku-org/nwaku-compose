@@ -102,7 +102,7 @@ services:
       - ./monitoring/configuration/customizations/custom-logo.svg:/usr/share/grafana/public/img/grafana_typelogo.svg:Z
       - ./monitoring/configuration/customizations/custom-logo.png:/usr/share/grafana/public/img/fav32.png:Z
     ports:
-      - 127.0.0.1:3000:3000
+      - 0.0.0.0:3000
     restart: on-failure:5
     depends_on:
       - prometheus
