@@ -83,7 +83,7 @@ services:
     command:
       - --config.file=/etc/prometheus/prometheus.yml
     ports:
-      - 127.0.0.1:9090:9090
+      -  0.0.0.0:3000
     restart: on-failure:5
     depends_on:
       - postgres-exporter
