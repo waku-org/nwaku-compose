@@ -66,6 +66,7 @@ exec /usr/bin/wakunode\
   --pubsub-topic=/waku/2/rs/1/7\
   --filter=true\
   --lightpush=true\
+  --rpc-admin=true\
   --keep-alive=true\
   --max-connections=150\
   --cluster-id=1\
@@ -76,6 +77,8 @@ exec /usr/bin/wakunode\
   --discv5-udp-port=9005\
   --discv5-enr-auto-update=True\
   --log-level=DEBUG\
+  --rpc-port=8545\
+  --rpc-address=0.0.0.0\
   --tcp-port=30304\
   --metrics-server=True\
   --metrics-server-port=8003\
