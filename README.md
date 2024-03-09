@@ -1,7 +1,7 @@
 
 <h1 align="center"> Waku Setup</h1>
 
-# Sunucu Paketleri update
+# Update Server Packages
 ```console
 sudo apt update && sudo apt upgrade -y
 sudo apt-get install build-essential git libpq5 jq -y
