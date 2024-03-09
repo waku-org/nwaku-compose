@@ -73,7 +73,7 @@ nano ~/nwaku-compose/docker-compose.yml
 
 > Your data will be updated in approximately 30 minutes.
 
-> `http://IP_ADRESS:3000/d/yns_4vFVk/nwaku-monitoring`
+> `http://IP_ADRESS:3000/d/ReginaMeis/nwaku-monitoring`
 
 > Open your IP ADDRESS from the browser with the IP of your own server.
 
