@@ -7,7 +7,7 @@ sudo apt update && sudo apt upgrade -y
 sudo apt-get install build-essential git libpq5 jq -y
 ```
 
-# kodu girdikten sonra 1 yazıyoruz.
+# After entering the code, we press the 1 key
 ```console
 curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
 source "$HOME/.cargo/env"
@@ -17,38 +17,38 @@ sudo apt install docker.io -y
 sudo curl -L "https://github.com/docker/compose/releases/download/v2.24.5/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
 sudo chmod +x /usr/local/bin/docker-compose
 ```
-# Waku kurulumu için
+# waku for installation
 
-> wakuyu clonluyoruz
+> waku clone
 ```console
 git clone https://github.com/waku-org/nwaku-compose
 cd nwaku-compose
 cp .env.example .env
 ```
-# .env içinde değişiklik için
+# .env for change in
 > nano .env
 ```
 
-> Değiştireceğimiz kısımlar bunlar aşağıya yazıyorum:
+> These are the parts we will change:
 ```console
-* `ETH_CLIENT_ADDRESS` = Infura'dan Sepolia RPC aldım bedava onu ekledim - https://www.infura.io/
-* `ETH_TESTNET_KEY` = Waku için açtığım metamaskın private keyini ekliyoruz - Metamask hesap bilgileri kısmında
-* `RLN_RELAY_CRED_PASSWORD` = Bir şifre belirledim
+* `ETH_CLIENT_ADDRESS` = I bought Sepolia RPC from Infura and added it for free - https://www.infura.io/
+* `ETH_TESTNET_KEY` = We add the metamask private key that I opened for Waku - in the Metamask account information section
+* `RLN_RELAY_CRED_PASSWORD` = I set a password
 ```
-> CTRL X Y ENTER ile kaydedip çıkıyoruz.
+> CTRL X Y ENTER We save and exit with .
 
 ```console
-# ve register edelim.
+# Let's register.
 ./register_rln.sh
-# register etmeden önce cüzdanda sepolia eth olmalı
+# Must have Sepolia eth in wallet before registering
 ```
 
-<h1 align="center"> Waku node başlatma </h1>
+<h1 align="center"> Waku node initialization </h1>
 
 ```console
-# firewallda portları aktif ediyoruz.
+# We activate the ports in the firewall.
 
-# yes diyelim aşağıdaki komutu girdikten sonra
+# Let's say yes after entering the following command
 sudo ufw enable
 sudo ufw allow 22    
 sudo ufw allow 3000   
@@ -58,26 +58,26 @@ sudo ufw allow 9005
 sudo ufw allow 30304  
 sudo ufw allow 8645
 
-# dockerları ayağa kaldıralım
+# Let's get the dockers up
 > docker-compose up -d
-# dockerları kontrol edelim
+# let's check dockers
 > docker-compose ps
 ```
-# bu komut ile içersine girelim:
+# Let's get into it with this command:
 
 nano ~/nwaku-compose/docker-compose.yml
 ```console
-> içersine girdikten sonra `ctrl w` yaparak `3000:3000` portuna bakalım
-> `127.0.0.1:3000:3000` yazıyor ise  `0.0.0.0:3000:3000`şeklinde düzeltelim ve docker-compose down-up yazalım.
+> Once inside, let's look at port '3000:3000' by pressing 'ctrl w'.
+> `If it says `127.0.0.1:3000:3000`, let's correct it as `0.0.0.0:3000:3000` and write docker-compose down-up.
 ```
 
-> Yaklaşık 30 dk içersine verileriniz güncellenecek
+> Your data will be updated in approximately 30 minutes.
 
-> `http://IP_ADRESİN:3000/d/yns_4vFVk/nwaku-monitoring`
+> `http://IP_ADRESS:3000/d/yns_4vFVk/nwaku-monitoring`
 
-> IP_ADRESİN kendi sunucunuzun ipsi ile tarayıcıdan açın.
+> Open your IP ADDRESS from the browser with the IP of your own server.
 
-> Yedekleme için `keystore.json` dosyasını kaydedin.
+> Save the `keystore.json` file for backup.
 
 
 
