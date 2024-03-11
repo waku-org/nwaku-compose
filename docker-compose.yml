@@ -31,7 +31,7 @@ x-pg-exporter-env: &pg_exp_env
 # Services definitions
 services:
   nwaku:
-    image: ${NWAKU_IMAGE:-harbor.status.im/wakuorg/nwaku:v0.25.0}
+    image: ${NWAKU_IMAGE:-harbor.status.im/wakuorg/nwaku:v0.26.0}
     restart: on-failure
     ports:
       - 30304:30304/tcp
