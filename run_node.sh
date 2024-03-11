@@ -91,7 +91,7 @@ exec /usr/bin/wakunode\
   --nat=extip:"${MY_EXT_IP}"\
   --store=true\
   --store-message-db-url="postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:5432/postgres"\
-  --store-message-retention-policy=time:86400\
+  --store-message-retention-policy=size:1.5GB\
   --rln-relay=true\
   --rln-relay-dynamic=true\
   --rln-relay-eth-contract-address="${RLN_RELAY_CONTRACT_ADDRESS}"\
