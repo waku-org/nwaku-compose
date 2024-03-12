@@ -84,6 +84,7 @@ exec /usr/bin/wakunode\
   --rest-admin=true\
   --rest-address=0.0.0.0\
   --rest-port=8645\
+  --rest-allow-origin="waku-org.github.io"\
   --nat=extip:"${MY_EXT_IP}"\
   --store=true\
   --store-message-db-url="postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:5432/postgres"\
