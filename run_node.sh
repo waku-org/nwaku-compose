@@ -56,10 +56,6 @@ fi
 STORE_RETENTION_POLICY=--store-message-retention-policy=size:1GB}
 
 if [ -n "${STORAGE_SIZE}" ]; then
-    if [[ ! "${STORAGE_SIZE}" =~ ^[0-9]*\.?[0-9]+[MG]B$ ]]; then
-        echo "Invalid STORAGE_SIZE value: \"${STORAGE_SIZE}\". Please use a valid size format (e.g. 1GB, 120MB, 1.5GB)."
-        exit 1
-    fi
     STORE_RETENTION_POLICY=--store-message-retention-policy=size:"${STORAGE_SIZE}"
 fi
 
