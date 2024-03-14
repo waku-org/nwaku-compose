@@ -38,10 +38,11 @@ Note that if you just want to relay traffic (not publish), you don't need one.
 
 **🖥️ 2. Start your node**
 
-Start all processes: nwaku node, database and grafana for metrics. Your RLN membership is loaded into nwaku under the hood.
+Start all processes: nwaku node, database and grafana for metrics. Your [RLN](https://rate-limiting-nullifier.github.io/rln-docs/what_is_rln.html) membership is loaded into nwaku under the hood.
 ```console
 docker-compose up -d
 ```
+⚠️ The node might take ~5' the very first time it runs because it needs to build locally the RLN community membership tree.
 
 **🏄🏼‍♂️ 3. Interact with your nwaku node**
 * See [http://localhost:3000/d/yns_4vFVk/nwaku-monitoring](http://localhost:3000/d/yns_4vFVk/nwaku-monitoring) for node metrics.
