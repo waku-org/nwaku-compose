@@ -48,15 +48,18 @@ fi
 
 RLN_RELAY_CRED_PATH=--rln-relay-cred-path=${RLN_RELAY_CRED_PATH:-/keystore/keystore.json}
 
-
 if [ -n "${RLN_RELAY_CRED_PASSWORD}" ]; then
     RLN_RELAY_CRED_PASSWORD=--rln-relay-cred-password="${RLN_RELAY_CRED_PASSWORD}"
 fi
 
 STORE_RETENTION_POLICY=--store-message-retention-policy=size:1GB}
-
 if [ -n "${STORAGE_SIZE}" ]; then
     STORE_RETENTION_POLICY=--store-message-retention-policy=size:"${STORAGE_SIZE}"
+fi
+
+USER_REST_ALLOW_ORIGIN=
+if [ -n "${ALLOW_ORIGIN}" ]; then
+    USER_REST_ALLOW_ORIGIN=--rest-allow-origin=\"${ALLOW_ORIGIN}\"
 fi
 
 exec /usr/bin/wakunode\
@@ -89,5 +92,6 @@ exec /usr/bin/wakunode\
   ${DNS_WSS_CMD}\
   ${NODEKEY}\
   ${STORE_RETENTION_POLICY}\
+  ${USER_REST_ALLOW_ORIGIN}\
   ${EXTRA_ARGS}
 

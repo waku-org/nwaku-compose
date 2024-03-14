@@ -50,6 +50,7 @@ services:
       ETH_CLIENT_ADDRESS: *eth_client_address
       EXTRA_ARGS: ${EXTRA_ARGS}
       STORAGE_SIZE: ${STORAGE_SIZE}
+      ALLOW_ORIGIN: ${ALLOW_ORIGIN}
       <<:
         - *pg_env
         - *rln_env
