@@ -15,6 +15,7 @@ There are multiple environment variables you can configure to modify behaviour o
 * `EXTRA_ARGS` - this variable allows you to specify additional or overriding CLI option for the Waku node which will be appended to the `wakunode2` command. (e.g. `EXTRA_ARGS="--store=false --max-connections=3000`)
 * `CERTS_DIR` - allows you to define a path where SSL certificates are/will be stored. It needs to follow the directory structure produced by Certbot in `/etc/letsencrypt`
 * `STORATE_SIZE` - overrides the default allowed DB size of waku message storage service. Current default is 1GB. (e.g. `STORAGE_SIZE=2GB` or `STORAGE_SIZE=3500MB`)
+* `ALLOW_ORIGIN` - Can set the allowed origin site that is enabled to use waku node's REST-API from browser. Great if you are connecting to the node with REST-API from a browser based app. (e.g. `ALLOW_ORIGIN=example.com` or `ALLOW_ORIGIN=localhost:*`)
 
 ## Log monitoring and troubleshooting
 
