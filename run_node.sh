@@ -46,12 +46,17 @@ if [ -n "${NODEKEY}" ]; then
     NODEKEY=--nodekey=${NODEKEY}
 fi
 
-
 RLN_RELAY_CRED_PATH=--rln-relay-cred-path=${RLN_RELAY_CRED_PATH:-/keystore/keystore.json}
 
 
 if [ -n "${RLN_RELAY_CRED_PASSWORD}" ]; then
     RLN_RELAY_CRED_PASSWORD=--rln-relay-cred-password="${RLN_RELAY_CRED_PASSWORD}"
+fi
+
+STORE_RETENTION_POLICY=--store-message-retention-policy=size:1GB}
+
+if [ -n "${STORAGE_SIZE}" ]; then
+    STORE_RETENTION_POLICY=--store-message-retention-policy=size:"${STORAGE_SIZE}"
 fi
 
 exec /usr/bin/wakunode\
@@ -88,7 +93,6 @@ exec /usr/bin/wakunode\
   --nat=extip:"${MY_EXT_IP}"\
   --store=true\
   --store-message-db-url="postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:5432/postgres"\
-  --store-message-retention-policy=time:86400\
   --rln-relay=true\
   --rln-relay-dynamic=true\
   --rln-relay-eth-contract-address="${RLN_RELAY_CONTRACT_ADDRESS}"\
@@ -98,5 +102,6 @@ exec /usr/bin/wakunode\
   ${RLN_RELAY_CRED_PASSWORD}\
   ${DNS_WSS_CMD}\
   ${NODEKEY}\
+  ${STORE_RETENTION_POLICY}\
   ${EXTRA_ARGS}
 
