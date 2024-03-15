@@ -53,7 +53,7 @@ if [ -n "${RLN_RELAY_CRED_PASSWORD}" ]; then
     RLN_RELAY_CRED_PASSWORD=--rln-relay-cred-password="${RLN_RELAY_CRED_PASSWORD}"
 fi
 
-STORE_RETENTION_POLICY=--store-message-retention-policy=size:1GB}
+STORE_RETENTION_POLICY=--store-message-retention-policy=size:1GB
 
 if [ -n "${STORAGE_SIZE}" ]; then
     STORE_RETENTION_POLICY=--store-message-retention-policy=size:"${STORAGE_SIZE}"
