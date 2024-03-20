@@ -74,3 +74,38 @@ curl -X GET "http://127.0.0.1:8645/store/v1/messages?contentTopics=%2Fmy-app%2F2
 ```
 
 For advanced documentation, refer to [ADVANCED.md](https://github.com/waku-org/nwaku-compose/blob/master/ADVANCED.md).
+
+# Node operator recognition
+We appreciate the participation on The Waku Network!
+
+With that, for those aiming to have their nodes monitored we
+encourage to do the following:
+
+1. Establish a fixed and private node key.
+Create a 64 character random hex string with:
+  ```bash
+  openssl rand -hex 32
+  ```
+   and paste it in the `NODEKEY` env var.
+
+Example:
+```bash
+NODEKEY=90200835bf53c689559bdd420fcab1a9057454377ccd9ae938fcf3b9b4c40785
+```
+
+2. Restart your node (`docker compose down` & `docker-compose up -d`)
+
+3. Wait a few minutes and retrieve your public multiaddress with the following command:
+```bash
+curl -X GET http://localhost:8645/debug/v1/info | sed -n 's/.*listenAddresses":\["\(.*\)"\].*/\1/p'
+```
+
+You should see something similar to:
+```bash
+/ip4/57.129.6.17/tcp/30304/p2p/16Uiu2HAmD4dpgoGKXHjEp5749uPpDwRm6Bpf4TuKTKrj6ErsAa1N
+```
+
+:warning: Make sure your node always retrieve the same public multiaddress. This can be checked by restarting the node twice.
+
+4. Send that public address to us on Discord:
+https://discord.com/channels/1110799176264056863/1216748184592711691
