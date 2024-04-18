@@ -3687,20 +3687,6 @@
       "valueName": "max"
     },
     {
-      "gridPos": {
-        "h": 7,
-        "w": 3,
-        "x": 0,
-        "y": 88
-      },
-      "id": 140,
-      "libraryPanel": {
-        "name": "Rows in message table (Postgres)",
-        "uid": "e2941e53-8bdf-4e44-8a14-8cca6476c269"
-      },
-      "title": "Rows in message table (Postgres)"
-    },
-    {
       "datasource": "Prometheus",
       "description": "Shared buffer hits vs reads from disc",
       "fieldConfig": {
@@ -3721,8 +3707,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "semi-dark-red",
-                "value": null
+                "color": "semi-dark-red"
               },
               {
                 "color": "semi-dark-yellow",
@@ -3741,7 +3726,7 @@
       "gridPos": {
         "h": 7,
         "w": 3,
-        "x": 3,
+        "x": 0,
         "y": 88
       },
       "id": 16,
@@ -3812,7 +3797,7 @@
       "gridPos": {
         "h": 7,
         "w": 3,
-        "x": 6,
+        "x": 3,
         "y": 88
       },
       "id": 9,
@@ -3883,7 +3868,7 @@
       "gridPos": {
         "h": 7,
         "w": 3,
-        "x": 9,
+        "x": 6,
         "y": 88
       },
       "id": 15,
@@ -4308,18 +4293,103 @@
       }
     },
     {
+      "aliasColors": {},
+      "bars": true,
+      "dashLength": 10,
+      "dashes": false,
+      "datasource": "Prometheus",
+      "decimals": 0,
+      "description": "View: pg_stat_activity",
+      "fieldConfig": {
+        "defaults": {
+          "links": []
+        },
+        "overrides": []
+      },
+      "fill": 1,
+      "fillGradient": 0,
       "gridPos": {
-        "h": 8,
+        "h": 9,
         "w": 12,
         "x": 12,
         "y": 99
       },
-      "id": 145,
-      "libraryPanel": {
-        "name": "Database Size (Postgres)",
-        "uid": "eedb4531-abdb-4c30-92f6-6545c862a1f5"
+      "hiddenSeries": false,
+      "id": 121,
+      "interval": "$Interval",
+      "legend": {
+        "alignAsTable": true,
+        "avg": true,
+        "current": true,
+        "hideEmpty": true,
+        "hideZero": true,
+        "max": true,
+        "min": false,
+        "rightSide": false,
+        "show": true,
+        "total": false,
+        "values": true
       },
-      "title": "Database Size (Postgres)"
+      "lines": false,
+      "linewidth": 1,
+      "links": [
+        {
+          "targetBlank": true,
+          "title": "PostgreSQL Documentation",
+          "url": "https://www.postgresql.org/docs/current/monitoring-stats.html"
+        }
+      ],
+      "nullPointMode": "null as zero",
+      "options": {
+        "alertThreshold": true
+      },
+      "percentage": false,
+      "pluginVersion": "10.2.3",
+      "pointradius": 2,
+      "points": false,
+      "renderer": "flot",
+      "seriesOverrides": [],
+      "spaceLength": 10,
+      "stack": true,
+      "steppedLine": false,
+      "targets": [
+        {
+          "expr": "sum by (datname) (pg_stat_activity_count{instance=\"$Instance\"})",
+          "legendFormat": "{{datname}}",
+          "refId": "A"
+        }
+      ],
+      "thresholds": [],
+      "timeRegions": [],
+      "title": "Connections by database (stacked) (Postgres)",
+      "tooltip": {
+        "shared": true,
+        "sort": 0,
+        "value_type": "individual"
+      },
+      "type": "graph",
+      "xaxis": {
+        "mode": "time",
+        "show": true,
+        "values": []
+      },
+      "yaxes": [
+        {
+          "decimals": 0,
+          "format": "short",
+          "logBase": 1,
+          "show": true
+        },
+        {
+          "decimals": 0,
+          "format": "short",
+          "logBase": 1,
+          "show": true
+        }
+      ],
+      "yaxis": {
+        "align": false
+      }
     },
     {
       "aliasColors": {},
@@ -4421,12 +4491,11 @@
     },
     {
       "aliasColors": {},
-      "bars": true,
+      "bars": false,
       "dashLength": 10,
       "dashes": false,
       "datasource": "Prometheus",
-      "decimals": 0,
-      "description": "View: pg_stat_activity",
+      "description": "Source: pg_stat_database",
       "fieldConfig": {
         "defaults": {
           "links": []
@@ -4439,34 +4508,24 @@
         "h": 9,
         "w": 12,
         "x": 12,
-        "y": 107
+        "y": 108
       },
       "hiddenSeries": false,
-      "id": 121,
-      "interval": "$Interval",
+      "id": 27,
       "legend": {
         "alignAsTable": true,
         "avg": true,
         "current": true,
-        "hideEmpty": true,
-        "hideZero": true,
+        "hideZero": false,
         "max": true,
         "min": false,
-        "rightSide": false,
         "show": true,
         "total": false,
         "values": true
       },
-      "lines": false,
+      "lines": true,
       "linewidth": 1,
-      "links": [
-        {
-          "targetBlank": true,
-          "title": "PostgreSQL Documentation",
-          "url": "https://www.postgresql.org/docs/current/monitoring-stats.html"
-        }
-      ],
-      "nullPointMode": "null as zero",
+      "nullPointMode": "null",
       "options": {
         "alertThreshold": true
       },
@@ -4477,18 +4536,31 @@
       "renderer": "flot",
       "seriesOverrides": [],
       "spaceLength": 10,
-      "stack": true,
+      "stack": false,
       "steppedLine": false,
       "targets": [
         {
-          "expr": "sum by (datname) (pg_stat_activity_count{instance=\"$Instance\"})",
-          "legendFormat": "{{datname}}",
+          "expr": "sum((rate(pg_stat_database_tup_inserted{instance=\"$Instance\"}[$Interval])))",
+          "interval": "",
+          "legendFormat": "Inserts",
           "refId": "A"
+        },
+        {
+          "expr": "sum((rate(pg_stat_database_tup_updated{instance=\"$Instance\"}[$Interval])))",
+          "interval": "",
+          "legendFormat": "Updates",
+          "refId": "B"
+        },
+        {
+          "expr": "sum((rate(pg_stat_database_tup_deleted{instance=\"$Instance\"}[$Interval])))",
+          "interval": "",
+          "legendFormat": "Deletes",
+          "refId": "C"
         }
       ],
       "thresholds": [],
       "timeRegions": [],
-      "title": "Connections by database (stacked) (Postgres)",
+      "title": "Tuples inserts/updates/deletes (Postgres)",
       "tooltip": {
         "shared": true,
         "sort": 0,
@@ -4502,15 +4574,15 @@
       },
       "yaxes": [
         {
-          "decimals": 0,
-          "format": "short",
+          "format": "none",
           "logBase": 1,
+          "min": "0",
           "show": true
         },
         {
-          "decimals": 0,
           "format": "short",
           "logBase": 1,
+          "min": "0",
           "show": true
         }
       ],
@@ -4618,7 +4690,7 @@
       "dashLength": 10,
       "dashes": false,
       "datasource": "Prometheus",
-      "description": "Source: pg_stat_database",
+      "description": "Source: pg_stat_database\n\n* tup_fetched: rows needed to satisfy queries\n* tup_returned: rows read/scanned",
       "fieldConfig": {
         "defaults": {
           "links": []
@@ -4631,10 +4703,10 @@
         "h": 9,
         "w": 12,
         "x": 12,
-        "y": 116
+        "y": 117
       },
       "hiddenSeries": false,
-      "id": 27,
+      "id": 111,
       "legend": {
         "alignAsTable": true,
         "avg": true,
@@ -4663,27 +4735,21 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "sum((rate(pg_stat_database_tup_inserted{instance=\"$Instance\"}[$Interval])))",
+          "expr": "sum((rate(pg_stat_database_tup_fetched{instance=\"$Instance\"}[$Interval])))",
           "interval": "",
-          "legendFormat": "Inserts",
+          "legendFormat": "Fetched",
           "refId": "A"
         },
         {
-          "expr": "sum((rate(pg_stat_database_tup_updated{instance=\"$Instance\"}[$Interval])))",
+          "expr": "sum((rate(pg_stat_database_tup_returned{instance=\"$Instance\"}[$Interval])))",
           "interval": "",
-          "legendFormat": "Updates",
+          "legendFormat": "Returned",
           "refId": "B"
-        },
-        {
-          "expr": "sum((rate(pg_stat_database_tup_deleted{instance=\"$Instance\"}[$Interval])))",
-          "interval": "",
-          "legendFormat": "Deletes",
-          "refId": "C"
         }
       ],
       "thresholds": [],
       "timeRegions": [],
-      "title": "Tuples inserts/updates/deletes (Postgres)",
+      "title": "Tuples fetched/returned (Postgres)",
       "tooltip": {
         "shared": true,
         "sort": 0,
@@ -4697,7 +4763,7 @@
       },
       "yaxes": [
         {
-          "format": "none",
+          "format": "short",
           "logBase": 1,
           "min": "0",
           "show": true
@@ -4706,7 +4772,7 @@
           "format": "short",
           "logBase": 1,
           "min": "0",
-          "show": true
+          "show": false
         }
       ],
       "yaxis": {
@@ -4810,192 +4876,6 @@
       "dashLength": 10,
       "dashes": false,
       "datasource": "Prometheus",
-      "description": "Source: pg_stat_database\n\n* tup_fetched: rows needed to satisfy queries\n* tup_returned: rows read/scanned",
-      "fieldConfig": {
-        "defaults": {
-          "links": []
-        },
-        "overrides": []
-      },
-      "fill": 1,
-      "fillGradient": 0,
-      "gridPos": {
-        "h": 9,
-        "w": 12,
-        "x": 12,
-        "y": 125
-      },
-      "hiddenSeries": false,
-      "id": 111,
-      "legend": {
-        "alignAsTable": true,
-        "avg": true,
-        "current": true,
-        "hideZero": false,
-        "max": true,
-        "min": false,
-        "show": true,
-        "total": false,
-        "values": true
-      },
-      "lines": true,
-      "linewidth": 1,
-      "nullPointMode": "null",
-      "options": {
-        "alertThreshold": true
-      },
-      "percentage": false,
-      "pluginVersion": "10.2.3",
-      "pointradius": 2,
-      "points": false,
-      "renderer": "flot",
-      "seriesOverrides": [],
-      "spaceLength": 10,
-      "stack": false,
-      "steppedLine": false,
-      "targets": [
-        {
-          "expr": "sum((rate(pg_stat_database_tup_fetched{instance=\"$Instance\"}[$Interval])))",
-          "interval": "",
-          "legendFormat": "Fetched",
-          "refId": "A"
-        },
-        {
-          "expr": "sum((rate(pg_stat_database_tup_returned{instance=\"$Instance\"}[$Interval])))",
-          "interval": "",
-          "legendFormat": "Returned",
-          "refId": "B"
-        }
-      ],
-      "thresholds": [],
-      "timeRegions": [],
-      "title": "Tuples fetched/returned (Postgres)",
-      "tooltip": {
-        "shared": true,
-        "sort": 0,
-        "value_type": "individual"
-      },
-      "type": "graph",
-      "xaxis": {
-        "mode": "time",
-        "show": true,
-        "values": []
-      },
-      "yaxes": [
-        {
-          "format": "short",
-          "logBase": 1,
-          "min": "0",
-          "show": true
-        },
-        {
-          "format": "short",
-          "logBase": 1,
-          "min": "0",
-          "show": false
-        }
-      ],
-      "yaxis": {
-        "align": false
-      }
-    },
-    {
-      "aliasColors": {},
-      "bars": false,
-      "dashLength": 10,
-      "dashes": false,
-      "datasource": "Prometheus",
-      "description": "Lag behind master in seconds.\n\nOnly available on a standby System.",
-      "fieldConfig": {
-        "defaults": {
-          "links": []
-        },
-        "overrides": []
-      },
-      "fill": 1,
-      "fillGradient": 0,
-      "gridPos": {
-        "h": 10,
-        "w": 12,
-        "x": 0,
-        "y": 132
-      },
-      "hiddenSeries": false,
-      "id": 120,
-      "interval": "1m",
-      "legend": {
-        "alignAsTable": true,
-        "avg": true,
-        "current": true,
-        "max": true,
-        "min": false,
-        "show": true,
-        "total": false,
-        "values": true
-      },
-      "lines": true,
-      "linewidth": 1,
-      "links": [],
-      "nullPointMode": "null",
-      "options": {
-        "alertThreshold": true
-      },
-      "percentage": false,
-      "pluginVersion": "10.2.3",
-      "pointradius": 2,
-      "points": false,
-      "renderer": "flot",
-      "seriesOverrides": [],
-      "spaceLength": 10,
-      "stack": false,
-      "steppedLine": false,
-      "targets": [
-        {
-          "expr": "max(pg_replication_lag{instance=\"$Instance\"})",
-          "instant": false,
-          "intervalFactor": 1,
-          "legendFormat": "lag ",
-          "refId": "A"
-        }
-      ],
-      "thresholds": [],
-      "timeRegions": [],
-      "title": "Replication lag (Postgres)",
-      "tooltip": {
-        "shared": true,
-        "sort": 0,
-        "value_type": "individual"
-      },
-      "type": "graph",
-      "xaxis": {
-        "mode": "time",
-        "show": true,
-        "values": []
-      },
-      "yaxes": [
-        {
-          "format": "s",
-          "logBase": 1,
-          "min": "0",
-          "show": true
-        },
-        {
-          "format": "short",
-          "logBase": 1,
-          "min": "0",
-          "show": true
-        }
-      ],
-      "yaxis": {
-        "align": false
-      }
-    },
-    {
-      "aliasColors": {},
-      "bars": false,
-      "dashLength": 10,
-      "dashes": false,
-      "datasource": "Prometheus",
       "description": "Should be 0 \n\nSource: pg_stat_database\n\nWith log_lock_waits turned on, deadlocks will be logged to the PostgreSQL Logfiles.",
       "fieldConfig": {
         "defaults": {
@@ -5009,7 +4889,7 @@
         "h": 5,
         "w": 12,
         "x": 12,
-        "y": 134
+        "y": 126
       },
       "hiddenSeries": false,
       "id": 30,
@@ -5105,7 +4985,7 @@
         "h": 5,
         "w": 12,
         "x": 12,
-        "y": 139
+        "y": 131
       },
       "hiddenSeries": false,
       "id": 31,
@@ -5167,6 +5047,97 @@
       "yaxes": [
         {
           "format": "none",
+          "logBase": 1,
+          "min": "0",
+          "show": true
+        },
+        {
+          "format": "short",
+          "logBase": 1,
+          "min": "0",
+          "show": true
+        }
+      ],
+      "yaxis": {
+        "align": false
+      }
+    },
+    {
+      "aliasColors": {},
+      "bars": false,
+      "dashLength": 10,
+      "dashes": false,
+      "datasource": "Prometheus",
+      "description": "Lag behind master in seconds.\n\nOnly available on a standby System.",
+      "fieldConfig": {
+        "defaults": {
+          "links": []
+        },
+        "overrides": []
+      },
+      "fill": 1,
+      "fillGradient": 0,
+      "gridPos": {
+        "h": 10,
+        "w": 12,
+        "x": 0,
+        "y": 132
+      },
+      "hiddenSeries": false,
+      "id": 120,
+      "interval": "1m",
+      "legend": {
+        "alignAsTable": true,
+        "avg": true,
+        "current": true,
+        "max": true,
+        "min": false,
+        "show": true,
+        "total": false,
+        "values": true
+      },
+      "lines": true,
+      "linewidth": 1,
+      "links": [],
+      "nullPointMode": "null",
+      "options": {
+        "alertThreshold": true
+      },
+      "percentage": false,
+      "pluginVersion": "10.2.3",
+      "pointradius": 2,
+      "points": false,
+      "renderer": "flot",
+      "seriesOverrides": [],
+      "spaceLength": 10,
+      "stack": false,
+      "steppedLine": false,
+      "targets": [
+        {
+          "expr": "max(pg_replication_lag{instance=\"$Instance\"})",
+          "instant": false,
+          "intervalFactor": 1,
+          "legendFormat": "lag ",
+          "refId": "A"
+        }
+      ],
+      "thresholds": [],
+      "timeRegions": [],
+      "title": "Replication lag (Postgres)",
+      "tooltip": {
+        "shared": true,
+        "sort": 0,
+        "value_type": "individual"
+      },
+      "type": "graph",
+      "xaxis": {
+        "mode": "time",
+        "show": true,
+        "values": []
+      },
+      "yaxes": [
+        {
+          "format": "s",
           "logBase": 1,
           "min": "0",
           "show": true
