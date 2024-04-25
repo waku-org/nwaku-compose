@@ -44,6 +44,11 @@ docker-compose up -d
 ```
 ⚠️ The node might take ~5' the very first time it runs because it needs to build locally the RLN community membership tree.
 
+Optionally, you can run it with caddy which gives a free SSL certificate for REST API,
+- set the A record in DNS settings to your server IP address
+- change `your-domain.com` in `Caddyfile`
+- run `docker-compose --profile prod up -d`
+
 **🏄🏼‍♂️ 3. Interact with your nwaku node**
 * See [http://localhost:3000/d/yns_4vFVk/nwaku-monitoring](http://localhost:3000/d/yns_4vFVk/nwaku-monitoring) for node metrics.
 * See [localhost:4000](http://localhost:4000). Under development 🚧
