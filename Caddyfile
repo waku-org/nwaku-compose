@@ -10,5 +10,5 @@ your-domain.com {
             Access-Control-Allow-Headers User-Agent,Content-Type,X-Api-Key
             Access-Control-Max-Age 86400
     }
-    reverse_proxy :8645
+    reverse_proxy nwaku:8645
 }
