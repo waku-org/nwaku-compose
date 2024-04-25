@@ -51,3 +51,10 @@ proofs, hashing, Merkle tree, Blockchain, etc.
 Deeper technical details can be found in:
 * [RLN-V1 spec](https://rfc.vac.dev/spec/32/)
 * [RLN-V2 spec](https://rfc.vac.dev/spec/58/)
+
+## Caddy Configuration
+
+Optionally, you can run it with caddy which gives a free SSL certificate for REST API,
+- set the A record in DNS settings to your server IP address
+- change `your-domain.com` in `Caddyfile`
+- run `docker-compose --profile prod up -d`
