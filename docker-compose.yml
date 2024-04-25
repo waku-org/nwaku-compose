@@ -38,7 +38,7 @@ services:
       - 30304:30304/udp
       - 9005:9005/udp
       - 127.0.0.1:8003:8003
-      - 80:80 #Let's Encrypt
+      - 88:80 #Let's Encrypt
       - 8000:8000/tcp #WSS
       - 127.0.0.1:8645:8645
     <<:
@@ -141,3 +141,19 @@ services:
       - --config.file=/etc/pgexporter/postgres-exporter.yml
     depends_on:
       - postgres
+  
+  caddy:
+    image: caddy:2.7.6
+    profiles: [prod]
+    restart: on-failure:5
+    cap_add:
+      - NET_ADMIN
+    ports:
+      - "80:80"
+      - "443:443"
+      - "443:443/udp"
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile
+      - ./caddy/data:/data
+      - ./caddy/config:/config
+
