@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-# optional argument to specgify the ip address
+# Optional argument to specify the ip address
 ip_address="localhost:8645"
 plain_text_out=false
 
@@ -31,7 +31,7 @@ if [[ -n "$1" ]]; then
   ip_address="$1"
 fi
 
-# check if curl is available
+# Check if curl is available
 if ! command -v curl &> /dev/null
 then
     echo "curl could not be found"
