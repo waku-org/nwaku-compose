@@ -60,3 +60,10 @@ docker compose --profile dbadmin up -d
 ```
 an additional service - pgadmin - is started and can be accessed from browser on http://localhost:15432
 That will give insights on the Node's message store database.
+
+### Shutting down the container with pgadmin service
+
+If started with 'dbadmin' profile it must be used when stopping it:
+```console
+docker compose --profile dbadmin down
+```
