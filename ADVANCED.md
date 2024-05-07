@@ -51,3 +51,12 @@ proofs, hashing, Merkle tree, Blockchain, etc.
 Deeper technical details can be found in:
 * [RLN-V1 spec](https://rfc.vac.dev/spec/32/)
 * [RLN-V2 spec](https://rfc.vac.dev/spec/58/)
+
+## DB Administration
+
+In case compositon is started with command
+```console
+docker compose --profile dbadmin up -d
+```
+an additional service - pgadmin - is started and can be accessed from browser on http://localhost:15432
+That will give insights on the Node's message store database.
