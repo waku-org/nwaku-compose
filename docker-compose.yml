@@ -142,45 +142,47 @@ services:
     depends_on:
       - postgres
 
-  pgadmin:
-    image: dpage/pgadmin4:latest
-    environment:
-      - PGADMIN_DEFAULT_EMAIL=waku@waku.com
-      - PGADMIN_DEFAULT_PASSWORD=wakuwaku
-      - PGADMIN_CONFIG_SERVER_MODE=False
-      - PGADMIN_CONFIG_MASTER_PASSWORD_REQUIRED=False
-      - PGADMIN_LISTEN_PORT=80
-    ports:
-      - 15432:80
-    user: root
-    entrypoint: /bin/sh -c "chmod 600 /pgpass; /entrypoint.sh;"
-    volumes:
-      - pgadmin:/var/lib/pgadmin
-    configs:
-      - source: servers.json
-        target: /pgadmin4/servers.json
-      - source: pgpass
-        target: /pgpass
-    depends_on:
-      - postgres
-    profiles:
-      - dbadmin
+##  Remove comment if you need pgadmin support in your container.
+##  Commented for backward version compatibility of docker-compose.
+#   pgadmin:
+#     image: dpage/pgadmin4:latest
+#     environment:
+#       - PGADMIN_DEFAULT_EMAIL=waku@waku.com
+#       - PGADMIN_DEFAULT_PASSWORD=wakuwaku
+#       - PGADMIN_CONFIG_SERVER_MODE=False
+#       - PGADMIN_CONFIG_MASTER_PASSWORD_REQUIRED=False
+#       - PGADMIN_LISTEN_PORT=80
+#     ports:
+#       - 15432:80
+#     user: root
+#     entrypoint: /bin/sh -c "chmod 600 /pgpass; /entrypoint.sh;"
+#     volumes:
+#       - pgadmin:/var/lib/pgadmin
+#     configs:
+#       - source: servers.json
+#         target: /pgadmin4/servers.json
+#       - source: pgpass
+#         target: /pgpass
+#     depends_on:
+#       - postgres
+#     profiles:
+#       - dbadmin
 
-volumes:
-  pgadmin:
+# volumes:
+#   pgadmin:
 
-configs:
-  pgpass:
-    content: postgres:5432:*:${POSTGRES_USER:-postgres}:${POSTGRES_PASSWORD:-test123}
-  servers.json:
-    content: |
-      {"Servers": {"1": {
-        "Group": "Servers",
-        "Name": "WakuStoreDB",
-        "Host": "postgres",
-        "Port": 5432,
-        "MaintenanceDB": "postgres",
-        "Username": "postgres",
-        "PassFile": "/pgpass",
-        "SSLMode": "disable"
-      }}}
+# configs:
+#   pgpass:
+#     content: postgres:5432:*:${POSTGRES_USER:-postgres}:${POSTGRES_PASSWORD:-test123}
+#   servers.json:
+#     content: |
+#       {"Servers": {"1": {
+#         "Group": "Servers",
+#         "Name": "WakuStoreDB",
+#         "Host": "postgres",
+#         "Port": 5432,
+#         "MaintenanceDB": "postgres",
+#         "Username": "postgres",
+#         "PassFile": "/pgpass",
+#         "SSLMode": "disable"
+#       }}}
