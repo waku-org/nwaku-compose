@@ -32,7 +32,7 @@ x-pg-exporter-env: &pg_exp_env
 services:
   nwaku:
     image: ${NWAKU_IMAGE:-gabrielmer/heaptrack:test}
-    restart: on-failure
+    #restart: on-failure
     ports:
       - 30304:30304/tcp
       - 30304:30304/udp
