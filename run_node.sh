@@ -59,7 +59,7 @@ if [ -n "${STORAGE_SIZE}" ]; then
     STORE_RETENTION_POLICY=--store-message-retention-policy=size:"${STORAGE_SIZE}"
 fi
 
-exec /usr/bin/wakunode\
+exec /heaptrack/build/bin/heaptrack /usr/bin/wakunode\
   --relay=true\
   --filter=true\
   --lightpush=true\
