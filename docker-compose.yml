@@ -146,10 +146,12 @@ services:
    # TODO: migrate to waku-org
    image: alrevuelta/waku-frontend:latest
    ports:
-     - 127.0.0.1:5173:5173
+    - 127.0.0.1:5173:5173
+   environment:
+    VITE_API_ENDPOINT: ${VITE_API_ENDPOINT}
    restart: on-failure:5
    depends_on:
-     - nwaku
+    - nwaku
 
 ##  Remove comment if you need pgadmin support in your container.
 ##  Commented for backward version compatibility of docker-compose.
