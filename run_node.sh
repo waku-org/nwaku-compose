@@ -106,8 +106,11 @@ exec /usr/bin/wakunode\
     --lightpush=true\
     --keep-alive=true\
     --max-connections=150\
-    --cluster-id=1\
+    --cluster-id=16\
+    --shard=32\
     --discv5-discovery=true\
+    --dns-discovery=true\
+    --dns-discovery-url=enrtree://AMOJVZX4V6EXP7NTJPMAYJYST2QP6AJXYW76IU6VGJS7UVSNDYZG4@boot.test.shards.nodes.status.im\
     --discv5-udp-port=9005\
     --discv5-enr-auto-update=True\
     --log-level=DEBUG\
@@ -132,4 +135,9 @@ exec /usr/bin/wakunode\
     ${NODEKEY}\
     ${STORE_RETENTION_POLICY}\
     ${EXTRA_ARGS}
+
+
+
+
+
 
