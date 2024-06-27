@@ -2,6 +2,12 @@
 
 echo "I am a nwaku node"
 
+if test -n "${ETH_CLIENT_ADDRESS}" -o ; then
+  echo "ETH_CLIENT_ADDRESS variable was renamed to RLN_RELAY_ETH_CLIENT_ADDRESS"
+  echo "Please update your .env file"
+  exit 1
+fi
+
 if [ -z "${RLN_RELAY_ETH_CLIENT_ADDRESS}" ]; then
     echo "Missing Eth client address, please refer to README.md for detailed instructions"
     exit 1
