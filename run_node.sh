@@ -2,7 +2,7 @@
 
 echo "I am a nwaku node"
 
-if [ -z "${ETH_CLIENT_ADDRESS}" ]; then
+if [ -z "${RLN_RELAY_ETH_CLIENT_ADDRESS}" ]; then
     echo "Missing Eth client address, please refer to README.md for detailed instructions"
     exit 1
 fi
@@ -83,7 +83,7 @@ exec /usr/bin/wakunode\
   --nat=extip:"${MY_EXT_IP}"\
   --store=true\
   --store-message-db-url="postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:5432/postgres"\
-  --rln-relay-eth-client-address="${ETH_CLIENT_ADDRESS}"\
+  --rln-relay-eth-client-address="${RLN_RELAY_ETH_CLIENT_ADDRESS}"\
   --rln-relay-tree-path="/etc/rln_tree"\
   ${RLN_RELAY_CRED_PATH}\
   ${RLN_RELAY_CRED_PASSWORD}\
