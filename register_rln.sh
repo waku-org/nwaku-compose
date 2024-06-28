@@ -7,10 +7,9 @@ if test -f ./keystore/keystore.json; then
   exit 1
 fi
 
-
 if test -f .env; then
   echo "Using .env file"
-  . $(pwd)/.env
+  . "$(pwd)"/.env
 fi
 
 # TODO: Set nwaku release when ready instead of quay
@@ -21,7 +20,7 @@ if test -n "${ETH_CLIENT_ADDRESS}"; then
   exit 1
 fi
 
-docker run -v $(pwd)/keystore:/keystore/:Z harbor.status.im/wakuorg/nwaku:v0.25.0 generateRlnKeystore \
+docker run -v "$(pwd)/keystore":/keystore/:Z harbor.status.im/wakuorg/nwaku:v0.25.0 generateRlnKeystore \
 --rln-relay-eth-client-address=${RLN_RELAY_ETH_CLIENT_ADDRESS} \
 --rln-relay-eth-private-key=${ETH_TESTNET_KEY} \
 --rln-relay-eth-contract-address=0xF471d71E9b1455bBF4b85d475afb9BB0954A29c4 \
