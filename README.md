@@ -10,9 +10,21 @@ Ready to use docker-compose to run your own [nwaku](https://github.com/waku-org/
 **📝 0. Prerequisites**
 
 You need:
-* Ethereum Sepolia WebSocket endpoint. Get one free from [Infura](https://www.infura.io/).
-* Ethereum Sepolia account with some balance <0.01 Eth. Get some [here](https://www.infura.io/faucet/sepolia).
+* Polygon zkEVM Cardona https endpoint. Get one free from [Alchemy](https://www.alchemy.com/).
+* Polygon zkEVM Cardona (test) account with some ETH balance (<0.1 ETH). Get some [here]( https://faucet.polygon.technology/).
 * A password to protect your rln membership.
+
+:information_source:
+Network: Cardona zkEVM testnet
+
+RPC URL: https://rpc.cardona.zkevm-rpc.com
+Chain ID: 2442
+
+Block Explorer: https://cardona-zkevm.polygonscan.com/
+                https://cardona-zkevm.polygonscan.com/address/0x4976df0f61135ef3e5720d92eade2e5f47a68ef9
+
+Currency: ETH
+
 
 `docker-compose` [will read the `./.env` file](https://docs.docker.com/compose/environment-variables/set-environment-variables/#additional-information-3) from the filesystem. There is `.env.example` available for you as a template to use for providing the above values. The process when working with `.env` files is to copy the `.env.example`, store it as `.env` and edit the values there.
 
