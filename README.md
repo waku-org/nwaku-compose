@@ -15,7 +15,7 @@ You need:
 * A password to protect your rln membership.
 
 :information_source:
-Additional details about the blockchain network that contains the membership contact:
+Additional details about the blockchain network that contains the membership smart contract:
 - Network name: Cardona zkEVM testnet
 - RPC URL: https://rpc.cardona.zkevm-rpc.com
 - Chain ID: 2442
