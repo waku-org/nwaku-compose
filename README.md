@@ -11,7 +11,7 @@ Ready to use docker-compose to run your own [nwaku](https://github.com/waku-org/
 
 You need:
 * Polygon zkEVM Cardona https endpoint. Get one free from [Alchemy](https://www.alchemy.com/).
-* Polygon zkEVM Cardona (test) account with some ETH balance (<0.1 ETH). Get some [here](https://faucet.polygon.technology/).
+* Polygon zkEVM Cardona (test) account with some ETH balance (<0.1 ETH). Get some [here](https://faucet.polygon.technology/) or [here](https://faucet-cardona.rymnc.com/).
 * A password to protect your rln membership.
 
 :information_source:
