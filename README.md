@@ -45,13 +45,10 @@ docker-compose up -d
 ⚠️ The node might take ~5' the very first time it runs because it needs to build locally the RLN community membership tree.
 
 **🏄🏼‍♂️ 3. Interact with your nwaku node**
-* See [http://localhost:3000/d/yns_4vFVk/nwaku-monitoring](http://localhost:3000/d/yns_4vFVk/nwaku-monitoring) for node metrics.
-* See [localhost:4000](http://localhost:4000). Under development 🚧
+* See [localhost:3000](http://localhost:3000/d/yns_4vFVk/nwaku-monitoring) for node metrics.
+* See [localhost:4000](http://localhost:4000) for a nice frontend to chat with other users.
 
-**⭐ 4. Chat using waku-frontend**
-Check out [http://localhost:5173](http://localhost:5173) and use your Waku node to chat with other users
-
-**📬 5. Use the REST API**
+**📬 4. Use the REST API**
 
 Your nwaku node exposes a [REST API](https://waku-org.github.io/waku-rest-api/) to interact with it.
 
