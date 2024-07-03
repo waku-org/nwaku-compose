@@ -9,7 +9,7 @@ x-logging: &logging
 x-rln-relay-eth-client-address: &rln_relay_eth_client_address ${RLN_RELAY_ETH_CLIENT_ADDRESS:-} # Add your RLN_RELAY_ETH_CLIENT_ADDRESS after the "-"
 
 x-rln-environment: &rln_env
-  RLN_RELAY_CONTRACT_ADDRESS: ${RLN_RELAY_CONTRACT_ADDRESS:-0xF471d71E9b1455bBF4b85d475afb9BB0954A29c4}
+  RLN_RELAY_CONTRACT_ADDRESS: ${RLN_RELAY_CONTRACT_ADDRESS:-0xCB33Aa5B38d79E3D9Fa8B10afF38AA201399a7e3}
   RLN_RELAY_CRED_PATH: ${RLN_RELAY_CRED_PATH:-} # Optional: Add your RLN_RELAY_CRED_PATH after the "-"
   RLN_RELAY_CRED_PASSWORD: ${RLN_RELAY_CRED_PASSWORD:-} # Optional: Add your RLN_RELAY_CRED_PASSWORD after the "-"
 
@@ -31,7 +31,7 @@ x-pg-exporter-env: &pg_exp_env
 # Services definitions
 services:
   nwaku:
-    image: ${NWAKU_IMAGE:-harbor.status.im/wakuorg/nwaku:v0.29.0}
+    image: ${NWAKU_IMAGE:-harbor.status.im/wakuorg/nwaku:v0.30.1}
     restart: on-failure
     ports:
       - 30304:30304/tcp
