@@ -144,9 +144,9 @@ services:
 
   waku-frontend:
    # TODO: migrate to waku-org
-   image: alrevuelta/waku-frontend:latest
+   image: alrevuelta/waku-frontend:aad9628
    ports:
-    - 127.0.0.1:5173:5173
+    - 127.0.0.1:4000:4000
    restart: on-failure:5
    depends_on:
     - nwaku
