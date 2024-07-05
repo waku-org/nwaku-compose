@@ -27,5 +27,5 @@ docker run -v $(pwd)/keystore:/keystore/:Z harbor.status.im/wakuorg/nwaku:v0.30.
 --rln-relay-eth-contract-address=0xCB33Aa5B38d79E3D9Fa8B10afF38AA201399a7e3 \
 --rln-relay-cred-path=/keystore/keystore.json \
 --rln-relay-cred-password="${RLN_RELAY_CRED_PASSWORD}" \
---rln-relay-user-message-limit=20 \
+--rln-relay-user-message-limit=100 \
 --execute
