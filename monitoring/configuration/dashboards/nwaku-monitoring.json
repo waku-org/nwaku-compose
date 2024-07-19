@@ -583,8 +583,9 @@
             "uid": "PBFA97CFB590B2093"
           },
           "editorMode": "code",
+          "exemplar": false,
           "expr": "rate(waku_relay_network_bytes_total{direction=\"in\"}[$__rate_interval])",
-          "legendFormat": "{{topic}}",
+          "legendFormat": "{{topic}}/{{type}}",
           "range": true,
           "refId": "A"
         }
@@ -3693,7 +3694,8 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green"
+                "color": "green",
+                "value": null
               }
             ]
           }
@@ -3800,7 +3802,8 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green"
+                "color": "green",
+                "value": null
               },
               {
                 "color": "red",
@@ -3913,7 +3916,8 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green"
+                "color": "green",
+                "value": null
               },
               {
                 "color": "red",
@@ -4025,7 +4029,8 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green"
+                "color": "green",
+                "value": null
               },
               {
                 "color": "red",
@@ -4138,7 +4143,8 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green"
+                "color": "green",
+                "value": null
               }
             ]
           },
@@ -4245,7 +4251,8 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green"
+                "color": "green",
+                "value": null
               },
               {
                 "color": "red",
@@ -4361,7 +4368,8 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "semi-dark-red"
+                "color": "semi-dark-red",
+                "value": null
               },
               {
                 "color": "semi-dark-yellow",
@@ -4430,7 +4438,8 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "semi-dark-green"
+                "color": "semi-dark-green",
+                "value": null
               },
               {
                 "color": "semi-dark-yellow",
@@ -4499,7 +4508,8 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "semi-dark-red"
+                "color": "semi-dark-red",
+                "value": null
               },
               {
                 "color": "#EAB839",
@@ -4595,7 +4605,8 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green"
+                "color": "green",
+                "value": null
               },
               {
                 "color": "red",
@@ -5634,10 +5645,9 @@
     "list": [
       {
         "current": {
-          "isNone": true,
           "selected": false,
-          "text": "None",
-          "value": ""
+          "text": "postgres-exporter:9187",
+          "value": "postgres-exporter:9187"
         },
         "datasource": {
           "type": "prometheus",
@@ -5754,8 +5764,8 @@
     ]
   },
   "time": {
-    "from": "2024-06-26T02:42:06.763Z",
-    "to": "2024-06-26T04:42:06.771Z"
+    "from": "now-30m",
+    "to": "now"
   },
   "timepicker": {
     "refresh_intervals": [
