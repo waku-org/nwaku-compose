@@ -74,3 +74,13 @@ curl -X GET "http://127.0.0.1:8645/store/v1/messages?contentTopics=%2Fmy-app%2F2
 ```
 
 For advanced documentation, refer to [ADVANCED.md](https://github.com/waku-org/nwaku-compose/blob/master/ADVANCED.md).
+
+-----
+# How to update to latest version
+
+We regularly announce new available versions in our [Discord](https://discord.com/channels/1110799176264056863/1111568123007606855) server.
+
+Updating the node is as simple as running the following:
+1. `docker-compose down`
+2. `git pull origin master`
+3. `docker-compose up -d`
