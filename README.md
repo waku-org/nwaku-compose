@@ -10,7 +10,7 @@ Ready to use docker-compose to run your own [nwaku](https://github.com/waku-org/
 **📝 0. Prerequisites**
 
 You need:
-* Ethereum Sepolia WebSocket endpoint. Get one free from [Infura](https://www.infura.io/).
+* Ethereum Sepolia HTTP endpoint. Get one free from [Infura](https://www.infura.io/).
 * Ethereum Sepolia account with some balance <0.01 Eth. Get some [here](https://www.infura.io/faucet/sepolia).
 * A password to protect your rln membership.
 
