@@ -78,7 +78,7 @@ For advanced documentation, refer to [ADVANCED.md](https://github.com/waku-org/n
 -----
 # How to update to latest version
 
-We regularly announce new available versions in our [Discord](https://discord.com/channels/1110799176264056863/1111568123007606855) server.
+We regularly announce new available versions in our [Discord](https://discord.waku.org/) server.
 
 Updating the node is as simple as running the following:
 1. `docker-compose down`
