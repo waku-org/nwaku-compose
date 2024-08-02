@@ -83,7 +83,7 @@ We regularly announce new available versions in our [Discord](https://discord.wa
 If your last running version is `v0.29` or older, you will need to delete both the `keystore` and `rln_tree` folders, and register your membership again before using the new version by running the following commands:
 
 1. `docker-compose down`
-2. `rm -r keystore rln_tree`
+2. `sudo rm -r keystore rln_tree`
 3. `git pull origin master`
 4. `./register_rln.sh`
 5. `docker-compose up -d`
