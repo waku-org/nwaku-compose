@@ -16,6 +16,34 @@ fi
 MY_EXT_IP=$(wget -qO- https://api4.ipify.org)
 DNS_WSS_CMD=
 
+if [ -z "${DOMAIN}" ]; then
+    echo "DOMAIN is unset, trying to guess it"
+
+    # Check if we have an IP
+    IPCHECK=$(echo "${MY_EXT_IP}" | grep -c '^[0-9]\+\.[0-9]\+\.[0-9]\+\.[0-9]\+$')
+
+    if [ "${IPCHECK}"  -ne 1 ]; then
+       echo "Failed to get ip, received: '${MY_EXT_IP}'"
+    else
+        # TODO: Include this in nwaku docker image
+        apk update
+        apk add bind-tools
+
+        # Get reverse DNS
+        DNS=$(dig +short -x "${MY_EXT_IP}")
+
+        # Check if looks like a DNS
+        DNSCHECK=$(echo "${DNS}" | grep -c '^\([a-zA-Z0-9_\-]\+\.\)\+$')
+
+        if [ "${DNSCHECK}"  -ne 1 ]; then
+            echo "Failed to get DNS, received: '${DNS}'"
+        else
+           DOMAIN=$(echo "${DNS}" | sed s/\.$//)
+           echo "DOMAIN deduced and set to ${DOMAIN}"
+       fi
+    fi
+fi
+
 if [ -n "${DOMAIN}" ]; then
 
     LETSENCRYPT_PATH=/etc/letsencrypt/live/${DOMAIN}
