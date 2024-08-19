@@ -43,7 +43,8 @@ if [ -z "${DOMAIN}" ]; then
             echo "auto-domain: DOMAIN deduced and set to ${DOMAIN}"
 
            # Double check the domain is setup to return right IP
-           DNS_IP=$(dig +short "${DNS}")
+           # OpenDNS servers are used to bypass /etc/hosts as it may return loopback address
+           DNS_IP=$(dig +short @208.67.222.222 "${DNS}")
 
            if [ "${DNS_IP}" != "${MY_EXT_IP}"  ]; then
                echo "auto-domain: DNS queried returned a different ip: '${DNS_IP}', unsetting DOMAIN"
