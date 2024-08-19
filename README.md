@@ -82,13 +82,15 @@ We regularly announce new available versions in our [Discord](https://discord.wa
 
 If your last running version is `v0.29` or older, you will need to delete both the `keystore` and `rln_tree` folders, and register your membership again before using the new version by running the following commands:
 
-1. `docker-compose down`
-2. `sudo rm -r keystore rln_tree`
-3. `git pull origin master`
-4. `./register_rln.sh`
-5. `docker-compose up -d`
+1. `cd nwaku-compose` ( go into the root's repository folder )
+2. `docker-compose down`
+3. `sudo rm -r keystore rln_tree`
+4. `git pull origin master`
+5. `./register_rln.sh`
+6. `docker-compose up -d`
 
 For nodes running on `v0.30` or newer, updating the node is as simple as running the following:
-1. `docker-compose down`
-2. `git pull origin master`
-3. `docker-compose up -d`
+1. `cd nwaku-compose` ( go into the root's repository folder )
+2. `docker-compose down`
+3. `git pull origin master`
+4. `docker-compose up -d`
