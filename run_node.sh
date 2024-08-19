@@ -49,6 +49,8 @@ if [ -z "${DOMAIN}" ]; then
            if [ "${DNS_IP}" != "${MY_EXT_IP}"  ]; then
                echo "auto-domain: DNS queried returned a different ip: '${DNS_IP}', unsetting DOMAIN"
                unset DOMAIN
+           else
+               echo "auto-domain: last verification successful, DOMAIN=${DOMAIN}"
            fi
         fi
     fi
