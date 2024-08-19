@@ -62,7 +62,7 @@ if [ -n "${DOMAIN}" ]; then
     fi
 
     if ! [ -e "${LETSENCRYPT_PATH}/privkey.pem" ]; then
-        echo "The certificate does not exist. Proceeding without supporting the domain"
+        echo "The certificate does not exist. Proceeding without supporting websocket"
     else
         WS_SUPPORT="--websocket-support=true"
         WSS_SUPPORT="--websocket-secure-support=true"
