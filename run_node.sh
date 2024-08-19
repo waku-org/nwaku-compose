@@ -2,10 +2,10 @@
 
 echo "I am a nwaku node"
 
-if test -n "${ETH_CLIENT_ADDRESS}" -o ; then
-  echo "ETH_CLIENT_ADDRESS variable was renamed to RLN_RELAY_ETH_CLIENT_ADDRESS"
-  echo "Please update your .env file"
-  exit 1
+if [ -n "${ETH_CLIENT_ADDRESS}" ] ; then
+    echo "ETH_CLIENT_ADDRESS variable was renamed to RLN_RELAY_ETH_CLIENT_ADDRESS"
+    echo "Please update your .env file"
+    exit 1
 fi
 
 if [ -z "${RLN_RELAY_ETH_CLIENT_ADDRESS}" ]; then
@@ -17,14 +17,15 @@ MY_EXT_IP=$(wget -qO- https://api4.ipify.org)
 DNS_WSS_CMD=
 
 if [ -z "${DOMAIN}" ]; then
-    echo "DOMAIN is unset, trying to guess it"
+    echo "auto-domain: DOMAIN is unset, trying to guess it"
 
     # Check if we have an IP
     IPCHECK=$(echo "${MY_EXT_IP}" | grep -c '^[0-9]\+\.[0-9]\+\.[0-9]\+\.[0-9]\+$')
 
     if [ "${IPCHECK}"  -ne 1 ]; then
-       echo "Failed to get ip, received: '${MY_EXT_IP}'"
+        echo "Failed to get ip, received: '${MY_EXT_IP}'"
     else
+        echo "auto-domain: ip is '${MY_EXT_IP}'"
         # TODO: Include this in nwaku docker image
         apk update
         apk add bind-tools
@@ -38,9 +39,20 @@ if [ -z "${DOMAIN}" ]; then
         if [ "${DNSCHECK}"  -ne 1 ]; then
             echo "Failed to get DNS, received: '${DNS}'"
         else
-           DOMAIN=$(echo "${DNS}" | sed s/\.$//)
-           echo "DOMAIN deduced and set to ${DOMAIN}"
-       fi
+            DOMAIN=$(echo "${DNS}" | sed s/\.$//)
+            echo "auto-domain: DOMAIN deduced and set to ${DOMAIN}"
+
+           # Double check the domain is setup to return right IP
+           # OpenDNS servers are used to bypass /etc/hosts as it may return loopback address
+           DNS_IP=$(dig +short @208.67.222.222 "${DNS}")
+
+           if [ "${DNS_IP}" != "${MY_EXT_IP}"  ]; then
+               echo "auto-domain: DNS queried returned a different ip: '${DNS_IP}', unsetting DOMAIN"
+               unset DOMAIN
+           else
+               echo "auto-domain: last verification successful, DOMAIN=${DOMAIN}"
+           fi
+        fi
     fi
 fi
 
@@ -92,35 +104,35 @@ if [ -n "${STORAGE_SIZE}" ]; then
 fi
 
 exec /usr/bin/wakunode\
-  --relay=true\
-  --filter=true\
-  --lightpush=true\
-  --keep-alive=true\
-  --max-connections=150\
-  --cluster-id=1\
-  --discv5-discovery=true\
-  --discv5-udp-port=9005\
-  --discv5-enr-auto-update=True\
-  --log-level=DEBUG\
-  --tcp-port=30304\
-  --metrics-server=True\
-  --metrics-server-port=8003\
-  --metrics-server-address=0.0.0.0\
-  --rest=true\
-  --rest-admin=true\
-  --rest-address=0.0.0.0\
-  --rest-port=8645\
-  --rest-allow-origin="waku-org.github.io"\
-  --rest-allow-origin="localhost:*"\
-  --nat=extip:"${MY_EXT_IP}"\
-  --store=true\
-  --store-message-db-url="postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:5432/postgres"\
-  --rln-relay-eth-client-address="${RLN_RELAY_ETH_CLIENT_ADDRESS}"\
-  --rln-relay-tree-path="/etc/rln_tree"\
-  "${RLN_RELAY_CRED_PATH}"\
-  "${RLN_RELAY_CRED_PASSWORD}"\
-  ${DNS_WSS_CMD}\
-  ${NODEKEY}\
-  ${STORE_RETENTION_POLICY}\
-  ${EXTRA_ARGS}
+    --relay=true\
+    --filter=true\
+    --lightpush=true\
+    --keep-alive=true\
+    --max-connections=150\
+    --cluster-id=1\
+    --discv5-discovery=true\
+    --discv5-udp-port=9005\
+    --discv5-enr-auto-update=True\
+    --log-level=DEBUG\
+    --tcp-port=30304\
+    --metrics-server=True\
+    --metrics-server-port=8003\
+    --metrics-server-address=0.0.0.0\
+    --rest=true\
+    --rest-admin=true\
+    --rest-address=0.0.0.0\
+    --rest-port=8645\
+    --rest-allow-origin="waku-org.github.io"\
+    --rest-allow-origin="localhost:*"\
+    --nat=extip:"${MY_EXT_IP}"\
+    --store=true\
+    --store-message-db-url="postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:5432/postgres"\
+    --rln-relay-eth-client-address="${RLN_RELAY_ETH_CLIENT_ADDRESS}"\
+    --rln-relay-tree-path="/etc/rln_tree"\
+    "${RLN_RELAY_CRED_PATH}"\
+    "${RLN_RELAY_CRED_PASSWORD}"\
+    ${DNS_WSS_CMD}\
+    ${NODEKEY}\
+    ${STORE_RETENTION_POLICY}\
+    ${EXTRA_ARGS}
 
