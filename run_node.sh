@@ -17,14 +17,15 @@ MY_EXT_IP=$(wget -qO- https://api4.ipify.org)
 DNS_WSS_CMD=
 
 if [ -z "${DOMAIN}" ]; then
-    echo "DOMAIN is unset, trying to guess it"
+    echo "auto-domain: DOMAIN is unset, trying to guess it"
 
     # Check if we have an IP
     IPCHECK=$(echo "${MY_EXT_IP}" | grep -c '^[0-9]\+\.[0-9]\+\.[0-9]\+\.[0-9]\+$')
 
     if [ "${IPCHECK}"  -ne 1 ]; then
-       echo "Failed to get ip, received: '${MY_EXT_IP}'"
+        echo "Failed to get ip, received: '${MY_EXT_IP}'"
     else
+        echo "auto-domain: ip is '${MY_EXT_IP}'"
         # TODO: Include this in nwaku docker image
         apk update
         apk add bind-tools
@@ -38,9 +39,17 @@ if [ -z "${DOMAIN}" ]; then
         if [ "${DNSCHECK}"  -ne 1 ]; then
             echo "Failed to get DNS, received: '${DNS}'"
         else
-           DOMAIN=$(echo "${DNS}" | sed s/\.$//)
-           echo "DOMAIN deduced and set to ${DOMAIN}"
-       fi
+            DOMAIN=$(echo "${DNS}" | sed s/\.$//)
+            echo "auto-domain: DOMAIN deduced and set to ${DOMAIN}"
+
+           # Double check the domain is setup to return right IP
+           DNS_IP=$(dig +short "${DNS}")
+
+           if [ "${DNS_IP}" != "${MY_EXT_IP}"  ]; then
+               echo "auto-domain: DNS queried returned a different ip: '${DNS_IP}', unsetting DOMAIN"
+               unset DOMAIN
+           fi
+        fi
     fi
 fi
 
