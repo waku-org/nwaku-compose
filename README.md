@@ -94,3 +94,7 @@ For nodes running on `v0.30` or newer, updating the node is as simple as running
 2. `docker-compose down`
 3. `git pull origin master`
 4. `docker-compose up -d`
+
+-----
+# FAQ
+[see](FAQ.md)
