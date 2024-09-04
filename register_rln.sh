@@ -20,7 +20,7 @@ if test -n "${ETH_CLIENT_ADDRESS}"; then
   exit 1
 fi
 
-docker run -v "$(pwd)/keystore":/keystore/:Z harbor.status.im/wakuorg/nwaku:v0.31.0 generateRlnKeystore \
+docker run -v "$(pwd)/keystore":/keystore/:Z harbor.status.im/wakuorg/nwaku:v0.32.0 generateRlnKeystore \
 --rln-relay-eth-client-address=${RLN_RELAY_ETH_CLIENT_ADDRESS} \
 --rln-relay-eth-private-key=${ETH_TESTNET_KEY} \
 --rln-relay-eth-contract-address=0xCB33Aa5B38d79E3D9Fa8B10afF38AA201399a7e3 \
