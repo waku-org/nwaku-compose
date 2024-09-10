@@ -8,6 +8,7 @@
 - [Does the running node have any incentives?](#does-running-a-node-have-any-incentives)
 - [Error when running .register_rln.sh](#error-when-running-register_rlnsh)
 - [Problem with Grafana](#does-my-grafana-looks-right)
+- [Migrate my setup to another server?](#how-to-migrate-my-setup-to-another-server)
 
 ----
 
@@ -46,5 +47,14 @@ Take a closer look on how you set the values of the .env file paying attention t
 It should look like:
 http://5.196.26.230:3000/d/yns_4vFVk/nwaku-monitoring?orgId=1&refresh=1m
 
+
+### How to migrate my setup to another server?
+
+1. Clone [nwaku-compose](https://github.com/waku-org/nwaku-compose) in the new server.
+
+2. Move your `keystore` folder (`nwaku-compose/keystore/`) from your current setup to the new server.
+
+   That folder was created when you executed `./register_rln.sh`,
+and then, there is no need to run `./register_rln.sh` again.
 
 
