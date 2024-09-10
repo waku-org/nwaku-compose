@@ -26,9 +26,6 @@ if [ -z "${DOMAIN}" ]; then
         echo "Failed to get ip, received: '${MY_EXT_IP}'"
     else
         echo "auto-domain: ip is '${MY_EXT_IP}'"
-        # TODO: Include this in nwaku docker image
-        apk update
-        apk add bind-tools
 
         # Get reverse DNS
         DNS=$(dig +short -x "${MY_EXT_IP}")
