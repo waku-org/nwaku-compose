@@ -553,7 +553,7 @@
               }
             ]
           },
-          "unit": "binBps"
+          "unit": "binbps"
         },
         "overrides": []
       },
@@ -584,7 +584,7 @@
           },
           "editorMode": "code",
           "exemplar": false,
-          "expr": "rate(waku_relay_network_bytes_total{direction=\"in\"}[$__rate_interval])",
+          "expr": "rate(waku_relay_network_bytes_total{direction=\"in\"}[$__rate_interval])*8",
           "legendFormat": "{{topic}}/{{type}}",
           "range": true,
           "refId": "A"
@@ -649,7 +649,7 @@
               }
             ]
           },
-          "unit": "binBps"
+          "unit": "binbps"
         },
         "overrides": []
       },
@@ -679,7 +679,7 @@
             "uid": "PBFA97CFB590B2093"
           },
           "editorMode": "code",
-          "expr": "rate(waku_relay_network_bytes_total{direction=\"out\"}[$__rate_interval])",
+          "expr": "rate(waku_relay_network_bytes_total{direction=\"out\"}[$__rate_interval])*8",
           "legendFormat": "{{topic}}",
           "range": true,
           "refId": "A"
@@ -869,10 +869,6 @@
               {
                 "color": "green",
                 "value": null
-              },
-              {
-                "color": "red",
-                "value": 80
               }
             ]
           }
@@ -1019,7 +1015,7 @@
               },
               {
                 "color": "red",
-                "value": 80
+                "value": 250
               }
             ]
           }
@@ -1383,7 +1379,7 @@
               }
             ]
           },
-          "unit": "binBps"
+          "unit": "binbps"
         },
         "overrides": []
       },
@@ -1413,7 +1409,7 @@
             "uid": "PBFA97CFB590B2093"
           },
           "editorMode": "code",
-          "expr": "rate(libp2p_network_bytes_total{direction=\"in\"}[$__rate_interval])",
+          "expr": "rate(libp2p_network_bytes_total{direction=\"in\"}[$__rate_interval])*8",
           "legendFormat": "traffic_{{direction}}",
           "range": true,
           "refId": "A"
@@ -1478,7 +1474,7 @@
               }
             ]
           },
-          "unit": "binBps"
+          "unit": "binbps"
         },
         "overrides": []
       },
@@ -1508,7 +1504,7 @@
             "uid": "PBFA97CFB590B2093"
           },
           "editorMode": "code",
-          "expr": "rate(libp2p_network_bytes_total{direction=\"out\"}[$__rate_interval])",
+          "expr": "rate(libp2p_network_bytes_total{direction=\"out\"}[$__rate_interval])*8",
           "legendFormat": "traffic_{{direction}}",
           "range": true,
           "refId": "A"
