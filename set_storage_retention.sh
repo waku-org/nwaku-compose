@@ -11,7 +11,7 @@ select_store_size()
   _MAX_SIZE_MB=$5
   unset SELECTED_STORAGE_SIZE_MB
   if [ -z "$_AVAIL_SPACE_MB" ] || [ -z "$_PGSQL_SIZE_MB" ] || [ -z "$_LEEWAY_MB" ] || [ -z "$_MIN_SIZE_MB" ] || [ -z "$_MAX_SIZE_MB" ]; then
-    echo "Internal error, not enough arguments passed to select_store_size"
+    >&2 echo "Internal error, not enough arguments passed to select_store_size"
   fi
 
   _USABLE_SPACE_MB=$(( _AVAIL_SPACE_MB + _PGSQL_SIZE_MB ))
@@ -20,13 +20,13 @@ select_store_size()
   _TARGET_MB=$(( _USABLE_SPACE_MB - _LEEWAY_MB))
 
   if [ $_TARGET_MB -lt $_MIN_SIZE_MB ]; then
-      echo "Flooring storage retention to ${_MIN_SIZE_MB}MB"
+      >&2 echo "Flooring storage retention to ${_MIN_SIZE_MB}MB"
       SELECTED_STORAGE_SIZE_MB=$_MIN_SIZE_MB
   elif [ $_TARGET_MB -gt $_MAX_SIZE_MB ]; then
-      echo "Capping storage retention to ${_MAX_SIZE_MB}MB"
+      >&2 echo "Capping storage retention to ${_MAX_SIZE_MB}MB"
       SELECTED_STORAGE_SIZE_MB=$_MAX_SIZE_MB
   else
-      echo "Storage retention set to ${_TARGET_MB}"
+      >&2 echo "Storage retention set to ${_TARGET_MB}"
       SELECTED_STORAGE_SIZE_MB=$_TARGET_MB
   fi
 }
@@ -47,7 +47,7 @@ fi
 
 # Check we are in right folder
 if ! [ -f "./run_node.sh" ]; then
-  echo "This script must be run from inside the 'nwaku-compose' folder"
+  >&2 echo "This script must be run from inside the 'nwaku-compose' folder"
   exit 1
 fi
 
@@ -55,7 +55,7 @@ fi
 if [ -f "./.env" ]; then
     . ./.env
     if [ -n "$STORAGE_SIZE" ]; then
-        echo "STORAGE_SIZE is specified in .env file, doing nothing"
+        >&2 echo "STORAGE_SIZE is specified in .env file, doing nothing"
         exit 0
     fi
 fi
@@ -76,8 +76,12 @@ AVAIL_SPACE_MB=$(df -BM . | tail -1 | awk '{ print $4 }' | sed 's/^\([0-9]\+\)M$
 select_store_size $AVAIL_SPACE_MB $PGSQL_SIZE_MB 1024 1024 $(( 30 * 1024 ))
 
 if [ -z "$SELECTED_STORAGE_SIZE_MB" ]; then
-  echo "Failed to selected a storage size"
+  >&2 echo "Failed to selected a storage size"
   exit 1
 fi
 
-echo "export STORAGE_SIZE=${SELECTED_STORAGE_SIZE_MB}MB" >> .env
+if [ "$1" = "echo-value" ]; then
+  echo ${SELECTED_STORAGE_SIZE_MB}MB
+else
+  echo "STORAGE_SIZE=${SELECTED_STORAGE_SIZE_MB}MB" >> .env
+fi

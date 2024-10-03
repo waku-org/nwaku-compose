@@ -24,6 +24,16 @@ ${EDITOR} .env
 
 Make sure to **NOT** place any secrets into `.env.example`, as they might be unintentionally published in the Git repository.
 
+### EXPERIMENTAL - Use wizard script
+
+Run the wizard script.
+Once the script is done, the node will be started for you, so there is nothing else to do.
+
+The script is experimental, feedback and pull requests are welcome.
+
+```
+./wizard.sh
+```
 
 ### 🔑 1. Register RLN membership
 
