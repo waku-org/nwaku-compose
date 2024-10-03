@@ -80,7 +80,9 @@ For advanced documentation, refer to [ADVANCED.md](https://github.com/waku-org/n
 
 We regularly announce new available versions in our [Discord](https://discord.waku.org/) server.
 
-If your last running version is `v0.29` or older, you will need to delete both the `keystore` and `rln_tree` folders, and register your membership again before using the new version by running the following commands:
+## From `v0.29` or older
+
+You will need to delete both the `keystore` and `rln_tree` folders, and register your membership again before using the new version by running the following commands:
 
 1. `cd nwaku-compose` ( go into the root's repository folder )
 2. `docker-compose down`
@@ -89,11 +91,70 @@ If your last running version is `v0.29` or older, you will need to delete both t
 5. `./register_rln.sh`
 6. `docker-compose up -d`
 
-For nodes running on `v0.30` or newer, updating the node is as simple as running the following:
+## From `v0.30` or newer
+
+Updating the node is as simple as running the following:
 1. `cd nwaku-compose` ( go into the root's repository folder )
 2. `docker-compose down`
 3. `git pull origin master`
 4. `docker-compose up -d`
+
+## Check
+
+Once done, check your node is healthy: 
+
+```
+./chkhealth.sh 
+```
+
+All good:
+```
+02:15:51 - node health status is:
+
+{
+  "nodeHealth": "Ready",
+  "protocolsHealth": [
+    {
+      "Rln Relay": "Ready"
+    }
+  ]
+}
+```
+
+If the `./chkhealth.sh` script is hanging or returns the following, wait a few minutes and run it again:
+```
+02:17:57 - node health status is:
+
+{
+  "nodeHealth": "Initializing",
+  "protocolsHealth": []
+}
+```
+
+## Clean-up
+
+Docker artefact can take some precious disk space, run the following commands to free space **while your node is running**.
+
+**Only do this if this machine is solely used for Waku and you have no other docker services**.
+
+**I repeat, this will clean other docker services and images not running, only do this if this machine is only used for Waku**.
+
+```
+# Be sure that your containers **are running**
+sudo docker-compose up -d
+
+# Clean docker system files
+sudo docker system prune -a
+
+# Delete docker images
+sudo docker image prune -a
+
+# Delete docker containers
+sudo docker container prune
+
+# Delete docker volumes
+sudo docker volume prune
+```
 
 -----
 # FAQ
