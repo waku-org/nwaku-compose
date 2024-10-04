@@ -22,7 +22,7 @@ if [ -z "${DOMAIN}" ]; then
     # Check if we have an IP
     IPCHECK=$(echo "${MY_EXT_IP}" | grep -c '^[0-9]\+\.[0-9]\+\.[0-9]\+\.[0-9]\+$')
 
-    if [ "${IPCHECK}"  -ne 1 ]; then
+    if [ "${IPCHECK}" -ne 1 ]; then
         echo "Failed to get ip, received: '${MY_EXT_IP}'"
     else
         echo "auto-domain: ip is '${MY_EXT_IP}'"
@@ -33,7 +33,7 @@ if [ -z "${DOMAIN}" ]; then
         # Check if looks like a DNS
         DNSCHECK=$(echo "${DNS}" | grep -c '^\([a-zA-Z0-9_\-]\+\.\)\+$')
 
-        if [ "${DNSCHECK}"  -ne 1 ]; then
+        if [ "${DNSCHECK}" -ne 1 ]; then
             echo "Failed to get DNS, received: '${DNS}'"
         else
             DOMAIN=$(echo "${DNS}" | sed s/\.$//)
