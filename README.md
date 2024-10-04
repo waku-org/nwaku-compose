@@ -32,7 +32,7 @@ Once the script is done, the node will be started for you, so there is nothing e
 The script is experimental, feedback and pull requests are welcome.
 
 ```
-./wizard.sh
+./setup_wizard.sh
 ```
 
 ### 🔑 1. Register RLN membership
