@@ -1,18 +1,22 @@
 #!/bin/sh
 
-if [ -f ./.env ] \
-    || [ -f keystore/keystore.json ] ; then
-  echo "Artefacts already existing, exiting wizard"
+if [ -f ./.env ] ; then
+  echo "'./.env\` already exists, exiting wizard"
+  exit 1
+fi
+
+if [ -f keystore/keystore.json ] ; then
+  echo "'keystore/keystore.json\` already exists, exiting wizard"
   exit 1
 fi
 
 if [ -z "$(which docker 2>/dev/null)" ]; then
-  echo "Ensure that 'docker' is installed and PATH"
+  echo "Ensure that 'docker\` is installed and in \$PATH"
   exit 1
 fi
 
 if [ -z "$(which docker-compose 2>/dev/null)" ]; then
-  echo "Ensure that 'docker-compose' is installed and PATH"
+  echo "Ensure that 'docker-compose' is installed and in \$PATH"
   exit 1
 fi
 

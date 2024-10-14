@@ -60,7 +60,7 @@ You can either run a script that will estimate and set a good value:
 Or select your own value. For example, `50GB`:
 
 ```shell
-echo "export STORAGE_SIZE=50GB" >> .env
+echo "STORAGE_SIZE=50GB" >> .env
 ```
 
 ### 🖥️ 3. Start your node
@@ -69,7 +69,7 @@ Start all processes: nwaku node, database and grafana for metrics. Your [RLN](ht
 ```console
 docker-compose up -d
 ```
-⚠️ The node might take ~5s the very first time it runs because it needs to build locally the RLN community membership tree.
+⚠️ The node might take a few minutes the very first time it runs because it needs to build locally the RLN community membership tree.
 
 ###🏄🏼‍♂️ 4. Interact with your nwaku node
 
@@ -126,6 +126,15 @@ Updating the node is as simple as running the following:
 2. `docker-compose down`
 3. `git pull origin master`
 4. `docker-compose up -d`
+
+### Set size
+
+To improve storage on the network, you can increase the allocated space for the database.
+To do so, you can simply run:
+
+```
+./set_storage_retention.sh
+```
 
 ### Check
 
