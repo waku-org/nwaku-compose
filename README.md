@@ -6,8 +6,9 @@ Ready to use docker-compose to run your own [nwaku](https://github.com/waku-org/
 * Grafana dashboard for advanced users or node operators.
 * Requires `docker-compose` and `git`.
 
+## Setup and Run
 
-**📝 0. Prerequisites**
+### 📝 0. Prerequisites
 
 You need:
 * Ethereum Sepolia HTTP endpoint. Get one free from [Infura](https://www.infura.io/).
@@ -23,8 +24,18 @@ ${EDITOR} .env
 
 Make sure to **NOT** place any secrets into `.env.example`, as they might be unintentionally published in the Git repository.
 
+### EXPERIMENTAL - Use wizard script
 
-**🔑 1. Register RLN membership**
+Run the wizard script.
+Once the script is done, the node will be started for you, so there is nothing else to do.
+
+The script is experimental, feedback and pull requests are welcome.
+
+```
+./setup_wizard.sh
+```
+
+### 🔑 1. Register RLN membership
 
 The RLN membership is your access key to The Waku Network. Its registration is done onchain, and allows your nwaku node to publish messages in a decentralized and private way, respecting some [rate limits](https://rfc.vac.dev/spec/64/#rate-limit-exceeded).
 Messages exceeding the rate limit won't be relayed by other peers.
@@ -36,15 +47,32 @@ Note that if you just want to relay traffic (not publish), you don't need one.
 ./register_rln.sh
 ```
 
-**🖥️ 2. Start your node**
+### 💽 2. Select storage size
+
+Waku runs a PostgreSQL Database to store messages from the network and serve them to other peers.
+To prevent the database to grow indefinitely, you need to select how much disk space to allocate.
+You can either run a script that will estimate and set a good value:
+
+```
+./set_storage_retention.sh
+```
+
+Or select your own value. For example, `50GB`:
+
+```shell
+echo "STORAGE_SIZE=50GB" >> .env
+```
+
+### 🖥️ 3. Start your node
 
 Start all processes: nwaku node, database and grafana for metrics. Your [RLN](https://rate-limiting-nullifier.github.io/rln-docs/what_is_rln.html) membership is loaded into nwaku under the hood.
 ```console
 docker-compose up -d
 ```
-⚠️ The node might take ~5' the very first time it runs because it needs to build locally the RLN community membership tree.
+⚠️ The node might take a few minutes the very first time it runs because it needs to build locally the RLN community membership tree.
 
-**🏄🏼‍♂️ 3. Interact with your nwaku node**
+###🏄🏼‍♂️ 4. Interact with your nwaku node
+
 * See [localhost:3000](http://localhost:3000/d/yns_4vFVk/nwaku-monitoring) for node metrics.
 * See [localhost:4000](http://localhost:4000) for a nice frontend to chat with other users.
 
@@ -76,11 +104,13 @@ curl -X GET "http://127.0.0.1:8645/store/v1/messages?contentTopics=%2Fmy-app%2F2
 For advanced documentation, refer to [ADVANCED.md](https://github.com/waku-org/nwaku-compose/blob/master/ADVANCED.md).
 
 -----
-# How to update to latest version
+## How to update to latest version
 
 We regularly announce new available versions in our [Discord](https://discord.waku.org/) server.
 
-If your last running version is `v0.29` or older, you will need to delete both the `keystore` and `rln_tree` folders, and register your membership again before using the new version by running the following commands:
+### From `v0.29` or older
+
+You will need to delete both the `keystore` and `rln_tree` folders, and register your membership again before using the new version by running the following commands:
 
 1. `cd nwaku-compose` ( go into the root's repository folder )
 2. `docker-compose down`
@@ -89,11 +119,79 @@ If your last running version is `v0.29` or older, you will need to delete both t
 5. `./register_rln.sh`
 6. `docker-compose up -d`
 
-For nodes running on `v0.30` or newer, updating the node is as simple as running the following:
+### From `v0.30` or newer
+
+Updating the node is as simple as running the following:
 1. `cd nwaku-compose` ( go into the root's repository folder )
 2. `docker-compose down`
 3. `git pull origin master`
 4. `docker-compose up -d`
+
+### Set size
+
+To improve storage on the network, you can increase the allocated space for the database.
+To do so, you can simply run:
+
+```
+./set_storage_retention.sh
+```
+
+### Check
+
+Once done, check your node is healthy: 
+
+```
+./chkhealth.sh 
+```
+
+All good:
+```
+02:15:51 - node health status is:
+
+{
+  "nodeHealth": "Ready",
+  "protocolsHealth": [
+    {
+      "Rln Relay": "Ready"
+    }
+  ]
+}
+```
+
+If the `./chkhealth.sh` script is hanging or returns the following, wait a few minutes and run it again:
+```
+02:17:57 - node health status is:
+
+{
+  "nodeHealth": "Initializing",
+  "protocolsHealth": []
+}
+```
+
+### Clean-up
+
+Docker artefact can take some precious disk space, run the following commands to free space **while your node is running**.
+
+**Only do this if this machine is solely used for Waku and you have no other docker services**.
+
+**I repeat, this will clean other docker services and images not running, only do this if this machine is only used for Waku**.
+
+```
+# Be sure that your containers **are running**
+sudo docker-compose up -d
+
+# Clean docker system files
+sudo docker system prune -a
+
+# Delete docker images
+sudo docker image prune -a
+
+# Delete docker containers
+sudo docker container prune
+
+# Delete docker volumes
+sudo docker volume prune
+```
 
 -----
 # FAQ
