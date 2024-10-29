@@ -112,7 +112,7 @@ services:
     # and the store-message-db-url is set to use Postgres
     image: postgres:15.4-alpine3.18
     restart: on-failure:5
-    shm_size: '1g'  # Set shared memory size to 1 GB
+    shm_size: "${POSTGRES_SHM:-1g}"  # Set default shared memory size to 1 GB
     environment:
       <<: *pg_env
     volumes:
