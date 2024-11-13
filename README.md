@@ -6,7 +6,23 @@ Ready to use docker-compose to run your own [nwaku](https://github.com/waku-org/
 * Grafana dashboard for advanced users or node operators.
 * Requires `docker-compose` and `git`.
 
-## Setup and Run
+# Running Your nwaku Node
+
+There are two ways to run your nwaku node:
+1. **Interactive CLI**: This method provides a user-friendly, guided setup process.
+2. **Manual Setup**: This method involves manually configuring and running the node using provided scripts and configuration files.
+
+## Interactive CLI
+
+The Interactive CLI guides you through the setup process step-by-step, making it easier to configure and run your nwaku node without needing to manually edit configuration files.
+
+To start the Interactive CLI, run the following command:
+
+```
+./waku-console.sh
+```
+
+## Manual Setup and Run
 
 ### 📝 0. Prerequisites
 
