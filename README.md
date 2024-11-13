@@ -9,10 +9,10 @@ Ready to use docker-compose to run your own [nwaku](https://github.com/waku-org/
 # Running Your nwaku Node
 
 There are two ways to run your nwaku node:
-I. **Interactive CLI**: This method provides a user-friendly, guided setup process.
-II. **Manual Setup**: This method involves manually configuring and running the node using provided scripts and configuration files.
+1. **Interactive CLI**: This method provides a user-friendly, guided setup process.
+2. **Manual Setup**: This method involves manually configuring and running the node using provided scripts and configuration files.
 
-## I. Interactive CLI
+## 1. Interactive CLI
 
 The Interactive CLI guides you through the setup process step-by-step, making it easier to configure and run your nwaku node without needing to manually edit configuration files.
 
@@ -22,7 +22,7 @@ To start the Interactive CLI, run the following command:
 ./waku-console.sh
 ```
 
-## II. Manual Setup and Run
+## 2. Manual Setup and Run
 
 ### 📝 0. Prerequisites
 
