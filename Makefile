@@ -1,0 +1,3 @@
+run:
+	./waku-console.sh
+

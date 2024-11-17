@@ -19,7 +19,7 @@ The Interactive CLI guides you through the setup process step-by-step, making it
 To start the Interactive CLI, run the following command:
 
 ```
-./waku-console.sh
+make run
 ```
 
 ## 2. Manual Setup and Run
