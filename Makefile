@@ -1,3 +1,3 @@
 run:
-	./waku-console.sh
+	./interactive-cli.sh
 
