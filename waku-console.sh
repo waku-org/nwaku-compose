@@ -37,6 +37,48 @@ spinner() {
     printf "    \b\b\b\b"
 }
 
+# Function to handle Sepolia RPC setup
+setup_sepolia_rpc() {
+    echo -e "\n${BOLD}⚡ Sepolia RPC Setup${NC}"
+    read -p "Do you already have an Infura account? (y/N): " has_infura
+
+    if [[ $has_infura != [yY] ]]; then
+        echo -e "\n${YELLOW}Let's create your Infura account:${NC}"
+        echo -e "1. Opening Infura registration page in your browser...\n"
+        if [[ "$OSTYPE" == "darwin"* ]]; then
+            open "https://app.infura.io/register"
+        else
+            xdg-open "https://app.infura.io/register" 2>/dev/null || echo "Please visit: https://app.infura.io/register"
+        fi
+        
+        echo -e "\n${YELLOW}Please complete these steps:${NC}"
+        echo "1. Register and verify your email"
+        echo "2. Create a new project (Web3 API)"
+        echo "3. Select Sepolia network"
+        echo -e "4. Copy your endpoint URL\n"
+        
+        echo -e "${BOLD}${BLUE}Press Enter once you've completed these steps...${NC}"
+        read
+    else
+        echo -e "\n${YELLOW}Please get your Sepolia endpoint URL from Infura dashboard${NC}"
+    fi
+
+    # Get and validate Sepolia RPC URL
+    while true; do
+        echo -e "\n🔗 Enter your Sepolia endpoint URL:"
+        echo -e "${YELLOW}Format: https://sepolia.infura.io/v3/YOUR-PROJECT-ID${NC}\n"
+        read -p "URL: " rpc_url
+        
+        if [[ $rpc_url =~ ^https://sepolia\.infura\.io/v3/[0-9a-fA-F]{32}$ ]]; then
+            echo -e "\n${GREEN}✅ Sepolia RPC URL configured successfully!${NC}"
+            sed -i.bak "s|RLN_RELAY_ETH_CLIENT_ADDRESS=.*|RLN_RELAY_ETH_CLIENT_ADDRESS=$rpc_url|" .env
+            return 0
+        else
+            echo -e "\n${RED}Invalid Infura URL format. Please check and try again.${NC}"
+        fi
+    done
+}
+
 # Interactive setup function
 setup() {
     clear
@@ -59,6 +101,8 @@ setup() {
             exit 1
         fi
     fi
+    
+    setup_sepolia_rpc
 
     # Get Sepolia RPC URL
     while true; do
