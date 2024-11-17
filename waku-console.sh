@@ -39,7 +39,17 @@ spinner() {
 
 # Function to handle Sepolia RPC setup
 setup_sepolia_rpc() {
+
+    echo -e "\n${BOLD}Great! Let's set up your node configuration.${NC}"
+    echo -e "${BOLD}First, we'll need to connect to Sepolia (a test network) through Infura.${NC}"
+    read -p "Press Enter to continue..."
+
     echo -e "\n${BOLD}⚡ Sepolia RPC Setup${NC}"
+
+    echo -e "\n${YELLOW}Why do we need Sepolia?${NC}"
+    echo -e "Sepolia is a test network that allows our Waku node to interact with the blockchain."
+    echo -e "We'll use Infura to connect to Sepolia - think of it as a bridge between your node and the blockchain.\n"
+
     read -p "Do you already have an Infura account? (y/N): " has_infura
 
     if [[ $has_infura != [yY] ]]; then
@@ -88,7 +98,11 @@ setup() {
     if [ -f .env ]; then
         read -p "💡 .env file already exists. Do you want to reconfigure? (y/N): " confirm
         if [[ $confirm != [yY] ]]; then
-            echo -e "${YELLOW}Setup cancelled${NC}"
+            echo -e "${YELLOW}Keeping existing configuration${NC}"
+            read -p $'\n'"Ready to start the node? (Y/n): " start_confirm
+            if [[ $start_confirm != [nN] ]]; then
+                docker-compose up -d
+            fi
             return
         fi
     fi
@@ -104,14 +118,18 @@ setup() {
     
     setup_sepolia_rpc
 
-    # Get Sepolia RPC URL
+    # Get and validate Sepolia RPC URL
     while true; do
-        read -p "🌐 Enter your Sepolia RPC URL (e.g., https://sepolia.infura.io/v3/YOUR-KEY): " rpc_url
-        if [[ $rpc_url == http* ]]; then
+        echo -e "\n🔗 Enter your Sepolia endpoint URL:"
+        echo -e "${YELLOW}Format: https://sepolia.infura.io/v3/YOUR-PROJECT-ID${NC}\n"
+        read -p "URL: " rpc_url
+        
+        if [[ $rpc_url =~ ^https://sepolia\.infura\.io/v3/[0-9a-fA-F]{32}$ ]]; then
+            echo -e "\n${GREEN}✅ Sepolia RPC URL configured successfully!${NC}"
             sed -i.bak "s|RLN_RELAY_ETH_CLIENT_ADDRESS=.*|RLN_RELAY_ETH_CLIENT_ADDRESS=$rpc_url|" .env
-            break
+            return 0
         else
-            echo -e "${RED}Please enter a valid HTTP(S) URL${NC}"
+            echo -e "\n${RED}Invalid Infura URL format. Please check and try again.${NC}"
         fi
     done
 
