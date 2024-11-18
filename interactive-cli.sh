@@ -171,7 +171,7 @@ setup() {
 
     # Register RLN membership
     echo -e "\n📝 Registering RLN membership..."
-    ./register_rln.sh &
+    ./register_rln.sh 
 
     # Start the node
     start_node
@@ -392,7 +392,7 @@ help_menu() {
 
 # Utility Functions
 press_enter() {
-    echo
+    echo ""
     read -p "Press Enter to continue..."
 }
 
@@ -418,14 +418,16 @@ update() {
 
 cleanup() {
     echo -e "${YELLOW}⚠️  Warning: This will clean up all Docker artifacts not used by Waku${NC}"
+    echo ""
     read -p "Are you sure you want to continue? (y/N): " confirm
+    echo ""
     if [[ $confirm == [yY] ]]; then
         echo "Cleaning Docker system..."
         docker system prune -a
         docker image prune -a
         docker container prune
         docker volume prune
-        echo -e "${GREEN}✅ Cleanup completed${NC}"
+        echo -e "${GREEN} ✅ Cleanup completed${NC}"
     fi
 }
 
@@ -438,35 +440,98 @@ show_node_stats() {
 }
 
 backup_config() {
-    backup_dir="backups/$(date +%Y%m%d_%H%M%S)"
-    mkdir -p "$backup_dir"
-    cp .env "$backup_dir/"
-    echo -e "${GREEN}✅ Configuration backed up to $backup_dir${NC}"
+    local backup_dir="backups/$(date +%Y%m%d_%H%M%S)"
+    
+    # Check if source files exist
+    if [ ! -f ".env" ]; then
+        echo -e "${RED}❌ No configuration files found to backup${NC}"
+        return 1
+    }
+
+    # Create backup directory
+    if ! mkdir -p "$backup_dir"; then
+        echo -e "${RED}❌ Failed to create backup directory${NC}"
+        return 1
+    }
+
+    # Copy files with error checking
+    if cp .env "$backup_dir/"; then
+        echo -e "\n${GREEN}✅ Configuration backed up successfully!${NC}"
+        echo -e "📁 Location: $backup_dir\n"
+    else
+        echo -e "${RED}❌ Backup failed${NC}"
+        rm -rf "$backup_dir"  # Cleanup on failure
+        return 1
+    fi
 }
 
 restore_config() {
-    if [ ! -d "backups" ]; then
-        echo -e "${RED}No backups found${NC}"
-        return
-    fi
+    # Check if backups directory exists and is not empty
+    if [ ! -d "backups" ] || [ -z "$(ls -A backups 2>/dev/null)" ]; then
+        echo -e "\n${RED}❌ No backups found${NC}"
+        echo -e "Please create a backup first using the backup command\n"
+        return 1
+    }
     
-    echo "Available backups:"
-    select backup in $(ls backups); do
+    echo -e "\n${BOLD}Available backups:${NC}"
+    select backup in $(ls -r backups); do  # -r for reverse order (newest first)
         if [ -n "$backup" ]; then
-            cp "backups/$backup/.env" .env
-            echo -e "${GREEN}✅ Configuration restored from $backup${NC}"
-            break
+            # Verify backup files exist
+            if [ ! -f "backups/$backup/.env" ]; then
+                echo -e "\n${RED}❌ Invalid or corrupted backup${NC}"
+                return 1
+            }
+
+            # Create backup of current config before restoring
+            if [ -f ".env" ]; then
+                mv .env .env.before_restore
+                echo -e "\n${YELLOW}ℹ️  Current config backed up to .env.before_restore${NC}"
+            fi
+
+            # Restore files
+            if cp "backups/$backup/.env" .env; then
+                echo -e "\n${GREEN}✅ Configuration restored successfully!${NC}"
+                echo -e "📁 Restored from: backups/$backup\n"
+            fi
         fi
     done
 }
 
 reset_node() {
+    echo -e "\n${YELLOW}⚠️  Warning: Resetting the node will remove all current configurations.${NC}"
+    echo -e "${YELLOW}If you haven't backed up your configuration, you'll need to set up everything again.${NC}"
+    
+    read -p "Have you backed up your configuration? (y/N): " has_backup
+    echo ""
+
+    if [[ $has_backup =~ ^[Nn]$ || $has_backup == "" ]]; then
+        echo -e "${RED}Please backup your configuration first!${NC}"
+        echo -e "You can find your configuration in: ./config/\n"
+        return 1
+    fi
+
+    read -p "Are you sure you want to reset the node? (y/N): " confirm
+    echo ""
+
+    if [[ $confirm =~ ^[Yy]$ ]]; then
+        echo -e "🔄 Resetting Waku node..."
+        docker-compose down -v
+        rm -rf ./config/*
+        echo -e "\n${GREEN}✅ Node reset successfully!${NC}\n"
+    else
+        echo -e "\n${YELLOW}Reset cancelled.${NC}\n"
+    fi
+}
+
+reset_node() {
     echo -e "${RED}⚠️  Warning: This will reset your node to default settings${NC}"
+    echo ""
     read -p "Are you sure? (y/N): " confirm
+    echo ""
     if [[ $confirm == [yY] ]]; then
         docker-compose down -v
         rm -f .env
-        echo -e "${GREEN}✅ Node reset complete${NC}"
+        echo -e "\n ${GREEN} ✅ Node reset complete${NC}"
     fi
 }
 
