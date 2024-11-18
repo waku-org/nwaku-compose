@@ -22,19 +22,15 @@ print_banner() {
     echo
 }
 
-# Show spinner while running command
-spinner() {
-    local pid=$1
-    local delay=0.1
-    local spinstr='|/-\'
-    while [ "$(ps a | awk '{print $1}' | grep $pid)" ]; do
-        local temp=${spinstr#?}
-        printf " [%c]  " "$spinstr"
-        local spinstr=$temp${spinstr%"$temp"}
-        sleep $delay
-        printf "\b\b\b\b\b\b"
-    done
-    printf "    \b\b\b\b"
+start_node() {
+    # Start the node
+    echo -e "\n🚀 Starting Waku node..."
+    docker-compose up -d &
+
+    echo -e "\n${GREEN}${BOLD}✨ Your Waku node is ready!${NC}"
+    echo -e "📊 View metrics: http://localhost:3000"
+    echo -e "💬 Chat interface: http://localhost:4000"
+    echo -e "🔍 Check node health: make status"
 }
 
 # Function to handle Sepolia RPC setup
@@ -101,14 +97,12 @@ setup() {
             echo -e "${YELLOW}Keeping existing configuration${NC}"
             read -p $'\n'"Ready to start the node? (Y/n): " start_confirm
             if [[ $start_confirm != [nN] ]]; then
-                docker-compose up -d
+                start_node
             fi
             return
         fi
-    fi
-
-    # Copy .env.example to .env if it doesn't exist
-    if [ ! -f .env ]; then
+    else    
+        # Copy .env.example to .env if it doesn't exist
         cp .env.example .env
         if [ $? -ne 0 ]; then
             echo -e "${RED}Error: Could not find .env.example file${NC}"
@@ -178,17 +172,9 @@ setup() {
     # Register RLN membership
     echo -e "\n📝 Registering RLN membership..."
     ./register_rln.sh &
-    spinner $!
 
     # Start the node
-    echo -e "\n🚀 Starting Waku node..."
-    docker-compose up -d &
-    spinner $!
-
-    echo -e "\n${GREEN}${BOLD}✨ Your Waku node is ready!${NC}"
-    echo -e "📊 View metrics: http://localhost:3000"
-    echo -e "💬 Chat interface: http://localhost:4000"
-    echo -e "🔍 Check node health: ./waku-cli.sh status"
+    start_node
 }
 
 # Interactive menu function
@@ -244,9 +230,7 @@ quick_start_menu() {
                 press_enter
                 ;;
             2)
-                echo -e "\n${BOLD}Starting Waku node...${NC}"
-                docker-compose up -d
-                echo -e "\n${GREEN}✅ Node started successfully!${NC}"
+                start_node
                 press_enter
                 ;;
             3) return ;;
@@ -274,8 +258,7 @@ node_management_menu() {
         
         case $choice in
             1) 
-                echo -e "\n${BOLD}Starting node...${NC}"
-                docker-compose up -d
+                start_node
                 press_enter
                 ;;
             2)
