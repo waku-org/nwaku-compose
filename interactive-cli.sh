@@ -444,13 +444,13 @@ backup_config() {
     
     # Check if source files exist
     if [ ! -f ".env" ]; then
-        echo -e "${RED}❌ No configuration files found to backup${NC}"
+        echo -e "${RED}⚠️ No configuration files found to backup${NC}"
         return 1
     }
 
     # Create backup directory
     if ! mkdir -p "$backup_dir"; then
-        echo -e "${RED}❌ Failed to create backup directory${NC}"
+        echo -e "${RED}⚠️ Failed to create backup directory${NC}"
         return 1
     }
 
@@ -459,7 +459,7 @@ backup_config() {
         echo -e "\n${GREEN}✅ Configuration backed up successfully!${NC}"
         echo -e "📁 Location: $backup_dir\n"
     else
-        echo -e "${RED}❌ Backup failed${NC}"
+        echo -e "${RED}⚠️ Backup failed${NC}"
         rm -rf "$backup_dir"  # Cleanup on failure
         return 1
     fi
@@ -468,7 +468,7 @@ backup_config() {
 restore_config() {
     # Check if backups directory exists and is not empty
     if [ ! -d "backups" ] || [ -z "$(ls -A backups 2>/dev/null)" ]; then
-        echo -e "\n${RED}❌ No backups found${NC}"
+        echo -e "\n${RED}⚠️ No backups found${NC}"
         echo -e "Please create a backup first using the backup command\n"
         return 1
     }
@@ -478,7 +478,7 @@ restore_config() {
         if [ -n "$backup" ]; then
             # Verify backup files exist
             if [ ! -f "backups/$backup/.env" ]; then
-                echo -e "\n${RED}❌ Invalid or corrupted backup${NC}"
+                echo -e "\n${RED}⚠️ Invalid or corrupted backup${NC}"
                 return 1
             }
 
