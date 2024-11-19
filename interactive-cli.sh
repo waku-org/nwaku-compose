@@ -23,11 +23,20 @@ print_banner() {
 }
 
 start_node() {
-    # Start the node
     echo -e "\n🚀 Starting Waku node..."
-    docker-compose up -d &
+    echo ""
 
-    echo -e "\n${GREEN}${BOLD}✨ Your Waku node is ready!${NC}"
+    docker-compose up -d
+
+    # Wait a moment for services to initialize
+    echo -e "\nInitializing services..."
+    for i in {1..3}; do
+        echo -n "."
+        sleep 1
+    done
+
+    # Now show the success message and instructions
+    echo -e "\n\n${GREEN}${BOLD}✨ Your Waku node is ready!${NC}"
     echo -e "📊 View metrics: http://localhost:3000"
     echo -e "💬 Chat interface: http://localhost:4000"
     echo -e "🔍 Check node health: make status"
@@ -78,9 +87,28 @@ setup_sepolia_rpc() {
         if [[ $rpc_url =~ ^https://sepolia\.infura\.io/v3/[0-9a-fA-F]{32}$ ]]; then
             echo -e "\n${GREEN}✅ Sepolia RPC URL configured successfully!${NC}"
             sed -i.bak "s|RLN_RELAY_ETH_CLIENT_ADDRESS=.*|RLN_RELAY_ETH_CLIENT_ADDRESS=$rpc_url|" .env
-            return 0
+            break
         else
             echo -e "\n${RED}Invalid Infura URL format. Please check and try again.${NC}"
+        fi
+    done
+
+    # Get Ethereum private key
+    while true; do
+        echo -e "\n🔑 Enter your Sepolia ETH private key:"
+        echo -e "${YELLOW}Note: Input will be hidden for security${NC}"
+        IFS= read -r eth_key
+        
+        # Remove any 0x prefix if present
+        eth_key="${eth_key#0x}"
+        
+        # Validate the key
+        if [[ ${#eth_key} == 64 && "$eth_key" =~ ^[0-9a-fA-F]+$ ]]; then
+            sed -i.bak "s|ETH_TESTNET_KEY=.*|ETH_TESTNET_KEY=$eth_key|" .env
+            break
+        else
+            echo -e "${RED}Error: Private key should be 64 hexadecimal characters (excluding any '0x' prefix)${NC}"
+            echo -e "${YELLOW}Please try again...${NC}"
         fi
     done
 }
@@ -112,49 +140,10 @@ setup() {
     
     setup_sepolia_rpc
 
-    # Get and validate Sepolia RPC URL
-    while true; do
-        echo -e "\n🔗 Enter your Sepolia endpoint URL:"
-        echo -e "${YELLOW}Format: https://sepolia.infura.io/v3/YOUR-PROJECT-ID${NC}\n"
-        read -p "URL: " rpc_url
-        
-        if [[ $rpc_url =~ ^https://sepolia\.infura\.io/v3/[0-9a-fA-F]{32}$ ]]; then
-            echo -e "\n${GREEN}✅ Sepolia RPC URL configured successfully!${NC}"
-            sed -i.bak "s|RLN_RELAY_ETH_CLIENT_ADDRESS=.*|RLN_RELAY_ETH_CLIENT_ADDRESS=$rpc_url|" .env
-            return 0
-        else
-            echo -e "\n${RED}Invalid Infura URL format. Please check and try again.${NC}"
-        fi
-    done
-
-    # Get Ethereum private key
-    while true; do
-        echo -e "\n🔑 Enter your Sepolia ETH private key:"
-        echo -e "${YELLOW}Note: Input will be hidden for security${NC}"
-        IFS= read -r eth_key
-        
-        # Remove any 0x prefix if present
-        eth_key="${eth_key#0x}"
-        
-        # Validate the key
-        if [[ ${#eth_key} == 64 && "$eth_key" =~ ^[0-9a-fA-F]+$ ]]; then
-            sed -i.bak "s|ETH_TESTNET_KEY=.*|ETH_TESTNET_KEY=$eth_key|" .env
-            break
-        else
-            echo -e "${RED}Error: Private key should be 64 hexadecimal characters (excluding any '0x' prefix)${NC}"
-            echo -e "${YELLOW}Please try again...${NC}"
-        fi
-    done
-
     # Get RLN password
     read -s -p "🔒 Create a password for your RLN membership: " rln_password
     echo
     sed -i.bak "s|RLN_RELAY_CRED_PASSWORD=.*|RLN_RELAY_CRED_PASSWORD=\"$rln_password\"|" .env
-
-    # Clean up backup file
-    rm -f .env.bak
-
-    echo -e "\n${GREEN}✅ Configuration saved${NC}"
 
     # Show configuration summary
     echo -e "\n${BOLD}Configuration Summary:${NC}"
@@ -263,11 +252,13 @@ node_management_menu() {
                 ;;
             2)
                 echo -e "\n${BOLD}Stopping node...${NC}"
+                echo ""
                 docker-compose down
                 press_enter
                 ;;
             3)
                 echo -e "\n${BOLD}Restarting node...${NC}"
+                echo ""
                 docker-compose restart
                 press_enter
                 ;;
@@ -446,13 +437,13 @@ backup_config() {
     if [ ! -f ".env" ]; then
         echo -e "${RED}⚠️ No configuration files found to backup${NC}"
         return 1
-    }
+    fi
 
     # Create backup directory
     if ! mkdir -p "$backup_dir"; then
         echo -e "${RED}⚠️ Failed to create backup directory${NC}"
         return 1
-    }
+    fi
 
     # Copy files with error checking
     if cp .env "$backup_dir/"; then
@@ -471,7 +462,7 @@ restore_config() {
         echo -e "\n${RED}⚠️ No backups found${NC}"
         echo -e "Please create a backup first using the backup command\n"
         return 1
-    }
+    fi
     
     echo -e "\n${BOLD}Available backups:${NC}"
     select backup in $(ls -r backups); do  # -r for reverse order (newest first)
@@ -480,7 +471,7 @@ restore_config() {
             if [ ! -f "backups/$backup/.env" ]; then
                 echo -e "\n${RED}⚠️ Invalid or corrupted backup${NC}"
                 return 1
-            }
+            fi
 
             # Create backup of current config before restoring
             if [ -f ".env" ]; then
