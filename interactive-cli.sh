@@ -497,44 +497,6 @@ restore_config() {
     done
 }
 
-reset_node() {
-    echo -e "\n${YELLOW}⚠️  Warning: Resetting the node will remove all current configurations.${NC}"
-    echo -e "${YELLOW}If you haven't backed up your configuration, you'll need to set up everything again.${NC}"
-    
-    read -p "Have you backed up your configuration? (y/N): " has_backup
-    echo ""
-
-    if [[ $has_backup =~ ^[Nn]$ || $has_backup == "" ]]; then
-        echo -e "${RED}Please backup your configuration first!${NC}"
-        echo -e "You can find your configuration in: ./config/\n"
-        return 1
-    fi
-
-    read -p "Are you sure you want to reset the node? (y/N): " confirm
-    echo ""
-
-    if [[ $confirm =~ ^[Yy]$ ]]; then
-        echo -e "🔄 Resetting Waku node..."
-        docker-compose down -v
-        rm -rf ./config/*
-        echo -e "\n${GREEN}✅ Node reset successfully!${NC}\n"
-    else
-        echo -e "\n${YELLOW}Reset cancelled.${NC}\n"
-    fi
-}
-
-reset_node() {
-    echo -e "${RED}⚠️  Warning: This will reset your node to default settings${NC}"
-    echo ""
-    read -p "Are you sure? (y/N): " confirm
-    echo ""
-    if [[ $confirm == [yY] ]]; then
-        docker-compose down -v
-        rm -f .env
-        echo -e "\n ${GREEN} ✅ Node reset complete${NC}"
-    fi
-}
-
 show_quick_start_guide() {
     echo -e "${BOLD}🚀 Quick Start Guide${NC}\n"
     echo "1. Ensure you have:"
