@@ -119,17 +119,7 @@ setup() {
     echo -e "${BOLD}🚀 Starting Waku Node Setup${NC}\n"
 
     # Check if .env already exists
-    if [ -f .env ]; then
-        read -p "💡 .env file already exists. Do you want to reconfigure? (y/N): " confirm
-        if [[ $confirm != [yY] ]]; then
-            echo -e "${YELLOW}Keeping existing configuration${NC}"
-            read -p $'\n'"Ready to start the node? (Y/n): " start_confirm
-            if [[ $start_confirm != [nN] ]]; then
-                start_node
-            fi
-            return
-        fi
-    else    
+    if [ ! -f .env ]; then    # Note the space after [ and before ]
         # Copy .env.example to .env if it doesn't exist
         cp .env.example .env
         if [ $? -ne 0 ]; then
@@ -138,29 +128,46 @@ setup() {
         fi
     fi
     
-    setup_sepolia_rpc
+    read -p "💡 .env file already exists. Do you want to reconfigure? (y/N): " reconfigure_confirmation
+    if [[ $reconfigure_confirmation == [yY] ]]; then
+        setup_sepolia_rpc
+        
+        # Get RLN password
+        read -s -p "🔒 Create a password for your RLN membership: " rln_password
+        echo
+        sed -i.bak "s|RLN_RELAY_CRED_PASSWORD=.*|RLN_RELAY_CRED_PASSWORD=\"$rln_password\"|" .env
 
-    # Get RLN password
-    read -s -p "🔒 Create a password for your RLN membership: " rln_password
-    echo
-    sed -i.bak "s|RLN_RELAY_CRED_PASSWORD=.*|RLN_RELAY_CRED_PASSWORD=\"$rln_password\"|" .env
-
-    # Show configuration summary
-    echo -e "\n${BOLD}Configuration Summary:${NC}"
-    echo -e "RPC URL: $rpc_url"
-    echo -e "Private Key: ****${eth_key: -4}"
-    echo -e "RLN Password: ********"
-
+        # Show configuration summary
+        echo -e "\n${BOLD}Configuration Summary:${NC}"
+        echo -e "RPC URL: $rpc_url"
+        echo -e "Private Key: ****${eth_key: -4}"
+        echo -e "RLN Password: ********"
+    else
+        echo -e "${YELLOW}Keeping existing configuration${NC}"
+    fi
+    
     # Confirm before proceeding
-    read -p $'\n'"Ready to start the node? (Y/n): " start_confirm
-    if [[ $start_confirm == [nN] ]]; then
-        echo -e "${YELLOW}Setup completed. Run './waku-cli.sh start' when you're ready to start the node.${NC}"
+    read -p $'\n'"Ready to start the node? (Y/n): " start_confirmation
+    if [[ $start_confirmation == [nN] ]]; then
+        echo -e "${YELLOW}Setup completed. Run './interactive-cli.sh start' or use the 'Start Node' option from the main menu when you're ready to start the node.${NC}"
         return
     fi
 
     # Register RLN membership
-    echo -e "\n📝 Registering RLN membership..."
-    ./register_rln.sh 
+    echo -e "\n📝 RLN Membership Registration Status:"
+    if [ ! -d "keystore" ]; then
+        echo -e "${YELLOW}➤ Initiating registration: No existing keystore found${NC}"
+        ./register_rln.sh
+    elif [ "$reconfigure_confirmation" == [yY] ]; then
+        echo -e "${YELLOW}➤ Initiating registration: Reconfiguration requested by user${NC}"
+        ./register_rln.sh
+    else
+        if [ $reconfigure_confirmation == [nN] ]; then
+            echo -e "${YELLOW}➤ Registration skipped: User chose to keep existing configuration${NC}" 
+        else
+            echo -e "${YELLOW}➤ Registration skipped: Valid keystore directory already exists${NC}" 
+        fi
+    fi
 
     # Start the node
     start_node
