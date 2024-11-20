@@ -297,7 +297,7 @@ monitoring_menu() {
         
         case $choice in
             1) 
-                docker-compose logs --tail=100 -f
+                docker-compose logs -f nwaku
                 ;;
             2)
                 echo -e "\n${BOLD}Opening metrics dashboard...${NC}"
@@ -546,3 +546,4 @@ case "$1" in
         show_interactive_menu
         ;;
 esac
+docker-compose logs --tail=100 -f
