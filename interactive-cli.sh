@@ -146,31 +146,47 @@ setup() {
         echo -e "${YELLOW}Keeping existing configuration${NC}"
     fi
     
-    # Confirm before proceeding
-    read -p $'\n'"Ready to start the node? (Y/n): " start_confirmation
-    if [[ $start_confirmation == [nN] ]]; then
-        echo -e "${YELLOW}Setup completed. Run './interactive-cli.sh start' or use the 'Start Node' option from the main menu when you're ready to start the node.${NC}"
-        return
-    fi
+    echo -e "${YELLOW}Setup completed. Run './interactive-cli.sh start' or use the 'Start Node' option from the main menu when you're ready to start the node.${NC}"
+    
+    press_enter
 
     # Register RLN membership
     echo -e "\n📝 RLN Membership Registration Status:"
+    registration_success=false
+
     if [ ! -d "keystore" ]; then
         echo -e "${YELLOW}➤ Initiating registration: No existing keystore found${NC}"
-        ./register_rln.sh
+        if ./register_rln.sh; then
+            registration_success=true
+        else
+            echo -e "$Registration failed. Please check the errors above${NC}"
+            return 1
+        fi
     elif [ "$reconfigure_confirmation" == [yY] ]; then
         echo -e "${YELLOW}➤ Initiating registration: Reconfiguration requested by user${NC}"
-        ./register_rln.sh
+        if ./register_rln.sh; then
+            registration_success=true
+        else
+            echo -e "Registration failed. Please check the errors above${NC}"
+            return 1
+        fi
     else
         if [ $reconfigure_confirmation == [nN] ]; then
-            echo -e "${YELLOW}➤ Registration skipped: User chose to keep existing configuration${NC}" 
+            echo -e "$Registration skipped: User chose to keep existing configuration${NC}"
+            registration_success=true
         else
-            echo -e "${YELLOW}➤ Registration skipped: Valid keystore directory already exists${NC}" 
+            echo -e "$Registration skipped: Valid keystore directory already exists${NC}"
+            registration_success=true
         fi
     fi
 
-    # Start the node
-    start_node
+    # Only proceed to start the node if registration was successful or skipped
+    if [ "$registration_success" = true ]; then
+        read -p $'\n'"Ready to start the node? (Y/n): " start_confirm
+        if [[ $start_confirm != [nN] ]]; then
+            start_node
+        fi
+    fi
 }
 
 # Interactive menu function
