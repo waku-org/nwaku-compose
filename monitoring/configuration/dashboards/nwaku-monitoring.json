@@ -3164,7 +3164,7 @@
           "fullMetaSearch": false,
           "includeNullMetadata": true,
           "instant": false,
-          "legendFormat": "{{type}}",
+          "legendFormat": "{{__name__}}",
           "range": true,
           "refId": "A",
           "useBackend": false
@@ -3263,7 +3263,7 @@
           "fullMetaSearch": false,
           "includeNullMetadata": true,
           "instant": false,
-          "legendFormat": "{{type}}",
+          "legendFormat": "{{__name__}}",
           "range": true,
           "refId": "A",
           "useBackend": false
