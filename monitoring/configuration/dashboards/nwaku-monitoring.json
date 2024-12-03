@@ -3160,7 +3160,7 @@
           },
           "disableTextWrap": false,
           "editorMode": "builder",
-          "expr": "waku_rln_proofs_generated_total",
+          "expr": "waku_rln_proofs_generated_total_total",
           "fullMetaSearch": false,
           "includeNullMetadata": true,
           "instant": false,
