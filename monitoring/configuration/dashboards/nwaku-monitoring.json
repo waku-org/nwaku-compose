@@ -3160,7 +3160,7 @@
           },
           "disableTextWrap": false,
           "editorMode": "builder",
-          "expr": "waku_rln_proofs_generated_total_total",
+          "expr": "waku_rln_total_generated_proofs",
           "fullMetaSearch": false,
           "includeNullMetadata": true,
           "instant": false,
@@ -3259,7 +3259,7 @@
           },
           "disableTextWrap": false,
           "editorMode": "builder",
-          "expr": "waku_rln_proofs_remaining",
+          "expr": "waku_rln_remaining_proofs_per_epoch",
           "fullMetaSearch": false,
           "includeNullMetadata": true,
           "instant": false,
@@ -5504,7 +5504,7 @@
         "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "10.4.2",
+      "pluginVersion": "10.4.3",
       "pointradius": 2,
       "points": false,
       "renderer": "flot",
@@ -5597,7 +5597,7 @@
         "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "10.4.2",
+      "pluginVersion": "10.4.3",
       "pointradius": 2,
       "points": false,
       "renderer": "flot",
@@ -5693,7 +5693,7 @@
         "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "10.4.2",
+      "pluginVersion": "10.4.3",
       "pointradius": 2,
       "points": false,
       "renderer": "flot",
@@ -5782,7 +5782,7 @@
         "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "10.4.2",
+      "pluginVersion": "10.4.3",
       "pointradius": 2,
       "points": false,
       "renderer": "flot",
