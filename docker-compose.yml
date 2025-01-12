@@ -3,7 +3,9 @@ x-logging: &logging
   logging:
     driver: json-file
     options:
-      max-size: 1000m
+      max-size: 100m
+      max-file: 10
+      compress: "true"
 
 # Environment variable definitions
 x-rln-relay-eth-client-address: &rln_relay_eth_client_address ${RLN_RELAY_ETH_CLIENT_ADDRESS:-} # Add your RLN_RELAY_ETH_CLIENT_ADDRESS after the "-"
