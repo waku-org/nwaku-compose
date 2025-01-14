@@ -1,10 +1,4 @@
 version: "3.7"
-x-logging: &logging
-  logging:
-    driver: json-file
-    options:
-      max-size: 1000m
-
 # Environment variable definitions
 x-rln-relay-eth-client-address: &rln_relay_eth_client_address ${RLN_RELAY_ETH_CLIENT_ADDRESS:-} # Add your RLN_RELAY_ETH_CLIENT_ADDRESS after the "-"
 
@@ -41,8 +35,13 @@ services:
       - 80:80 #Let's Encrypt
       - 8000:8000/tcp #WSS
       - 127.0.0.1:8645:8645
-    <<:
-      - *logging
+    logging:
+      driver: json-file
+      options:
+        max-size: "100m"
+        max-file: "10"
+        compress: "true"
+        tag: "nwaku-{{.ID}}"
     environment:
       DOMAIN: ${DOMAIN}
       NODEKEY: ${NODEKEY}
