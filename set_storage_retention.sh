@@ -74,7 +74,7 @@ fi
 AVAIL_SPACE_MB=$(df -m . | tail -1 | awk '{ print $4 }' | sed 's/^\([0-9]\+\)M$/\1/')
 
 # Select a store size with the following constraints:
-# - Margin: 1GB - 1GB will be left over for the system and logs
+# - Margin: 5GB - 3GB will be left over for logs and docker volumes
 # - Min: 1GB - The minimum allocated space will be 1GB (old default)
 # - Max: 30GB - The maximum allocated space will be 30GB
 select_store_size $AVAIL_SPACE_MB $PGSQL_SIZE_MB 1024 1024 $(( 30 * 1024 ))
