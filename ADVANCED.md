@@ -14,7 +14,8 @@ There are multiple environment variables you can configure to modify behaviour o
 * `RLN_RELAY_CRED_PASSWORD` - password for encrypting RLN credentials
 * `EXTRA_ARGS` - this variable allows you to specify additional or overriding CLI option for the Waku node which will be appended to the `wakunode2` command. (e.g. `EXTRA_ARGS="--store=false --max-connections=3000`)
 * `CERTS_DIR` - allows you to define a path where SSL certificates are/will be stored. It needs to follow the directory structure produced by Certbot in `/etc/letsencrypt`
-* `STORATE_SIZE` - overrides the default allowed DB size of waku message storage service. Current default is 1GB. (e.g. `STORAGE_SIZE=2GB` or `STORAGE_SIZE=3500MB`)
+* `STORAGE_SIZE` - overrides the default allowed DB size of Waku message storage service. Current default is 1GB. (e.g. `STORAGE_SIZE=2GB` or `STORAGE_SIZE=3500MB`)
+* `PROMETHEUS_RETENTION_SIZE` - overrides the default allow data dir for Prometheus data (which feeds Grafana). Current default is 5GB. (e.g. `PROMETHEUS_RETENTION_SIZE=1GB`)
 
 ## Log monitoring and troubleshooting
 

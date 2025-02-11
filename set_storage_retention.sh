@@ -74,8 +74,8 @@ fi
 AVAIL_SPACE_MB=$(df -m . | tail -1 | awk '{ print $4 }' | sed 's/^\([0-9]\+\)M$/\1/')
 
 # Select a store size with the following constraints:
-# - Margin: 1GB - 1GB will be left over for the system and logs
-# - Min: 1GB - The minimum allocated space will be 1GB (old default)
+# - Margin: 6GB - 1GB will be left over for the system, logs and prometheus data
+# - Min: 1GB - The minimum allocated space will be 1GB
 # - Max: 30GB - The maximum allocated space will be 30GB
 select_store_size $AVAIL_SPACE_MB $PGSQL_SIZE_MB 1024 1024 $(( 30 * 1024 ))
 
