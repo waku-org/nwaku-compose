@@ -56,19 +56,6 @@ if [ -f "./.env" ]; then
     . ./.env
 fi
 
-# Set PostgreSQL container Shared Memory value
-if [ -z "${POSTGRES_SHM}" ]; then
-    TOTAL_MEM_MB=$(free -m|grep Mem| awk '{ print $2 }')
-    if [ "${TOTAL_MEM_MB}" -ge 4096 ]; then
-      # Allocate 2GB of Shared Memory for Postgres if machine has more than 4GB RAM
-      POSTGRES_SHM='2g'
-      echo "Setting PostgreSQL container SHM to ${POSTGRES_SHM}"
-      echo "POSTGRES_SHM=${POSTGRES_SHM}" >> .env
-    fi
-else
-  >&2 echo "POSTGRES_SHM is already specified in .env file"
-fi
-
 if [ -n "$STORAGE_SIZE" ]; then
     >&2 echo "STORAGE_SIZE is specified in .env file, doing nothing"
     exit 0

@@ -47,7 +47,7 @@ Note that if you just want to relay traffic (not publish), you don't need one.
 ./register_rln.sh
 ```
 
-### 💽 2. Select storage size
+### 💽 2. Select DB Parameters
 
 Waku runs a PostgreSQL Database to store messages from the network and serve them to other peers.
 To prevent the database to grow indefinitely, you need to select how much disk space to allocate.
@@ -61,6 +61,18 @@ Or select your own value. For example, `50GB`:
 
 ```shell
 echo "STORAGE_SIZE=50GB" >> .env
+```
+
+Depending on your machine's memory, it may be worth allocating more memory to the Postgres container to ensure heavy queries are served:
+
+```shell
+./set_postgres_shm.sh
+```
+
+Or select your own value manually, for example, `4g`:
+
+```shell
+echo "POSTGRES_SHM=4g" >> .env
 ```
 
 ### 🖥️ 3. Start your node

@@ -67,17 +67,28 @@ if [ -z "$STORAGE_SIZE" ]; then
 fi
 
 echocol "...."
+echocol "Selecting a SHM for Postgres..."
+POSTGRES_SHM=$(./set_postgres_shm.sh echo-value)
+
+if [ -z "$POSTGRES_SHM" ]; then
+  echo "Error encountered when estimating postgres container shm, exiting"
+  exit 1
+fi
+
+echocol "...."
 echocol "The following parameters will be saved to your .env file. Press ENTER to confirm or quit with CONTROL-C to abort:"
 echo "RLN_RELAY_ETH_CLIENT_ADDRESS='$RLN_RELAY_ETH_CLIENT_ADDRESS'
 ETH_TESTNET_KEY=$ETH_TESTNET_KEY
 RLN_RELAY_CRED_PASSWORD='$RLN_RELAY_CRED_PASSWORD'
-STORAGE_SIZE=$STORAGE_SIZE"
+STORAGE_SIZE=$STORAGE_SIZE
+POSTGRES_SHM=$POSTGRES_SHM"
 read foo
 
 echo "RLN_RELAY_ETH_CLIENT_ADDRESS='$RLN_RELAY_ETH_CLIENT_ADDRESS'
 ETH_TESTNET_KEY=$ETH_TESTNET_KEY
 RLN_RELAY_CRED_PASSWORD='$RLN_RELAY_CRED_PASSWORD'
-STORAGE_SIZE=$STORAGE_SIZE" > ./.env
+STORAGE_SIZE=$STORAGE_SIZE
+POSTGRES_SHM=$POSTGRES_SHM" > ./.env
 
 SUDO=""
 if ! docker info > /dev/null 2>&1; then
