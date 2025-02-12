@@ -193,6 +193,34 @@ sudo docker container prune
 sudo docker volume prune
 ```
 
+#### journal
+
+If your `/var/log` gets quite large:
+
+```
+journalctl --disk-usage
+> Archived and active journals take up 1.5G in the file system.
+```
+
+You can cap the size in ` /etc/systemd/journald.conf` with
+
+```
+SystemMaxUse=50M
+```
+
+then restart to apply
+
+```
+systemctl restart systemd-journald
+```
+
+and verify
+```
+journalctl --disk-usage
+> Archived and active journals take up 55.8M in the file system.
+```
+
 -----
+
 # FAQ
 [see](FAQ.md)
