@@ -54,10 +54,11 @@ fi
 # check if STORAGE_SIZE is already specified
 if [ -f "./.env" ]; then
     . ./.env
-    if [ -n "$STORAGE_SIZE" ]; then
-        >&2 echo "STORAGE_SIZE is specified in .env file, doing nothing"
-        exit 0
-    fi
+fi
+
+if [ -n "$STORAGE_SIZE" ]; then
+    >&2 echo "STORAGE_SIZE is specified in .env file, doing nothing"
+    exit 0
 fi
 
 SUDO=""
