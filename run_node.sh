@@ -89,7 +89,6 @@ fi
 
 RLN_RELAY_CRED_PATH=--rln-relay-cred-path=${RLN_RELAY_CRED_PATH:-/keystore/keystore.json}
 
-
 if [ -n "${RLN_RELAY_CRED_PASSWORD}" ]; then
     RLN_RELAY_CRED_PASSWORD=--rln-relay-cred-password="${RLN_RELAY_CRED_PASSWORD}"
 fi
@@ -100,13 +99,30 @@ if [ -n "${STORAGE_SIZE}" ]; then
     STORE_RETENTION_POLICY=--store-message-retention-policy=size:"${STORAGE_SIZE}"
 fi
 
+RLN_PARAMS="--rln-relay-eth-client-address=${RLN_RELAY_ETH_CLIENT_ADDRESS} \
+--rln-relay-tree-path=\"/etc/rln_tree\" \
+${RLN_RELAY_CRED_PATH} \
+${RLN_RELAY_CRED_PASSWORD}"
+
+if [ "${RLN_ENABLED:-1}" == "0" ]; then
+    RLN_PARAMS=
+
+    if [ -z "$CLUSTER_ID" ] || [ "$CLUSTER_ID" = "1" ]; then
+        echo "The CLUSTER_ID env var should be set to a number different to 1 when RLN is disabled"
+        exit 1
+    fi
+fi
+
+# The default cluster-id is 1, which implies The Waku Network and RLN (Rate-Limit Nullifier)
+# For further info, see https://github.com/waku-org/nwaku/blob/v0.35.0/waku/factory/waku.nim#L219
+CLUSTER_ID=--cluster-id="${CLUSTER_ID:-1}"
+
 exec /usr/bin/wakunode\
     --relay=true\
     --filter=true\
     --lightpush=true\
     --keep-alive=true\
     --max-connections=150\
-    --cluster-id=1\
     --discv5-discovery=true\
     --discv5-udp-port=9005\
     --discv5-enr-auto-update=True\
@@ -124,10 +140,8 @@ exec /usr/bin/wakunode\
     --nat=extip:"${MY_EXT_IP}"\
     --store=true\
     --store-message-db-url="postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:5432/postgres"\
-    --rln-relay-eth-client-address="${RLN_RELAY_ETH_CLIENT_ADDRESS}"\
-    --rln-relay-tree-path="/etc/rln_tree"\
-    "${RLN_RELAY_CRED_PATH}"\
-    "${RLN_RELAY_CRED_PASSWORD}"\
+    ${CLUSTER_ID}\
+    ${RLN_PARAMS}\
     ${DNS_WSS_CMD}\
     ${NODEKEY}\
     ${STORE_RETENTION_POLICY}\
