@@ -23,7 +23,7 @@ fi
 docker run -v "$(pwd)/keystore":/keystore/:Z wakuorg/nwaku:v0.35.0 generateRlnKeystore \
 --rln-relay-eth-client-address=${RLN_RELAY_ETH_CLIENT_ADDRESS} \
 --rln-relay-eth-private-key=${ETH_TESTNET_KEY} \
---rln-relay-eth-contract-address=0xCB33Aa5B38d79E3D9Fa8B10afF38AA201399a7e3 \
+--rln-relay-eth-contract-address=0xfe7a9eabce779a090fd702346fd0bfac02ce6ac8 \
 --rln-relay-cred-path=/keystore/keystore.json \
 --rln-relay-cred-password="${RLN_RELAY_CRED_PASSWORD}" \
 --rln-relay-user-message-limit=100 \
