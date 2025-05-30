@@ -106,11 +106,14 @@ exec /usr/bin/wakunode\
     --lightpush=true\
     --keep-alive=true\
     --max-connections=150\
-    --cluster-id=1\
+     --rln-relay-chain-id=59141\
+    --rln-relay-eth-contract-address=0xb9cd878c90e49f797b4431fbf4fb333108cb90e6\
+    --cluster-id=42\
     --discv5-discovery=true\
     --discv5-udp-port=9005\
     --discv5-enr-auto-update=True\
-    --log-level=DEBUG\
+    --log-level=TRACE\
+    --rln-relay=true\
     --tcp-port=30304\
     --metrics-server=True\
     --metrics-server-port=8003\
@@ -119,6 +122,7 @@ exec /usr/bin/wakunode\
     --rest-admin=true\
     --rest-address=0.0.0.0\
     --rest-port=8645\
+    --rln-relay-dynamic=true\
     --rest-allow-origin="waku-org.github.io"\
     --rest-allow-origin="localhost:*"\
     --nat=extip:"${MY_EXT_IP}"\

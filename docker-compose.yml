@@ -25,7 +25,7 @@ x-pg-exporter-env: &pg_exp_env
 # Services definitions
 services:
   nwaku:
-    image: ${NWAKU_IMAGE:-wakuorg/nwaku:v0.35.1}
+    image: quay.io/wakuorg/nwaku-pr:3390
     restart: on-failure
     ports:
       - 30304:30304/tcp
