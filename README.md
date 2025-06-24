@@ -11,9 +11,8 @@ Ready to use docker-compose to run your own [nwaku](https://github.com/waku-org/
 ### 📝 0. Prerequisites
 
 You need:
-* Ethereum Sepolia HTTP endpoint. Get one free from [Infura](https://www.infura.io/).
-* Ethereum Sepolia account with some balance <0.01 Eth. Get some [here](https://www.infura.io/faucet/sepolia).
-* A password to protect your rln membership.
+* Linea Sepolia account with some balance <0.01 Eth. Get some [here](https://www.infura.io/faucet/sepolia).
+* Then go to https://rln.waku.org/ and follow the instructions to create your membership and export the keystore.
 
 `docker-compose` [will read the `./.env` file](https://docs.docker.com/compose/environment-variables/set-environment-variables/#additional-information-3) from the filesystem. There is `.env.example` available for you as a template to use for providing the above values. The process when working with `.env` files is to copy the `.env.example`, store it as `.env` and edit the values there.
 
