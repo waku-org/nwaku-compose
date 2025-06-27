@@ -46,8 +46,8 @@ The simplest way is using Foundry's [cast](https://getfoundry.sh/) tool, which y
 ```
 curl -L https://foundry.paradigm.xyz | bash
 foundryup
-
 ```
+
 Mint the token from your Linea Sepolia account:
 ```
 cast send 0x185A0015aC462a0aECb81beCc0497b649a64B9ea "mint(address,uint256)" <Your Linea Sepolia Account Address> 5000000000000000000 --private-key $PRIVATE_KEY --rpc-url https://sepolia.infura.io/v3/<key>
