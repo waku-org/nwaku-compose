@@ -51,6 +51,7 @@ foundryup
 ```
 
 Mint the token used to pay for RLN Membership registration from your Linea Sepolia account (This is a generic ERC20 token used for testnet only):
+The amount of "5000000000000000000" is how much is needed to register with a `rln-relay-user-message-limit` of 100
 ```
 cast send $TOKEN_CONTRACT_ADDRESS "mint(address,uint256)" $ETH_TESTNET_ACCOUNT 5000000000000000000 --private-key $ETH_TESTNET_KEY --rpc-url $RLN_RELAY_ETH_CLIENT_ADDRESS
 ```
