@@ -13,8 +13,8 @@ Ready to use docker-compose to run your own [nwaku](https://github.com/waku-org/
 You need:
 * Linea Sepolia HTTP endpoint. Get one free from [Infura](https://www.infura.io/).
 * Linea Sepolia account with some balance <0.01 Eth.
-* You can get some Ethereum Sepolia or Linea Sepolia [here](https://www.infura.io/faucet/sepolia)
-* If you have Ethereum Sepolia, it can be bridged to Linea Sepolia [here](https://bridge.linea.build/native-bridge). 
+* You can get some Linea Sepolia [here](https://www.infura.io/faucet/sepolia)
+* If you have ETH on Sepolia, it can be bridged to Linea Sepolia [here](https://bridge.linea.build/native-bridge). 
 * A password to protect your rln membership.
 
 `docker-compose` [will read the `./.env` file](https://docs.docker.com/compose/environment-variables/set-environment-variables/#additional-information-3) from the filesystem. There is `.env.example` available for you as a template to use for providing the above values. The process when working with `.env` files is to copy the `.env.example`, store it as `.env` and edit the values there.
@@ -58,7 +58,7 @@ cast send $TOKEN_CONTRACT_ADDRESS "mint(address,uint256)" $ETH_TESTNET_ACCOUNT 5
 
 Approve the RLN contract to spend tokens on behalf of your account:
 ```
-cast send $TOKEN_CONTRACT_ADDRESS "approve(address,uint256)" $RLN_RELAY-ETH-CONTRACT-ADDRESS 5000000000000000000 --private-key $ETH_TESTNET_KEY --rpc-url $RLN_RELAY_ETH_CLIENT_ADDRESS
+cast send $TOKEN_CONTRACT_ADDRESS "approve(address,uint256)" $RLN_CONTRACT_ADDRESS 5000000000000000000 --private-key $ETH_TESTNET_KEY --rpc-url $RLN_RELAY_ETH_CLIENT_ADDRESS
 ```
 
 This command will register your membership and store it in `keystore/keystore.json`.
