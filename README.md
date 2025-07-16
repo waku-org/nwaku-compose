@@ -11,8 +11,10 @@ Ready to use docker-compose to run your own [nwaku](https://github.com/waku-org/
 ### 📝 0. Prerequisites
 
 You need:
-* Ethereum Sepolia HTTP endpoint. Get one free from [Infura](https://www.infura.io/).
-* Ethereum Sepolia account with some balance <0.01 Eth. Get some [here](https://www.infura.io/faucet/sepolia).
+* Linea Sepolia HTTP endpoint. Get one free from [Infura](https://www.infura.io/).
+* Linea Sepolia account with some balance <0.01 Eth.
+* You can get some Linea Sepolia [here](https://www.infura.io/faucet/sepolia)
+* If you have ETH on Sepolia, it can be bridged to Linea Sepolia [here](https://bridge.linea.build/native-bridge). 
 * A password to protect your rln membership.
 
 `docker-compose` [will read the `./.env` file](https://docs.docker.com/compose/environment-variables/set-environment-variables/#additional-information-3) from the filesystem. There is `.env.example` available for you as a template to use for providing the above values. The process when working with `.env` files is to copy the `.env.example`, store it as `.env` and edit the values there.
@@ -39,6 +41,25 @@ The script is experimental, feedback and pull requests are welcome.
 
 The RLN membership is your access key to The Waku Network. Its registration is done onchain, and allows your nwaku node to publish messages in a decentralized and private way, respecting some [rate limits](https://rfc.vac.dev/spec/64/#rate-limit-exceeded).
 Messages exceeding the rate limit won't be relayed by other peers.
+
+Before registering you need to mint and approve the tokens to pay for the registration.
+The simplest way is using Foundry's [cast](https://getfoundry.sh/) tool, which you can install with:
+
+```
+curl -L https://foundry.paradigm.xyz | bash
+foundryup
+```
+
+Mint the token used to pay for RLN Membership registration from your Linea Sepolia account (This is a generic ERC20 token used for testnet only):
+The amount of "5000000000000000000" is how much is needed to register with a `rln-relay-user-message-limit` of 100
+```
+cast send $TOKEN_CONTRACT_ADDRESS "mint(address,uint256)" $ETH_TESTNET_ACCOUNT 5000000000000000000 --private-key $ETH_TESTNET_KEY --rpc-url $RLN_RELAY_ETH_CLIENT_ADDRESS
+```
+
+Approve the RLN contract to spend tokens on behalf of your account:
+```
+cast send $TOKEN_CONTRACT_ADDRESS "approve(address,uint256)" $RLN_CONTRACT_ADDRESS 5000000000000000000 --private-key $ETH_TESTNET_KEY --rpc-url $RLN_RELAY_ETH_CLIENT_ADDRESS
+```
 
 This command will register your membership and store it in `keystore/keystore.json`.
 Note that if you just want to relay traffic (not publish), you don't need one.
