@@ -22,25 +22,9 @@ Ready‑to‑use **docker‑compose** stack for running your own [nwaku](https:/
 | **2** | **setup_wizard** | Fastest one-command bootstrap | Generates `.env`, registers RLN, and spins up the whole stack automatically |
 | **3** | **Manual script** | Power users / CI | Mint & approve tokens yourself, then run the script for maximum control |
 
-**recommended** rln.waku.org 
 
-### Note
-RLN membership is your access key to The Waku Network. It is registered on-chain, enabling your nwaku node to send messages in a decentralized and privacy-preserving way while adhering to rate limits. Messages exceeding the rate limit will not be relayed by other peers.
-
-If you’re upgrading from a version earlier than v0.36.0, we recommend starting from a fresh clone.
-
-docker-compose automatically reads the .env file from the filesystem. A .env.example is provided as a template — copy it and update the values as needed:
-
-```
-cp .env.example .env
-${EDITOR} .env
-```
-
-Make sure to **NOT** place any secrets into `.env.example`, as they might be unintentionally published in the Git repository.
-
-if you just want to relay traffic (not publish), you don't need to perform the registration.
-
-### EXPERIMENTAL - Use wizard script
+<details>
+<summary>⚙️ option 1 :- SETUP-WIZARD [ experimental ]</summary>
 
 Run the wizard script.
 Once the script is done, the node will be started for you, so there is nothing else to do.
@@ -51,7 +35,10 @@ The script is experimental, feedback and pull requests are welcome.
 ./setup_wizard.sh
 ```
 
-### 🔑 1. RLN.WAKU.ORG ( Recommended )
+</details>
+
+<details>
+<summary>🌐 option 2 :- RLN.WAKU.ORG [ recommended ]</summary>
 
 To register for RLN membership and generate your keystore:
 
@@ -59,7 +46,10 @@ To register for RLN membership and generate your keystore:
 2. Follow the instructions to register your membership and generate a `keystore.json` file.
 3. Download the generated `keystore.json` and place it in the `keystore/` directory of your `nwaku-compose` setup (i.e., at `keystore/keystore.json`).
 
-#### Manual Script
+</details>
+
+<details>
+<summary>🧪 option 3 :- MANUAL SCRIPT [ advanced ] </summary>
 
 You can also register your membership using the provided script, which will store it in `keystore/keystore.json`.
 
@@ -155,6 +145,27 @@ curl -X GET "http://127.0.0.1:8645/store/v1/messages?contentTopics=%2Fmy-app%2F2
 ```
 
 For advanced documentation, refer to [ADVANCED.md](https://github.com/waku-org/nwaku-compose/blob/master/ADVANCED.md).
+
+</details>
+
+
+### 📌 Note
+RLN membership is your access key to The Waku Network. It is registered on-chain, enabling your nwaku node to send messages in a decentralized and privacy-preserving way while adhering to rate limits. Messages exceeding the rate limit will not be relayed by other peers.
+
+If you’re upgrading from a version earlier than v0.36.0, we recommend starting from a fresh clone.
+
+docker-compose automatically reads the .env file from the filesystem. A .env.example is provided as a template — copy it and update the values as needed:
+
+```
+cp .env.example .env
+${EDITOR} .env
+```
+
+Make sure to **NOT** place any secrets into `.env.example`, as they might be unintentionally published in the Git repository.
+
+if you just want to relay traffic (not publish), you don't need to perform the registration.
+
+
 
 -----
 ## How to update to latest version
