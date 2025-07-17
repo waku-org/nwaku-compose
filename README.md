@@ -161,7 +161,7 @@ We regularly announce new available versions in our [Discord](https://discord.wa
 
 ### From `v0.35.1` or older
 
-You will need to delete both the `keystore` and `rln_tree` folders, and register your membership again from scratch. For that, follow [the above steps](#1-register-rln-membership).
+You will need to delete both the `keystore` and `rln_tree` folders, and register your membership again from scratch. For that, follow [the above steps](#-1-register-rln-membership).
 
 ### From `v0.36.0` or newer
 
