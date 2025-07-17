@@ -1,12 +1,25 @@
 #!/bin/sh
 
-if [ -f ./.env ] ; then
-  echo "'./.env\` already exists, exiting wizard"
-  exit 1
+if [ -f ./.env ]; then
+  echocol "'.env' already exists."
+  read -p "Do you want to delete and regenerate it? (y/N): " RECREATE_ENV
+  if [ "$RECREATE_ENV" = "y" ] || [ "$RECREATE_ENV" = "Y" ]; then
+    rm -f ./.env
+    echocol "Old .env removed. Generating a new one..."
+  else
+    echocol "Keeping existing .env. Exiting wizard."
+    exit 1
+  fi
 fi
 
-if [ -f keystore/keystore.json ] ; then
-  echo "'keystore/keystore.json\` already exists, exiting wizard"
+if [ -f keystore/keystore.json ]; then
+  echocol "'keystore/keystore.json' already exists."
+  read -p "Do you want to delete and regenerate it? (y/N): " RECREATE_KEYSTORE
+  if [ "$RECREATE_KEYSTORE" = "y" ] || [ "$RECREATE_KEYSTORE" = "Y" ]; then
+    rm -f keystore/keystore.json
+    echocol "Old keystore/keystore.json removed. Generating a new one..."
+  else
+    echocol "Keeping existing keystore/keystore.json. Exiting wizard."
   exit 1
 fi
 
@@ -27,12 +40,49 @@ echocol()
   printf "$COL${1}${NC}\n"
 }
 
-echocol "##############################"
-echocol "#### nwaku-compose wizard ####"
-echocol "##############################"
+mint_tokens() {
+  echocol "Minting TTT tokens to $ETH_TESTNET_ACCOUNT …"
+  cast send $TOKEN_CONTRACT_ADDRESS "mint(address,uint256)" \
+    $ETH_TESTNET_ACCOUNT $TTT_AMOUNT_WEI \
+    --private-key $ETH_TESTNET_KEY \
+    --rpc-url $RLN_RELAY_ETH_CLIENT_ADDRESS || {
+      echocol "❌ Mint transaction failed."
+      exit 1
+    }
+  echocol "✅ Mint complete!"
+}
+
+approve_tokens() {
+  echocol "Approving RLN contract to spend your TTT tokens …"
+  cast send $TOKEN_CONTRACT_ADDRESS "approve(address,uint256)" \
+    $RLN_CONTRACT_ADDRESS $TTT_AMOUNT_WEI \
+    --private-key $ETH_TESTNET_KEY \
+    --rpc-url $RLN_RELAY_ETH_CLIENT_ADDRESS || {
+      echocol "❌ Approve transaction failed."
+      exit 1
+    }
+  echocol "✅ Approval complete!"
+}
+
+check_eth_balance() {
+  # 0.01 ETH in wei
+  local MIN=10000000000000000
+  local BAL
+
+  BAL=$(cast balance "$ETH_TESTNET_ACCOUNT" --rpc-url "$RLN_RELAY_ETH_CLIENT_ADDRESS" 2>/dev/null | tr -d '[:space:]')
+  [ -z "$BAL" ] && { echocol "Couldn’t fetch ETH balance."; exit 1; }
+  [ "$BAL" -lt "$MIN" ] && { echocol "Need ≥ 0.01 Sepolia ETH. Top up at https://www.infura.io/faucet/sepolia"; exit 1; }
+
+  echocol "You have enough Linea Sepolia ETH to register."
+}
+
+echocol "+----------------------------------------------------------------------------------+"
+echocol "|                                                                                  |"
+echocol "|                            nwaku-compose wizard                                  |"
+echocol "|                                                                                  |"
+echocol "+----------------------------------------------------------------------------------+"
 echocol "First, you need a RPC HTTP endpoint for Ethereum Sepolia"
-echocol "If you don't have one, try out https://www.infura.io/"
-echocol "Expected format is https://linea-sepolia.infura.io/v3/<api key>"
+echocol "If you don't have one, try out https://www.infura.io/ (Expected format is https://linea-sepolia.infura.io/v3/<api key>)"
 read -p "RLN_RELAY_ETH_CLIENT_ADDRESS: " RLN_RELAY_ETH_CLIENT_ADDRESS
 
 if [ -z "$RLN_RELAY_ETH_CLIENT_ADDRESS" ] \
@@ -51,8 +101,7 @@ if ! [[ "$ETH_TESTNET_ACCOUNT" =~ ^0x[0-9a-fA-F]{40}$ ]]; then
 fi
 
 echocol "...."
-echocol "Double check you have some Eth Sepolia, at least 0.01Eth."
-echocol "If not, you can use this faucet: https://www.infura.io/faucet/sepolia"
+check_eth_balance
 echocol "Now enter your SEPOLIA TESTNET private key in hex format 0a...1f without 0x prefix"
 read -p "ETH_TESTNET_KEY: " ETH_TESTNET_KEY
 
@@ -103,14 +152,11 @@ RLN_RELAY_CRED_PASSWORD='$RLN_RELAY_CRED_PASSWORD'
 STORAGE_SIZE=$STORAGE_SIZE
 POSTGRES_SHM=$POSTGRES_SHM" > ./.env
 
-RLN_CONTRACT_ADDRESS=0xB9cd878C90E49F797B4431fBF4fb333108CB90e6
-TOKEN_CONTRACT_ADDRESS=0x185A0015aC462a0aECb81beCc0497b649a64B9ea
-REQUIRED_AMOUNT=5000000000000000000
-
 echocol "...."
 echocol "Checking your TTT token balance..."
 USER_BALANCE_RAW=$(cast call $TOKEN_CONTRACT_ADDRESS "balanceOf(address)(uint256)" $ETH_TESTNET_ACCOUNT --rpc-url $RLN_RELAY_ETH_CLIENT_ADDRESS 2>/dev/null)
 USER_BALANCE=$(echo "$USER_BALANCE_RAW" | awk '{print $1}')
+USER_BALANCE=$(echo "$USER_BALANCE / 10^18" | bc)
 
 if [ -z "$USER_BALANCE" ]; then
   echocol "Could not fetch balance. Please ensure your RPC endpoint and account are correct."
@@ -123,26 +169,15 @@ if [ "$USER_BALANCE" -ge "$REQUIRED_AMOUNT" ]; then
   echocol "You already have enough TTT tokens to register."
   read -p "Do you want to mint more tokens? (y/N): " MINT_CHOICE
   if [ "$MINT_CHOICE" = "y" ] || [ "$MINT_CHOICE" = "Y" ]; then
-    echocol "Run the following commands in your terminal:"
-    echo "cast send $TOKEN_CONTRACT_ADDRESS \"mint(address,uint256)\" $ETH_TESTNET_ACCOUNT 5000000000000000000 --private-key $ETH_TESTNET_KEY --rpc-url $RLN_RELAY_ETH_CLIENT_ADDRESS"
-    echo "cast send $TOKEN_CONTRACT_ADDRESS \"approve(address,uint256)\" $RLN_CONTRACT_ADDRESS 5000000000000000000 --private-key $ETH_TESTNET_KEY --rpc-url $RLN_RELAY_ETH_CLIENT_ADDRESS"
-    echocol "Press ENTER after you have minted and approved tokens, or CONTROL-C to abort."
-    read foo
-    echocol "🎉 Minting and approval complete! You're ready for the next step."
+    mint_tokens
+    approve_tokens
   else
-    echocol "Run the following command in your terminal:"
-    echo "cast send $TOKEN_CONTRACT_ADDRESS \"approve(address,uint256)\" $RLN_CONTRACT_ADDRESS 5000000000000000000 --private-key $ETH_TESTNET_KEY --rpc-url $RLN_RELAY_ETH_CLIENT_ADDRESS"
-    echocol "Press ENTER after you have approved tokens, or CONTROL-C to abort."
-    read foo
-    echocol "✅ Approval complete! You're ready for the next step."
+    approve_tokens
   fi
 else
-  echocol "You do not have enough TTT tokens. Mint and approve tokens to continue."
-  echo "cast send $TOKEN_CONTRACT_ADDRESS \"mint(address,uint256)\" $ETH_TESTNET_ACCOUNT 5000000000000000000 --private-key $ETH_TESTNET_KEY --rpc-url $RLN_RELAY_ETH_CLIENT_ADDRESS"
-  echo "cast send $TOKEN_CONTRACT_ADDRESS \"approve(address,uint256)\" $RLN_CONTRACT_ADDRESS 5000000000000000000 --private-key $ETH_TESTNET_KEY --rpc-url $RLN_RELAY_ETH_CLIENT_ADDRESS"
-  echocol "Press ENTER after you have minted and approved tokens, or CONTROL-C to abort."
-  read foo
-  echocol "🎉 Minting and approval complete! You're ready for the next step."
+  echocol "Minting and approving required TTT tokens …"
+  mint_tokens
+  approve_tokens
 fi
 
 SUDO=""
