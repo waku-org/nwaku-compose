@@ -32,12 +32,22 @@ echocol "#### nwaku-compose wizard ####"
 echocol "##############################"
 echocol "First, you need a RPC HTTP endpoint for Ethereum Sepolia"
 echocol "If you don't have one, try out https://www.infura.io/"
-echocol "Expected format is https://sepolia.infura.io/v3/<api key>:"
+echocol "Expected format is https://linea-sepolia.infura.io/v3/<api key>"
 read -r RLN_RELAY_ETH_CLIENT_ADDRESS
 
 if [ -z "$RLN_RELAY_ETH_CLIENT_ADDRESS" ] \
   || [ $(echo "$RLN_RELAY_ETH_CLIENT_ADDRESS" | grep -c "^https:") -eq 0 ]; then
     echo "Invalid value, received '$RLN_RELAY_ETH_CLIENT_ADDRESS'"
+    exit 1
+fi
+
+echocol "...."
+echocol "Now enter your SEPOLIA TESTNET account address (should start with 0x and be 42 characters)"
+read ETH_TESTNET_ACCOUNT
+
+if [ -z "$ETH_TESTNET_ACCOUNT" ] \
+  || [ $(echo -n "$ETH_TESTNET_ACCOUNT" | grep -c '^0x[0-9a-fA-F]\{40\}$') -ne 1 ]; then
+    echo "Invalid value, received '$ETH_TESTNET_ACCOUNT'"
     exit 1
 fi
 
@@ -79,6 +89,7 @@ echocol "...."
 echocol "The following parameters will be saved to your .env file. Press ENTER to confirm or quit with CONTROL-C to abort:"
 echo "RLN_RELAY_ETH_CLIENT_ADDRESS='$RLN_RELAY_ETH_CLIENT_ADDRESS'
 ETH_TESTNET_KEY=$ETH_TESTNET_KEY
+ETH_TESTNET_ACCOUNT=$ETH_TESTNET_ACCOUNT
 RLN_RELAY_CRED_PASSWORD='$RLN_RELAY_CRED_PASSWORD'
 STORAGE_SIZE=$STORAGE_SIZE
 POSTGRES_SHM=$POSTGRES_SHM"
@@ -86,6 +97,7 @@ read foo
 
 echo "RLN_RELAY_ETH_CLIENT_ADDRESS='$RLN_RELAY_ETH_CLIENT_ADDRESS'
 ETH_TESTNET_KEY=$ETH_TESTNET_KEY
+ETH_TESTNET_ACCOUNT=$ETH_TESTNET_ACCOUNT
 RLN_RELAY_CRED_PASSWORD='$RLN_RELAY_CRED_PASSWORD'
 STORAGE_SIZE=$STORAGE_SIZE
 POSTGRES_SHM=$POSTGRES_SHM" > ./.env
