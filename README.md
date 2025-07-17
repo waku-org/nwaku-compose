@@ -59,7 +59,7 @@ To register for RLN membership and generate your keystore:
 #### Alternative: Register locally
 
 You can also register your membership using the provided script, which will store it in `keystore/keystore.json`.
-Note that if you just want to relay traffic (not publish), you don't need one.
+Note that if you just want to relay traffic (not publish), you don't need to perform the registration.
 
 Before registering you need to mint and approve the tokens to pay for the registration.
 The simplest way is using Foundry's [cast](https://getfoundry.sh/) tool, which you can install with:
