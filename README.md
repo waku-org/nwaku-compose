@@ -17,7 +17,7 @@ You need:
 * If you have ETH on Sepolia, it can be bridged to Linea Sepolia [here](https://bridge.linea.build/native-bridge). 
 * A password to protect your rln membership.
 
-`docker-compose` [will read the `./.env` file](https://docs.docker.com/compose/environment-variables/set-environment-variables/#additional-information-3) from the filesystem. There is `.env.example` available for you as a template to use for providing the above values. The process when working with `.env` files is to copy the `.env.example`, store it as `.env` and edit the values there.
+`docker-compose` [will read the `.env` file](https://docs.docker.com/compose/environment-variables/set-environment-variables/#additional-information-3) from the filesystem. There is `.env.example` available for you as a template to use for providing the above values. The process when working with `.env` files is to copy the `.env.example`, store it as `.env` and edit the values there.
 
 ```
 cp .env.example .env
@@ -159,18 +159,11 @@ For advanced documentation, refer to [ADVANCED.md](https://github.com/waku-org/n
 
 We regularly announce new available versions in our [Discord](https://discord.waku.org/) server.
 
-### From `v0.29` or older
+### From `v0.35.1` or older
 
-You will need to delete both the `keystore` and `rln_tree` folders, and register your membership again before using the new version by running the following commands:
+You will need to delete both the `keystore` and `rln_tree` folders, and register your membership again from scratch. For that, follow [the above steps](#1-register-rln-membership).
 
-1. `cd nwaku-compose` ( go into the root's repository folder )
-2. `docker-compose down`
-3. `sudo rm -r keystore rln_tree`
-4. `git pull origin master`
-5. `./register_rln.sh`
-6. `docker-compose up -d`
-
-### From `v0.30` or newer
+### From `v0.36.0` or newer
 
 Updating the node is as simple as running the following:
 1. `cd nwaku-compose` ( go into the root's repository folder )
