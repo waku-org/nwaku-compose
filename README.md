@@ -39,6 +39,13 @@ The script is experimental, feedback and pull requests are welcome.
 
 ### 🔑 1. Register RLN membership
 
+> **Note:** If upgrading from less than v0.36.0, run the following commands before proceeding with the registration:
+>
+> ```sh
+> sudo rm -r rln_tree
+> sudo rm keystore/keystore.json
+> ```
+
 The RLN membership is your access key to The Waku Network. Its registration is done on-chain, allowing your `nwaku` node to send messages in a decentralized and private way, respecting some [rate limits](https://rfc.vac.dev/spec/64/#rate-limit-exceeded). Other peers won't relay messages that exceed the rate limit.
 
 #### Recommended: Register via rln.waku.org
