@@ -22,9 +22,19 @@ Ready‑to‑use **docker‑compose** stack for running your own [nwaku](https:/
 | **2** | **setup_wizard** | Fastest one-command bootstrap | Generates `.env`, registers RLN, and spins up the whole stack automatically |
 | **3** | **Manual script** | Power users / CI | Mint & approve tokens yourself, then run the script for maximum control |
 
+<details>
+<summary>🌐 option 1 :- RLN.WAKU.ORG [ recommended ]</summary>
+
+To register for RLN membership and generate your keystore:
+
+1. Visit [https://rln.waku.org](https://rln.waku.org).
+2. Follow the instructions to register your membership and generate a `keystore.json` file.
+3. Download the generated `keystore.json` and place it in the `keystore/` directory of your `nwaku-compose` setup (i.e., at `keystore/keystore.json`).
+
+</details>
 
 <details>
-<summary>⚙️ option 1 :- SETUP-WIZARD [ experimental ]</summary>
+<summary>⚙️ option 2 :- SETUP-WIZARD [ experimental ]</summary>
 
 Run the wizard script.
 Once the script is done, the node will be started for you, so there is nothing else to do.
@@ -34,17 +44,6 @@ The script is experimental, feedback and pull requests are welcome.
 ```
 ./setup_wizard.sh
 ```
-
-</details>
-
-<details>
-<summary>🌐 option 2 :- RLN.WAKU.ORG [ recommended ]</summary>
-
-To register for RLN membership and generate your keystore:
-
-1. Visit [https://rln.waku.org](https://rln.waku.org).
-2. Follow the instructions to register your membership and generate a `keystore.json` file.
-3. Download the generated `keystore.json` and place it in the `keystore/` directory of your `nwaku-compose` setup (i.e., at `keystore/keystore.json`).
 
 </details>
 
