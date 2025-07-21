@@ -16,9 +16,9 @@ Ready‑to‑use **docker‑compose** stack for running your own [nwaku](https:/
 
 ### 🚀 Starting your node — pick one of three paths
 
-| # | Path | Quick-start command | What happens | 
+| # | Option | Quick-start command | What happens | 
 |---|------|--------------------|--------------|
-| **1** | **setup_wizard** | Fastest one-command bootstrap | Generates `.env`, registers RLN, and spins up the whole stack automatically |
+| **1** | **setup-wizard** | Fastest one-command bootstrap | Generates `.env`, registers RLN, and spins up the whole stack automatically |
 | **2** | **script** | Power user / CI | setup a .env file manually, run ./register_rln.sh, and then start the node.|
 
 <details>
