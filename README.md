@@ -18,23 +18,11 @@ Ready‑to‑use **docker‑compose** stack for running your own [nwaku](https:/
 
 | # | Path | Quick-start command | What happens | 
 |---|------|--------------------|--------------|
-| **1** | **rln.waku.org** | Guided web setup | Register RLN in the browser, download `keystore.json`, then return here to proceed |
-| **2** | **setup_wizard** | Fastest one-command bootstrap | Generates `.env`, registers RLN, and spins up the whole stack automatically |
-| **3** | **Manual script** | Power users / CI | Mint & approve tokens yourself, then run the script for maximum control |
+| **1** | **setup_wizard** | Fastest one-command bootstrap | Generates `.env`, registers RLN, and spins up the whole stack automatically |
+| **2** | **script** | Power user / CI | setup a .env file manually, run ./register_rln.sh, and then start the node.|
 
 <details>
-<summary>🌐 option 1 :- RLN.WAKU.ORG [ recommended ]</summary>
-
-To register for RLN membership and generate your keystore:
-
-1. Visit [https://rln.waku.org](https://rln.waku.org).
-2. Follow the instructions to register your membership and generate a `keystore.json` file.
-3. Download the generated `keystore.json` and place it in the `keystore/` directory of your `nwaku-compose` setup (i.e., at `keystore/keystore.json`).
-
-</details>
-
-<details>
-<summary>⚙️ option 2 :- SETUP-WIZARD [ experimental ]</summary>
+<summary>⚙️ option 1 :- SETUP-WIZARD [ experimental ]</summary>
 
 Run the wizard script.
 Once the script is done, the node will be started for you, so there is nothing else to do.
@@ -48,31 +36,14 @@ The script is experimental, feedback and pull requests are welcome.
 </details>
 
 <details>
-<summary>🧪 option 3 :- MANUAL SCRIPT [ advanced ] </summary>
-
-You can also register your membership using the provided script, which will store it in `keystore/keystore.json`.
-
-Before registering you need to mint and approve the tokens to pay for the registration.
-The simplest way is using Foundry's [cast](https://getfoundry.sh/) tool, which you can install with:
+<summary>🧪 option 2 :- SCRIPT [ manual ] [ recommended ] </summary>
 
 ```
-curl -L https://foundry.paradigm.xyz | bash
-foundryup
+cp .env.example .env  
 ```
-
-Mint the token used to pay for RLN Membership registration from your Linea Sepolia account (This is a generic ERC20 token used for testnet only):
-The amount of "5000000000000000000" is how much is needed to register with a `rln-relay-user-message-limit` of 100
-```
-cast send $TOKEN_CONTRACT_ADDRESS "mint(address,uint256)" $ETH_TESTNET_ACCOUNT 5000000000000000000 --private-key $ETH_TESTNET_KEY --rpc-url $RLN_RELAY_ETH_CLIENT_ADDRESS
-```
-
-Approve the RLN contract to spend tokens on behalf of your account:
-```
-cast send $TOKEN_CONTRACT_ADDRESS "approve(address,uint256)" $RLN_CONTRACT_ADDRESS 5000000000000000000 --private-key $ETH_TESTNET_KEY --rpc-url $RLN_RELAY_ETH_CLIENT_ADDRESS
-```
+Edit the .env file and fill in all required parameters 
 
 This command will register your membership and store it in `keystore/keystore.json`:
-
 ```
 ./register_rln.sh
 ```
