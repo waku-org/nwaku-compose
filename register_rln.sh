@@ -32,7 +32,7 @@ TOKEN_CONTRACT_ADDRESS=0x185A0015aC462a0aECb81beCc0497b649a64B9ea
 TTT_AMOUNT_WEI=5000000000000000000
 
 # Mint 
-echo "Minting test token"
+echo "\nMinting test token"
 if ! cast send "$TOKEN_CONTRACT_ADDRESS" "mint(address,uint256)" \
         "$ETH_TESTNET_ACCOUNT" "$TTT_AMOUNT_WEI" \
         --private-key "$ETH_TESTNET_KEY" \
@@ -43,7 +43,7 @@ then
 fi
 
 # Approve 
-echo "Aprove to spend the test tokens"
+echo "\nAprove to spend the test tokens"
 if ! cast send "$TOKEN_CONTRACT_ADDRESS" "approve(address,uint256)" \
         "$RLN_CONTRACT_ADDRESS" "$TTT_AMOUNT_WEI" \
         --private-key "$ETH_TESTNET_KEY" \
