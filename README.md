@@ -18,25 +18,11 @@ Ready‑to‑use **docker‑compose** stack for running your own [nwaku](https:/
 
 | # | Option | Quick-start command | What happens | 
 |---|------|--------------------|--------------|
-| **1** | **setup-wizard** | Fastest one-command bootstrap | Generates `.env`, registers RLN, and spins up the whole stack automatically |
-| **2** | **script** | Power user / CI | setup a .env file manually, run ./register_rln.sh, and then start the node.|
+| **1** | **script** | Power user / CI | setup a .env file manually, run ./register_rln.sh, and then start the node.|
+| **2** | **setup-wizard** | Fastest one-command bootstrap | Generates `.env`, registers RLN, and spins up the whole stack automatically |
 
 <details>
-<summary>⚙️ option 1 :- SETUP-WIZARD [ experimental ]</summary>
-
-Run the wizard script.
-Once the script is done, the node will be started for you, so there is nothing else to do.
-
-The script is experimental, feedback and pull requests are welcome.
-
-```
-./setup_wizard.sh
-```
-
-</details>
-
-<details>
-<summary>🧪 option 2 :- SCRIPT [ manual ] [ recommended ] </summary>
+<summary>🧪 option 1 :- SCRIPT [ manual ] [ recommended ] </summary>
 
 ```
 cp .env.example .env  
@@ -118,6 +104,19 @@ For advanced documentation, refer to [ADVANCED.md](https://github.com/waku-org/n
 
 </details>
 
+<details>
+<summary>⚙️ option 1 :- SETUP-WIZARD [ experimental ]</summary>
+
+Run the wizard script.
+Once the script is done, the node will be started for you, so there is nothing else to do.
+
+The script is experimental, feedback and pull requests are welcome.
+
+```
+./setup_wizard.sh
+```
+
+</details>
 
 ### 📌 Note
 RLN membership is your access key to The Waku Network. It is registered on-chain, enabling your nwaku node to send messages in a decentralized and privacy-preserving way while adhering to rate limits. Messages exceeding the rate limit will not be relayed by other peers.
