@@ -14,7 +14,7 @@ Ready‑to‑use **docker‑compose** stack for running your own [nwaku](https:/
   * Need test ETH? Use the [Linea Sepolia faucet](https://www.infura.io/faucet/sepolia)  
   * Already have ETH on Sepolia? Bridge it to Linea via the [official bridge](https://bridge.linea.build/native-bridge)
 
-### 🚀 Starting your node — pick one of three paths
+### 🚀 Starting your node
 
 | # | Option | Quick-start command | What happens | 
 |---|------|--------------------|--------------|
@@ -105,7 +105,7 @@ For advanced documentation, refer to [ADVANCED.md](https://github.com/waku-org/n
 </details>
 
 <details>
-<summary>⚙️ option 1 :- SETUP-WIZARD [ experimental ]</summary>
+<summary>⚙️ option 2 :- SETUP-WIZARD [ experimental ]</summary>
 
 Run the wizard script.
 Once the script is done, the node will be started for you, so there is nothing else to do.
@@ -121,27 +121,17 @@ The script is experimental, feedback and pull requests are welcome.
 ### 📌 Note
 RLN membership is your access key to The Waku Network. It is registered on-chain, enabling your nwaku node to send messages in a decentralized and privacy-preserving way while adhering to rate limits. Messages exceeding the rate limit will not be relayed by other peers.
 
-If you’re upgrading from a version earlier than v0.36.0, we recommend starting from a fresh clone.
-
-docker-compose automatically reads the .env file from the filesystem. A .env.example is provided as a template — copy it and update the values as needed:
-
-```
-cp .env.example .env
-${EDITOR} .env
-```
-
-Make sure to **NOT** place any secrets into `.env.example`, as they might be unintentionally published in the Git repository.
-
-if you just want to relay traffic (not publish), you don't need to perform the registration.
+If you just want to relay traffic (not publish), you don't need to perform the registration.
 
 
 
 -----
-## How to update to latest version
+<details>
+<summary>How to update to latest version</summary>
 
 We regularly announce new available versions in our [Discord](https://discord.waku.org/) server.
 
-### From `v0.29` or older
+### From `v0.35.1` or older
 
 You will need to delete both the `keystore` and `rln_tree` folders, and register your membership again before using the new version by running the following commands:
 
@@ -152,15 +142,17 @@ You will need to delete both the `keystore` and `rln_tree` folders, and register
 5. `./register_rln.sh`
 6. `docker-compose up -d`
 
-### From `v0.30` or newer
+### From `v0.36.0` or newer
 
 Updating the node is as simple as running the following:
 1. `cd nwaku-compose` ( go into the root's repository folder )
 2. `docker-compose down`
 3. `git pull origin master`
 4. `docker-compose up -d`
+</details>
 
-### Set size
+<details>
+<summary>Set storage size (optional)</summary>
 
 To improve storage on the network, you can increase the allocated space for the database.
 To do so, you can simply run:
@@ -168,8 +160,10 @@ To do so, you can simply run:
 ```
 ./set_storage_retention.sh
 ```
+</details>
 
-### Check
+<details>
+<summary>Node's health check</summary>
 
 Once done, check your node is healthy: 
 
@@ -187,6 +181,7 @@ All good:
     {
       "Rln Relay": "Ready"
     }
+    ...
   ]
 }
 ```
@@ -200,8 +195,10 @@ If the `./chkhealth.sh` script is hanging or returns the following, wait a few m
   "protocolsHealth": []
 }
 ```
+</details>
 
-### Clean-up
+<details>
+<summary>Disk cleanup tips</summary>
 
 Docker artefact can take some precious disk space, run the following commands to free space **while your node is running**.
 
@@ -253,7 +250,9 @@ journalctl --disk-usage
 > Archived and active journals take up 55.8M in the file system.
 ```
 
------
+</details>
 
-# FAQ
+<details>
+<summary>FAQ</summary>
 [see](FAQ.md)
+</details>
