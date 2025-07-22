@@ -43,7 +43,7 @@ then
 fi
 
 # Approve 
-echo "\nAprove to spend the test tokens"
+echo "\nApprove to spend the test tokens"
 if ! cast send "$TOKEN_CONTRACT_ADDRESS" "approve(address,uint256)" \
         "$RLN_CONTRACT_ADDRESS" "$TTT_AMOUNT_WEI" \
         --private-key "$ETH_TESTNET_KEY" \
