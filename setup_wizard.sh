@@ -47,7 +47,7 @@ check_eth_balance() {
 
   BAL=$(cast balance "$ETH_TESTNET_ACCOUNT" --rpc-url "$RLN_RELAY_ETH_CLIENT_ADDRESS" 2>/dev/null | tr -d '[:space:]')
   [ -z "$BAL" ] && { echocol "Couldn’t fetch ETH balance."; exit 1; }
-  [ "$BAL" -lt "$MIN" ] && { echocol "Need ≥ 0.01 Sepolia ETH. Top up at https://www.infura.io/faucet/sepolia"; exit 1; }
+  [ "$BAL" -lt "$MIN" ] && { echocol "Need ≥ 0.01 Linea Sepolia ETH. Top up at https://www.infura.io/faucet/sepolia"; exit 1; }
 
   echocol "✅ You have enough Linea Sepolia ETH to register."
 }
@@ -217,7 +217,7 @@ read -p "Press ENTER to continue..." foo
 if ! $SUDO ./register_rln.sh; then
   echocol ""
   echocol "❌ RLN registration failed. This may be due to high gas fees."
-  echocol "💡 Make sure you have enough Sepolia ETH and try again with:"
+  echocol "💡 Make sure you have enough Linea Sepolia ETH and try again with:"
   echocol "   $SUDO ./register_rln.sh"
   echocol ""
   exit 1
