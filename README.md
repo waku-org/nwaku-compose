@@ -133,7 +133,7 @@ We regularly announce new available versions in our [Discord](https://discord.wa
 
 ### From `v0.35.1` or older
 
-Please review the latest https://github.com/waku-org/nwaku-compose/blob/master/.env.example env var template file and update your .env accordingly
+Please review the latest https://github.com/waku-org/nwaku-compose/blob/master/.env.example env var template file and update your .env accordingly.
 
 Make sure you have some ETH in your Linea Sepolia account.
 Also, move your Sepolia RPC client (e.g., Infura) to a Linea Sepolia RPC client.
