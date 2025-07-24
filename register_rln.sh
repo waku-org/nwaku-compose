@@ -60,4 +60,5 @@ docker run -v "$(pwd)/keystore":/keystore/:Z wakuorg/nwaku:v0.36.0 generateRlnKe
 --rln-relay-cred-path=/keystore/keystore.json \
 --rln-relay-cred-password="${RLN_RELAY_CRED_PASSWORD}" \
 --rln-relay-user-message-limit=100 \
+--rln-relay-chain-id=59141 \
 --execute
