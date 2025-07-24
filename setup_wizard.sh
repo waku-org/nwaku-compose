@@ -9,36 +9,36 @@ echocol()
 
 RLN_CONTRACT_ADDRESS=0xB9cd878C90E49F797B4431fBF4fb333108CB90e6
 TOKEN_CONTRACT_ADDRESS=0x185A0015aC462a0aECb81beCc0497b649a64B9ea
-REQUIRED_AMOUNT=5
-TTT_AMOUNT_WEI=5000000000000000000
+# REQUIRED_AMOUNT=5
+# TTT_AMOUNT_WEI=5000000000000000000
 
-mint_tokens() {
-  echocol ""
-  echocol "Minting TTT tokens ..."
-  cast send $TOKEN_CONTRACT_ADDRESS "mint(address,uint256)" \
-    $ETH_TESTNET_ACCOUNT $TTT_AMOUNT_WEI \
-    --private-key $ETH_TESTNET_KEY \
-    --rpc-url $RLN_RELAY_ETH_CLIENT_ADDRESS || {
-      echocol "❌ Mint transaction failed."
-      exit 1
-    }
-  echocol "✅ Mint complete!"
-  echocol ""
-}
+# mint_tokens() {
+#   echocol ""
+#   echocol "Minting TTT tokens ..."
+#   cast send $TOKEN_CONTRACT_ADDRESS "mint(address,uint256)" \
+#     $ETH_TESTNET_ACCOUNT $TTT_AMOUNT_WEI \
+#     --private-key $ETH_TESTNET_KEY \
+#     --rpc-url $RLN_RELAY_ETH_CLIENT_ADDRESS || {
+#       echocol "❌ Mint transaction failed."
+#       exit 1
+#     }
+#   echocol "✅ Mint complete!"
+#   echocol ""
+# }
 
-approve_tokens() {
-  echocol ""
-  echocol "Approving RLN contract to spend your TTT tokens ..."
-  cast send $TOKEN_CONTRACT_ADDRESS "approve(address,uint256)" \
-    $RLN_CONTRACT_ADDRESS $TTT_AMOUNT_WEI \
-    --private-key $ETH_TESTNET_KEY \
-    --rpc-url $RLN_RELAY_ETH_CLIENT_ADDRESS || {
-      echocol "❌ Approve transaction failed."
-      exit 1
-    }
-  echocol "✅ Approval complete!"
-  echocol ""
-}
+# approve_tokens() {
+#   echocol ""
+#   echocol "Approving RLN contract to spend your TTT tokens ..."
+#   cast send $TOKEN_CONTRACT_ADDRESS "approve(address,uint256)" \
+#     $RLN_CONTRACT_ADDRESS $TTT_AMOUNT_WEI \
+#     --private-key $ETH_TESTNET_KEY \
+#     --rpc-url $RLN_RELAY_ETH_CLIENT_ADDRESS || {
+#       echocol "❌ Approve transaction failed."
+#       exit 1
+#     }
+#   echocol "✅ Approval complete!"
+#   echocol ""
+# }
 
 check_eth_balance() {
   # 0.01 ETH in wei
@@ -195,39 +195,16 @@ echocol "Your current TTT token balance is: $USER_BALANCE"
 echocol "Required amount: $REQUIRED_AMOUNT"
 echocol ""
 
+MINT_CHOICE="y"
 if [ "$USER_BALANCE" -ge "$REQUIRED_AMOUNT" ]; then
   echocol "You already have enough TTT tokens to register."
   read -p "Do you want to mint more tokens? (y/N): " MINT_CHOICE
-  if [ "$MINT_CHOICE" = "y" ] || [ "$MINT_CHOICE" = "Y" ]; then
-    mint_tokens
-    approve_tokens
-  else
-    approve_tokens
-  fi
-else
-  echocol "Minting and approving required TTT tokens …"
-  mint_tokens
-  approve_tokens
 fi
 
-echocol "🔐 Registering RLN membership..."
-read -p "Press ENTER to continue..." foo
-
-if ! docker run --rm \
-  -v "$(pwd)/keystore:/keystore":Z \
-  wakuorg/nwaku:v0.36.0 \
-  generateRlnKeystore \
-    --rln-relay-eth-client-address="${RLN_RELAY_ETH_CLIENT_ADDRESS}" \
-    --rln-relay-eth-private-key="${ETH_TESTNET_KEY}" \
-    --rln-relay-eth-contract-address="${RLN_RELAY_CONTRACT_ADDRESS}" \
-    --rln-relay-cred-path=/keystore/keystore.json \
-    --rln-relay-cred-password="${RLN_RELAY_CRED_PASSWORD}" \
-    --rln-relay-user-message-limit=100 \
-    --execute; then
-  echocol ""
-  echocol "❌ RLN registration failed (likely gas / RPC issue)."
-  echocol ""
-  exit 1
+if [ "$MINT_CHOICE" = "y" ] || [ "$MINT_CHOICE" = "Y" ]; then
+  ./register_rln.sh --no-mint;
+else
+  ./register_rln.sh --mint;
 fi
 
 echocol ""
