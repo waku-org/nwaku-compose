@@ -75,6 +75,15 @@ if [ -f keystore/keystore.json ]; then
   fi
 fi
 
+# Ensure Foundry (cast & foundryup) is available for token mint/approve calls
+if ! command -v cast >/dev/null 2>&1; then
+  echocol "Foundry toolkit (cast) not found. Installing Foundry... \n"
+  curl -L https://foundry.paradigm.xyz | bash
+  # Make the freshly installed binaries available in the current session
+  export PATH="$HOME/.foundry/bin:$PATH"
+  foundryup
+fi
+
 if [ -z "$(which docker 2>/dev/null)" ]; then
   echo "Ensure that 'docker\` is installed and in \$PATH"
   exit 1
@@ -201,24 +210,22 @@ else
   approve_tokens
 fi
 
-SUDO=""
-if ! docker info > /dev/null 2>&1; then
-  echocol "...."
-  echocol "'sudo' seems to be needed to run docker, your unix password will be asked"
-  SUDO="sudo"
-fi
-
-
-
-echocol ""
 echocol "🔐 Registering RLN membership..."
 read -p "Press ENTER to continue..." foo
 
-if ! $SUDO ./register_rln.sh; then
+if ! docker run --rm \
+  -v "$(pwd)/keystore:/keystore":Z \
+  wakuorg/nwaku:v0.36.0 \
+  generateRlnKeystore \
+    --rln-relay-eth-client-address="${RLN_RELAY_ETH_CLIENT_ADDRESS}" \
+    --rln-relay-eth-private-key="${ETH_TESTNET_KEY}" \
+    --rln-relay-eth-contract-address="${RLN_RELAY_CONTRACT_ADDRESS}" \
+    --rln-relay-cred-path=/keystore/keystore.json \
+    --rln-relay-cred-password="${RLN_RELAY_CRED_PASSWORD}" \
+    --rln-relay-user-message-limit=100 \
+    --execute; then
   echocol ""
-  echocol "❌ RLN registration failed. This may be due to high gas fees."
-  echocol "💡 Make sure you have enough Linea Sepolia ETH and try again with:"
-  echocol "   $SUDO ./register_rln.sh"
+  echocol "❌ RLN registration failed (likely gas / RPC issue)."
   echocol ""
   exit 1
 fi
@@ -229,6 +236,6 @@ echocol ""
 
 echocol "Your node is ready! enter the following command to start it:"
 read -p "Press ENTER to continue..." foo
-echo "> $SUDO docker-compose up -d"
+sudo docker-compose up -d
 echocol "✅ Node started successfully!"
 echocol ""
