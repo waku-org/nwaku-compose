@@ -9,36 +9,7 @@ echocol()
 
 RLN_CONTRACT_ADDRESS=0xB9cd878C90E49F797B4431fBF4fb333108CB90e6
 TOKEN_CONTRACT_ADDRESS=0x185A0015aC462a0aECb81beCc0497b649a64B9ea
-# REQUIRED_AMOUNT=5
-# TTT_AMOUNT_WEI=5000000000000000000
-
-# mint_tokens() {
-#   echocol ""
-#   echocol "Minting TTT tokens ..."
-#   cast send $TOKEN_CONTRACT_ADDRESS "mint(address,uint256)" \
-#     $ETH_TESTNET_ACCOUNT $TTT_AMOUNT_WEI \
-#     --private-key $ETH_TESTNET_KEY \
-#     --rpc-url $RLN_RELAY_ETH_CLIENT_ADDRESS || {
-#       echocol "❌ Mint transaction failed."
-#       exit 1
-#     }
-#   echocol "✅ Mint complete!"
-#   echocol ""
-# }
-
-# approve_tokens() {
-#   echocol ""
-#   echocol "Approving RLN contract to spend your TTT tokens ..."
-#   cast send $TOKEN_CONTRACT_ADDRESS "approve(address,uint256)" \
-#     $RLN_CONTRACT_ADDRESS $TTT_AMOUNT_WEI \
-#     --private-key $ETH_TESTNET_KEY \
-#     --rpc-url $RLN_RELAY_ETH_CLIENT_ADDRESS || {
-#       echocol "❌ Approve transaction failed."
-#       exit 1
-#     }
-#   echocol "✅ Approval complete!"
-#   echocol ""
-# }
+REQUIRED_AMOUNT=5
 
 check_eth_balance() {
   # 0.01 ETH in wei
@@ -202,9 +173,9 @@ if [ "$USER_BALANCE" -ge "$REQUIRED_AMOUNT" ]; then
 fi
 
 if [ "$MINT_CHOICE" = "y" ] || [ "$MINT_CHOICE" = "Y" ]; then
-  ./register_rln.sh --no-mint;
-else
   ./register_rln.sh --mint;
+else
+  ./register_rln.sh --no-mint;
 fi
 
 echocol ""
