@@ -76,7 +76,7 @@ if [ -n "${DOMAIN}" ]; then
         WS_SUPPORT="--websocket-support=true"
         WSS_SUPPORT="--websocket-secure-support=true"
         WSS_KEY="--websocket-secure-key-path=${LETSENCRYPT_PATH}/privkey.pem"
-        WSS_CERT="--websocket-secure-cert-path=${LETSENCRYPT_PATH}/cert.pem"
+        WSS_CERT="--websocket-secure-cert-path=${LETSENCRYPT_PATH}/fullchain.pem"
         DNS4_DOMAIN="--dns4-domain-name=${DOMAIN}"
 
         DNS_WSS_CMD="${WS_SUPPORT} ${WSS_SUPPORT} ${WSS_CERT} ${WSS_KEY} ${DNS4_DOMAIN}" 
