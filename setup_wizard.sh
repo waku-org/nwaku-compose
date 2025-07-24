@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/usr/bin/env bash
 
 echocol()
 {
@@ -77,7 +77,7 @@ fi
 
 # Ensure Foundry (cast & foundryup) is available for token mint/approve calls
 if ! command -v cast >/dev/null 2>&1; then
-  echocol "Foundry toolkit (cast) not found. Installing Foundry... \n"
+  echocol "\n Foundry toolkit (cast) not found. Installing Foundry... \n"
   curl -L https://foundry.paradigm.xyz | bash
   # Make the freshly installed binaries available in the current session
   export PATH="$HOME/.foundry/bin:$PATH"
