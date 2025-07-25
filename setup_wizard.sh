@@ -184,6 +184,6 @@ echocol ""
 
 echocol "Your node is ready! enter the following command to start it:"
 read -p "Press ENTER to continue..." foo
-sudo docker-compose up -d
+docker-compose up -d
 echocol "✅ Node started successfully!"
 echocol ""
