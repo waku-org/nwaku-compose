@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/usr/bin/env bash
 
 echocol()
 {
@@ -10,35 +10,6 @@ echocol()
 RLN_CONTRACT_ADDRESS=0xB9cd878C90E49F797B4431fBF4fb333108CB90e6
 TOKEN_CONTRACT_ADDRESS=0x185A0015aC462a0aECb81beCc0497b649a64B9ea
 REQUIRED_AMOUNT=5
-TTT_AMOUNT_WEI=5000000000000000000
-
-mint_tokens() {
-  echocol ""
-  echocol "Minting TTT tokens ..."
-  cast send $TOKEN_CONTRACT_ADDRESS "mint(address,uint256)" \
-    $ETH_TESTNET_ACCOUNT $TTT_AMOUNT_WEI \
-    --private-key $ETH_TESTNET_KEY \
-    --rpc-url $RLN_RELAY_ETH_CLIENT_ADDRESS || {
-      echocol "❌ Mint transaction failed."
-      exit 1
-    }
-  echocol "✅ Mint complete!"
-  echocol ""
-}
-
-approve_tokens() {
-  echocol ""
-  echocol "Approving RLN contract to spend your TTT tokens ..."
-  cast send $TOKEN_CONTRACT_ADDRESS "approve(address,uint256)" \
-    $RLN_CONTRACT_ADDRESS $TTT_AMOUNT_WEI \
-    --private-key $ETH_TESTNET_KEY \
-    --rpc-url $RLN_RELAY_ETH_CLIENT_ADDRESS || {
-      echocol "❌ Approve transaction failed."
-      exit 1
-    }
-  echocol "✅ Approval complete!"
-  echocol ""
-}
 
 check_eth_balance() {
   # 0.01 ETH in wei
@@ -73,6 +44,15 @@ if [ -f keystore/keystore.json ]; then
   else
     echocol "Keeping existing keystore/keystore.json. Exiting wizard."
   fi
+fi
+
+# Ensure Foundry (cast & foundryup) is available for token mint/approve calls
+if ! command -v cast >/dev/null 2>&1; then
+  echocol "\n Foundry toolkit (cast) not found. Installing Foundry... \n"
+  curl -L https://foundry.paradigm.xyz | bash
+  # Make the freshly installed binaries available in the current session
+  export PATH="$HOME/.foundry/bin:$PATH"
+  foundryup
 fi
 
 if [ -z "$(which docker 2>/dev/null)" ]; then
@@ -186,41 +166,16 @@ echocol "Your current TTT token balance is: $USER_BALANCE"
 echocol "Required amount: $REQUIRED_AMOUNT"
 echocol ""
 
+MINT_CHOICE="y"
 if [ "$USER_BALANCE" -ge "$REQUIRED_AMOUNT" ]; then
   echocol "You already have enough TTT tokens to register."
   read -p "Do you want to mint more tokens? (y/N): " MINT_CHOICE
-  if [ "$MINT_CHOICE" = "y" ] || [ "$MINT_CHOICE" = "Y" ]; then
-    mint_tokens
-    approve_tokens
-  else
-    approve_tokens
-  fi
+fi
+
+if [ "$MINT_CHOICE" = "y" ] || [ "$MINT_CHOICE" = "Y" ]; then
+  ./register_rln.sh --mint;
 else
-  echocol "Minting and approving required TTT tokens …"
-  mint_tokens
-  approve_tokens
-fi
-
-SUDO=""
-if ! docker info > /dev/null 2>&1; then
-  echocol "...."
-  echocol "'sudo' seems to be needed to run docker, your unix password will be asked"
-  SUDO="sudo"
-fi
-
-
-
-echocol ""
-echocol "🔐 Registering RLN membership..."
-read -p "Press ENTER to continue..." foo
-
-if ! $SUDO ./register_rln.sh; then
-  echocol ""
-  echocol "❌ RLN registration failed. This may be due to high gas fees."
-  echocol "💡 Make sure you have enough Linea Sepolia ETH and try again with:"
-  echocol "   $SUDO ./register_rln.sh"
-  echocol ""
-  exit 1
+  ./register_rln.sh --no-mint;
 fi
 
 echocol ""
@@ -229,6 +184,6 @@ echocol ""
 
 echocol "Your node is ready! enter the following command to start it:"
 read -p "Press ENTER to continue..." foo
-echo "> $SUDO docker-compose up -d"
+docker-compose up -d
 echocol "✅ Node started successfully!"
 echocol ""
