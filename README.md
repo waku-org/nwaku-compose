@@ -1,8 +1,8 @@
 # nwaku-compose
 
-Ready‑to‑use **docker‑compose** stack for running your own [nwaku](https://github.com/waku-org/nwaku) full node:
+Ready‑to‑use **docker‑compose** stack for running your own [nwaku](https://github.com/waku-org/nwaku) node for a subset of protocols (full node capability is coming soon).:
 
-* RLN‑enabled nwaku node (relay + store protocols)
+* RLN‑enabled nwaku node (relay + store protocols, excluding message publishing)
 * Simple web UI to publish and receive messages
 * Grafana dashboard for metrics
 * Requires **Docker Compose** and **Git**
@@ -10,7 +10,7 @@ Ready‑to‑use **docker‑compose** stack for running your own [nwaku](https:/
 ## 📝 Prerequisites
 
 * **Linea Sepolia RPC endpoint** — grab one for free on [Infura](https://www.infura.io)
-* **Linea Sepolia wallet** with at least **0.01 ETH**  
+* **Linea Sepolia wallet** with at least **0.01 ETH** (Only REquired For RLN Membership Registration which is WIP)
   * Need test ETH? Use the [Linea Sepolia faucet](https://www.infura.io/faucet/sepolia)  
   * Already have ETH on Sepolia? Bridge it to Linea via the [official bridge](https://bridge.linea.build/native-bridge)
 
@@ -18,8 +18,8 @@ Ready‑to‑use **docker‑compose** stack for running your own [nwaku](https:/
 
 | # | Option | Quick-start command | What happens | 
 |---|------|--------------------|--------------|
-| **1** | **script** | Power user / CI | setup a .env file manually, run ./register_rln.sh, and then start the node.|
-| **2** | **setup-wizard** | Fastest one-command bootstrap | Generates `.env`, registers RLN, and spins up the whole stack automatically |
+| **1** | **script** | Power user / CI | setup a .env file manually and then start the node.|
+| **2** | ** WIP setup-wizard** | Fastest one-command bootstrap | Generates `.env`, registers RLN, and spins up the whole stack automatically |
 
 <details>
 <summary>🧪 option 1 :- SCRIPT [ manual ] [ recommended ] </summary>
@@ -29,10 +29,6 @@ cp .env.example .env
 ```
 Edit the .env file and fill in all required parameters 
 
-This command will register your membership and store it in `keystore/keystore.json`:
-```
-./register_rln.sh
-```
 
 ### 💽 2. Select DB Parameters
 
@@ -105,7 +101,7 @@ For advanced documentation, refer to [ADVANCED.md](https://github.com/waku-org/n
 </details>
 
 <details>
-<summary>⚙️ option 2 :- SETUP-WIZARD [ experimental ]</summary>
+<summary>⚙️ option 2 (not recommended at this time):- SETUP-WIZARD [ experimental ]</summary>
 
 Run the wizard script.
 Once the script is done, the node will be started for you, so there is nothing else to do.

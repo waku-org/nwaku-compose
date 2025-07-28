@@ -87,8 +87,10 @@ if [ -n "${NODEKEY}" ]; then
     NODEKEY=--nodekey=${NODEKEY}
 fi
 
-RLN_RELAY_CRED_PATH=--rln-relay-cred-path=${RLN_RELAY_CRED_PATH:-/keystore/keystore.json}
-
+if [ -n "${RLN_RELAY_CRED_PATH}" ]; then
+    echo "Using RLN credentials from ${RLN_RELAY_CRED_PATH}"
+    RLN_RELAY_CRED_PATH=--rln-relay-cred-path="${RLN_RELAY_CRED_PATH}"
+fi
 
 if [ -n "${RLN_RELAY_CRED_PASSWORD}" ]; then
     RLN_RELAY_CRED_PASSWORD=--rln-relay-cred-password="${RLN_RELAY_CRED_PASSWORD}"
@@ -103,7 +105,7 @@ fi
 exec /usr/bin/wakunode\
     --relay=true\
     --filter=true\
-    --lightpush=true\
+    --lightpush=false\
     --keep-alive=true\
     --max-connections=150\
     --cluster-id=1\
@@ -126,8 +128,8 @@ exec /usr/bin/wakunode\
     --store-message-db-url="postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:5432/postgres"\
     --rln-relay-eth-client-address="${RLN_RELAY_ETH_CLIENT_ADDRESS}"\
     --rln-relay-tree-path="/etc/rln_tree"\
-    "${RLN_RELAY_CRED_PATH}"\
-    "${RLN_RELAY_CRED_PASSWORD}"\
+    ${RLN_RELAY_CRED_PATH:+${RLN_RELAY_CRED_PATH}}\
+    ${RLN_RELAY_CRED_PASSWORD:+${RLN_RELAY_CRED_PASSWORD}}\
     ${DNS_WSS_CMD}\
     ${NODEKEY}\
     ${STORE_RETENTION_POLICY}\
