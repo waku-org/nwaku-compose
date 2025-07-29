@@ -143,16 +143,17 @@ services:
     depends_on:
       - postgres
 
-  waku-frontend:
-   # TODO: migrate to waku-org
-   image: alrevuelta/waku-frontend:aad9628
-   ports:
-    - 127.0.0.1:4000:4000
-   restart: on-failure:5
-   depends_on:
-    - nwaku
+## Uncomment if you have RLN credentials and want to use play with a front end to send messages
+#  waku-frontend:
+#   # TODO: migrate to waku-org
+#   image: alrevuelta/waku-frontend:aad9628
+#   ports:
+#    - 127.0.0.1:4000:4000
+#   restart: on-failure:5
+#   depends_on:
+#    - nwaku
 
-##  Remove comment if you need pgadmin support in your container.
+##  Uncomment if you need pgadmin support in your container.
 ##  Commented for backward version compatibility of docker-compose.
 #   pgadmin:
 #     image: dpage/pgadmin4:latest
