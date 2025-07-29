@@ -1,28 +1,27 @@
 # nwaku-compose
 
-Ready‑to‑use **docker‑compose** stack for running your own [nwaku](https://github.com/waku-org/nwaku) node for a subset of protocols (full node capability is coming soon).:
+Ready‑to‑use **docker‑compose** stack for running your own [nwaku](https://github.com/waku-org/nwaku) node:
 
 * RLN‑enabled nwaku node (relay + store protocols, excluding message publishing)
-* Simple web UI to publish and receive messages
 * Grafana dashboard for metrics
 * Requires **Docker Compose** and **Git**
 
 ## 📝 Prerequisites
 
 * **Linea Sepolia RPC endpoint** — grab one for free on [Infura](https://www.infura.io)
-* **Linea Sepolia wallet** with at least **0.01 ETH** (Only REquired For RLN Membership Registration which is WIP)
+* **Linea Sepolia wallet** with at least **0.01 ETH** (Only Required For RLN Membership Registration which is WIP)
   * Need test ETH? Use the [Linea Sepolia faucet](https://www.infura.io/faucet/sepolia)  
   * Already have ETH on Sepolia? Bridge it to Linea via the [official bridge](https://bridge.linea.build/native-bridge)
 
 ### 🚀 Starting your node
 
-| # | Option | Quick-start command | What happens | 
-|---|------|--------------------|--------------|
-| **1** | **script** | Power user / CI | setup a .env file manually and then start the node.|
-| **2** | ** WIP setup-wizard** | Fastest one-command bootstrap | Generates `.env`, registers RLN, and spins up the whole stack automatically |
+| #     | Option               | Quick-start command           | What happens                                                                | 
+|-------|----------------------|-------------------------------|-----------------------------------------------------------------------------|
+| **A** | **script**           | Power user / CI               | setup a .env file manually and then start the node.                         |
+| **B** | **WIP setup-wizard** | Fastest one-command bootstrap | Generates `.env`, registers RLN, and spins up the whole stack automatically |
 
 <details>
-<summary>🧪 option 1 :- SCRIPT [ manual ] [ recommended ] </summary>
+<summary>🧪 option A :- SCRIPT [ manual ] [ recommended ] </summary>
 
 ```
 cp .env.example .env  
@@ -69,7 +68,6 @@ docker-compose up -d
 ###🏄🏼‍♂️ 4. Interact with your nwaku node
 
 * See [localhost:3000](http://localhost:3000/d/yns_4vFVk/nwaku-monitoring) for node metrics.
-* See [localhost:4000](http://localhost:4000) for a nice frontend to chat with other users.
 
 **📬 4. Use the REST API**
 
@@ -80,14 +78,6 @@ Your nwaku node exposes a [REST API](https://waku-org.github.io/waku-rest-api/) 
 curl http://127.0.0.1:8645/debug/v1/version
 # get nwaku info
 curl http://127.0.0.1:8645/debug/v1/info
-```
-
-**Publish a message to a `contentTopic`**. Everyone subscribed to it will receive it. Note that `payload` is base64 encoded.
-
-```
-curl -X POST "http://127.0.0.1:8645/relay/v1/auto/messages" \
- -H "content-type: application/json" \
- -d '{"payload":"'$(echo -n "Hello Waku Network - from Anonymous User" | base64)'","contentTopic":"/my-app/2/chatroom-1/proto"}'
 ```
 
 **Get messages sent to a `contentTopic`**. Note that any store node in the network is used to reply.
@@ -101,7 +91,7 @@ For advanced documentation, refer to [ADVANCED.md](https://github.com/waku-org/n
 </details>
 
 <details>
-<summary>⚙️ option 2 (not recommended at this time):- SETUP-WIZARD [ experimental ]</summary>
+<summary>⚙️ option B (not recommended at this time):- SETUP-WIZARD [ experimental ]</summary>
 
 Run the wizard script.
 Once the script is done, the node will be started for you, so there is nothing else to do.
@@ -118,8 +108,6 @@ The script is experimental, feedback and pull requests are welcome.
 RLN membership is your access key to The Waku Network. It is registered on-chain, enabling your nwaku node to send messages in a decentralized and privacy-preserving way while adhering to rate limits. Messages exceeding the rate limit will not be relayed by other peers.
 
 If you just want to relay traffic (not publish), you don't need to perform the registration.
-
-
 
 -----
 <details>
