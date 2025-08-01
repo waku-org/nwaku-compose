@@ -8,7 +8,7 @@ echocol()
 }
 
 RLN_CONTRACT_ADDRESS=0xB9cd878C90E49F797B4431fBF4fb333108CB90e6
-TOKEN_CONTRACT_ADDRESS=0x185A0015aC462a0aECb81beCc0497b649a64B9ea
+TOKEN_CONTRACT_ADDRESS=<TEST_STABLE_TOKEN_CONTRACT_ADDRESS_HERE>
 REQUIRED_AMOUNT=5
 
 check_eth_balance() {
@@ -46,7 +46,7 @@ if [ -f keystore/keystore.json ]; then
   fi
 fi
 
-# Ensure Foundry (cast & foundryup) is available for token mint/approve calls
+# Ensure Foundry (cast & foundryup) is available for token approve calls
 if ! command -v cast >/dev/null 2>&1; then
   echocol "\n Foundry toolkit (cast) not found. Installing Foundry... \n"
   curl -L https://foundry.paradigm.xyz | bash
@@ -152,7 +152,7 @@ STORAGE_SIZE=$STORAGE_SIZE
 POSTGRES_SHM=$POSTGRES_SHM" > ./.env
 
 echocol ""
-echocol "Checking your TTT token balance..."
+echocol "Checking your TST token balance..."
 USER_BALANCE_RAW=$(cast call $TOKEN_CONTRACT_ADDRESS "balanceOf(address)(uint256)" $ETH_TESTNET_ACCOUNT --rpc-url $RLN_RELAY_ETH_CLIENT_ADDRESS 2>/dev/null)
 USER_BALANCE=$(echo "$USER_BALANCE_RAW" | awk '{print $1}')
 USER_BALANCE=$(echo "$USER_BALANCE / 10^18" | bc)
@@ -162,20 +162,20 @@ if [ -z "$USER_BALANCE" ]; then
   exit 1
 fi
 
-echocol "Your current TTT token balance is: $USER_BALANCE"
+echocol "Your current TST token balance is: $USER_BALANCE"
 echocol "Required amount: $REQUIRED_AMOUNT"
 echocol ""
 
-MINT_CHOICE="y"
+APPROVE_CHOICE="y"
 if [ "$USER_BALANCE" -ge "$REQUIRED_AMOUNT" ]; then
-  echocol "You already have enough TTT tokens to register."
-  read -p "Do you want to mint more tokens? (y/N): " MINT_CHOICE
+  echocol "You already have enough TST tokens to register."
+  read -p "Do you want to approve more tokens? (y/N): " APPROVE_CHOICE
 fi
 
-if [ "$MINT_CHOICE" = "y" ] || [ "$MINT_CHOICE" = "Y" ]; then
-  ./register_rln.sh --mint;
+if [ "$APPROVE_CHOICE" = "y" ] || [ "$APPROVE_CHOICE" = "Y" ]; then
+  ./register_rln.sh --approve;
 else
-  ./register_rln.sh --no-mint;
+  ./register_rln.sh --no-approve;
 fi
 
 echocol ""
