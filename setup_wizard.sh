@@ -8,7 +8,7 @@ echocol()
 }
 
 RLN_CONTRACT_ADDRESS=0xB9cd878C90E49F797B4431fBF4fb333108CB90e6
-TOKEN_CONTRACT_ADDRESS=0x185A0015aC462a0aECb81beCc0497b649a64B9ea
+TOKEN_CONTRACT_ADDRESS=0xd17e184e3c1941585a3edcb3a10367da6326d844
 REQUIRED_AMOUNT=5
 
 check_eth_balance() {
@@ -56,7 +56,7 @@ if ! command -v cast >/dev/null 2>&1; then
 fi
 
 if [ -z "$(which docker 2>/dev/null)" ]; then
-  echo "Ensure that 'docker\` is installed and in \$PATH"
+  echo "Ensure that 'docker' is installed and in \$PATH"
   exit 1
 fi
 
@@ -84,103 +84,108 @@ if [ -z "$RLN_RELAY_ETH_CLIENT_ADDRESS" ] \
 fi
 
 echocol ""
-echocol "Now enter your Linea Sepolia Testnet account address (should start with 0x and be 42 characters)"
-read -p "ETH_TESTNET_ACCOUNT: " ETH_TESTNET_ACCOUNT
-
-if ! [[ "$ETH_TESTNET_ACCOUNT" =~ ^0x[0-9a-fA-F]{40}$ ]]; then
-  echo "Invalid value, received '$ETH_TESTNET_ACCOUNT'"
-  exit 1
+SKIP_RLN_REGISTRATION="true"
+read -p "Do you want to register an RLN membership key to enable publishing messages? (y/N): " REGISTER_RLN
+if [ "$REGISTER_RLN" != "y" ] && [ "$REGISTER_RLN" != "Y" ]; then
+  echocol "Skipping RLN membership registration. Your node will operate in relay/store mode only."
+  SKIP_RLN_REGISTRATION="false"
 fi
 
-echocol ""
-echocol "Checking your Linea Sepolia Testnet balance..."
-check_eth_balance
-echocol ""
+if [ -z "$SKIP_RLN_REGISTRATION" ]; then
+  echocol ""
+  echocol "> **You will need one _TST_ token (Waku test token) to pay the registration fee.**"
+  echocol "> Ask for a TST token in the Waku Discord #lobby channel before jumping into registration"
+  echocol ""
 
-echocol "Now enter your Linea Sepolia Testnet private key in hex format 0a...1f without 0x prefix"
-read -p "ETH_TESTNET_KEY: " ETH_TESTNET_KEY
+  echocol "Now enter your Linea Sepolia Testnet account address (should start with 0x and be 42 characters)"
+  read -p "ETH_TESTNET_ACCOUNT: " ETH_TESTNET_ACCOUNT
+  
+  if ! [[ "$ETH_TESTNET_ACCOUNT" =~ ^0x[0-9a-fA-F]{40}$ ]]; then
+    echo "Invalid value, received '$ETH_TESTNET_ACCOUNT'"
+    exit 1
+  fi
+  
+  echocol ""
+  echocol "Checking your Linea Sepolia Testnet balance..."
+  check_eth_balance
+  echocol ""
+  
+  echocol "Now enter your Linea Sepolia Testnet private key in hex format 0a...1f without 0x prefix"
+  read -p "ETH_TESTNET_KEY: " ETH_TESTNET_KEY
+  
+  if ! [[ "$ETH_TESTNET_KEY" =~ ^[0-9a-fA-F]{64}$ ]]; then
+    echo "Invalid value, received '$ETH_TESTNET_KEY'"
+    exit 1
+  fi
+  
+  echocol ""
+  echocol "Generating a password for the RLN membership keystore file..."
+  read -p "Press ENTER to continue..." foo
+  RLN_RELAY_CRED_PASSWORD=$(LC_ALL=C < /dev/urandom tr -dc ',/.;:<>?!@#$%^&*()+\-_A-Z-a-z-0-9' | head -c${1:-16}; echo)
+  
+  echocol ""
+  echocol "Estimating storage size for DB..."
+  read -p "Press ENTER to continue..." foo
+  STORAGE_SIZE=$(./set_storage_retention.sh echo-value)
+  
+  if [ -z "$STORAGE_SIZE" ]; then
+    echo "Error encountered when estimating storage size, exiting"
+    exit 1
+  fi
+  
+  echocol ""
+  echocol "Estimating SHM for Postgres..."
+  read -p "Press ENTER to continue..." foo
+  POSTGRES_SHM=$(./set_postgres_shm.sh echo-value)
+  
+  if [ -z "$POSTGRES_SHM" ]; then
+    echo "Error encountered when estimating postgres container shm, exiting"
+    exit 1
+  fi
+  
+  echocol ""
+  echocol "🔐 Review your credentials and environment configuration below."
+  echocol "They will be saved to '.env'. Press ENTER to confirm or CONTROL-C to cancel:"
+  
+  echocol ""
+  echocol "RLN_RELAY_ETH_CLIENT_ADDRESS: $RLN_RELAY_ETH_CLIENT_ADDRESS"
+  echocol "ETH_TESTNET_KEY: $ETH_TESTNET_KEY"
+  echocol "ETH_TESTNET_ACCOUNT: $ETH_TESTNET_ACCOUNT"
+  echocol "RLN_RELAY_CRED_PASSWORD: $RLN_RELAY_CRED_PASSWORD"
+  echocol "STORAGE_SIZE: $STORAGE_SIZE"
+  echocol "POSTGRES_SHM: $POSTGRES_SHM"
+  
+  read -p "Press ENTER to continue..." foo
+  
+  echo "RLN_RELAY_ETH_CLIENT_ADDRESS='$RLN_RELAY_ETH_CLIENT_ADDRESS'
+  ETH_TESTNET_KEY=$ETH_TESTNET_KEY
+  ETH_TESTNET_ACCOUNT=$ETH_TESTNET_ACCOUNT
+  RLN_RELAY_CRED_PASSWORD='$RLN_RELAY_CRED_PASSWORD'
+  STORAGE_SIZE=$STORAGE_SIZE
+  POSTGRES_SHM=$POSTGRES_SHM" > ./.env
+  
+  echocol ""
+  echocol "Checking your TST token balance..."
+  USER_BALANCE_RAW=$(cast call $TOKEN_CONTRACT_ADDRESS "balanceOf(address)(uint256)" $ETH_TESTNET_ACCOUNT --rpc-url $RLN_RELAY_ETH_CLIENT_ADDRESS 2>/dev/null)
+  USER_BALANCE=$(echo "$USER_BALANCE_RAW" | awk '{print $1}')
+  USER_BALANCE=$(echo "$USER_BALANCE / 10^18" | bc)
+  
+  if [ -z "$USER_BALANCE" ]; then
+    echocol "Could not fetch balance. Please ensure your RPC endpoint and account are correct."
+    exit 1
+  fi
+  
+  echocol "Your current TST token balance is: $USER_BALANCE"
+  echocol "Required amount: $REQUIRED_AMOUNT"
+  echocol ""
+  
+  ./register_rln.sh
+  
+  echocol ""
+  echocol "✅ RLN membership registered successfully!"
+  echocol ""
 
-if ! [[ "$ETH_TESTNET_KEY" =~ ^[0-9a-fA-F]{64}$ ]]; then
-  echo "Invalid value, received '$ETH_TESTNET_KEY'"
-  exit 1
 fi
-
-echocol ""
-echocol "Generating a password for the RLN membership keystore file..."
-read -p "Press ENTER to continue..." foo
-RLN_RELAY_CRED_PASSWORD=$(LC_ALL=C < /dev/urandom tr -dc ',/.;:<>?!@#$%^&*()+\-_A-Z-a-z-0-9' | head -c${1:-16}; echo)
-
-echocol ""
-echocol "Estimating storage size for DB..."
-read -p "Press ENTER to continue..." foo
-STORAGE_SIZE=$(./set_storage_retention.sh echo-value)
-
-if [ -z "$STORAGE_SIZE" ]; then
-  echo "Error encountered when estimating storage size, exiting"
-  exit 1
-fi
-
-echocol ""
-echocol "Estimating SHM for Postgres..."
-read -p "Press ENTER to continue..." foo
-POSTGRES_SHM=$(./set_postgres_shm.sh echo-value)
-
-if [ -z "$POSTGRES_SHM" ]; then
-  echo "Error encountered when estimating postgres container shm, exiting"
-  exit 1
-fi
-
-echocol ""
-echocol "🔐 Review your credentials and environment configuration below."
-echocol "They will be saved to '.env'. Press ENTER to confirm or CONTROL-C to cancel:"
-
-echocol ""
-echocol "RLN_RELAY_ETH_CLIENT_ADDRESS: $RLN_RELAY_ETH_CLIENT_ADDRESS"
-echocol "ETH_TESTNET_KEY: $ETH_TESTNET_KEY"
-echocol "ETH_TESTNET_ACCOUNT: $ETH_TESTNET_ACCOUNT"
-echocol "RLN_RELAY_CRED_PASSWORD: $RLN_RELAY_CRED_PASSWORD"
-echocol "STORAGE_SIZE: $STORAGE_SIZE"
-echocol "POSTGRES_SHM: $POSTGRES_SHM"
-
-read -p "Press ENTER to continue..." foo
-
-echo "RLN_RELAY_ETH_CLIENT_ADDRESS='$RLN_RELAY_ETH_CLIENT_ADDRESS'
-ETH_TESTNET_KEY=$ETH_TESTNET_KEY
-ETH_TESTNET_ACCOUNT=$ETH_TESTNET_ACCOUNT
-RLN_RELAY_CRED_PASSWORD='$RLN_RELAY_CRED_PASSWORD'
-STORAGE_SIZE=$STORAGE_SIZE
-POSTGRES_SHM=$POSTGRES_SHM" > ./.env
-
-echocol ""
-echocol "Checking your TTT token balance..."
-USER_BALANCE_RAW=$(cast call $TOKEN_CONTRACT_ADDRESS "balanceOf(address)(uint256)" $ETH_TESTNET_ACCOUNT --rpc-url $RLN_RELAY_ETH_CLIENT_ADDRESS 2>/dev/null)
-USER_BALANCE=$(echo "$USER_BALANCE_RAW" | awk '{print $1}')
-USER_BALANCE=$(echo "$USER_BALANCE / 10^18" | bc)
-
-if [ -z "$USER_BALANCE" ]; then
-  echocol "Could not fetch balance. Please ensure your RPC endpoint and account are correct."
-  exit 1
-fi
-
-echocol "Your current TTT token balance is: $USER_BALANCE"
-echocol "Required amount: $REQUIRED_AMOUNT"
-echocol ""
-
-MINT_CHOICE="y"
-if [ "$USER_BALANCE" -ge "$REQUIRED_AMOUNT" ]; then
-  echocol "You already have enough TTT tokens to register."
-  read -p "Do you want to mint more tokens? (y/N): " MINT_CHOICE
-fi
-
-if [ "$MINT_CHOICE" = "y" ] || [ "$MINT_CHOICE" = "Y" ]; then
-  ./register_rln.sh --mint;
-else
-  ./register_rln.sh --no-mint;
-fi
-
-echocol ""
-echocol "✅ RLN membership registered successfully!"
-echocol ""
 
 echocol "Your node is ready! enter the following command to start it:"
 read -p "Press ENTER to continue..." foo
