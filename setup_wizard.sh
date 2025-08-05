@@ -84,14 +84,14 @@ if [ -z "$RLN_RELAY_ETH_CLIENT_ADDRESS" ] \
 fi
 
 echocol ""
-SKIP_RLN_REGISTRATION="true"
+RLN_REGISTRATION="false"
 read -p "Do you want to register an RLN membership key to enable publishing messages? (y/N): " REGISTER_RLN
-if [ "$REGISTER_RLN" != "y" ] && [ "$REGISTER_RLN" != "Y" ]; then
+if [ "$REGISTER_RLN" == "y" ] || [ "$RE GISTER_RLN" == "Y" ]; then
   echocol "Skipping RLN membership registration. Your node will operate in relay/store mode only."
-  SKIP_RLN_REGISTRATION="false"
+  RLN_REGISTRATION="true"
 fi
 
-if [ -z "$SKIP_RLN_REGISTRATION" ]; then
+if [ "$RLN_REGISTRATION" = "true" ]; then
   echocol ""
   echocol "> **You will need one _TST_ token (Waku test token) to pay the registration fee.**"
   echocol "> Ask for a TST token in the Waku Discord #lobby channel before jumping into registration"
@@ -184,7 +184,14 @@ if [ -z "$SKIP_RLN_REGISTRATION" ]; then
   echocol ""
   echocol "✅ RLN membership registered successfully!"
   echocol ""
+else
+  echocol ""
+  echocol "RLN_RELAY_ETH_CLIENT_ADDRESS: $RLN_RELAY_ETH_CLIENT_ADDRESS"
 
+  read -p "Press ENTER to continue..." foo
+
+  echo "RLN_RELAY_ETH_CLIENT_ADDRESS='$RLN_RELAY_ETH_CLIENT_ADDRESS'" > ./.env
+  echocol "✅ RLN membership registration skipped."
 fi
 
 echocol "Your node is ready! enter the following command to start it:"
