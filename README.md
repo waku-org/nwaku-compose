@@ -104,6 +104,14 @@ The script is experimental, feedback and pull requests are welcome.
 
 </details>
 
+
+### 🛑 Shutting down your node
+
+To gracefully shut down your node:
+```shell
+docker compose down
+```
+
 ### 📌 Note
 RLN membership is your access key to The Waku Network. It is registered on-chain, enabling your nwaku node to send messages in a decentralized and privacy-preserving way while adhering to rate limits. Messages exceeding the rate limit will not be relayed by other peers.
 
