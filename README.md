@@ -2,31 +2,51 @@
 
 Ready‑to‑use **docker‑compose** stack for running your own [nwaku](https://github.com/waku-org/nwaku) node:
 
-* RLN‑enabled nwaku node (relay + store protocols, excluding message publishing)
+* nwaku node with relay and store protocols enabled by default. Adding an RLN membership key unlocks message publishing functionality.
 * Grafana dashboard for metrics
-* Requires **Docker Compose** and **Git**
+* Requires **Docker** and **Git**
 
-## 📝 Prerequisites
+### 📝 Prerequisites
 
-* **Linea Sepolia RPC endpoint** — grab one for free on [Infura](https://www.infura.io)
-* **Linea Sepolia wallet** with at least **0.01 ETH** (Only Required For RLN Membership Registration which is WIP)
-  * Need test ETH? Use the [Linea Sepolia faucet](https://www.infura.io/faucet/sepolia)  
-  * Already have ETH on Sepolia? Bridge it to Linea via the [official bridge](https://bridge.linea.build/native-bridge)
+* **Linea Sepolia RPC endpoint** — grab one for free on [Infura](https://www.infura.io)
+* **(Optional)** Linea Sepolia wallet with at least **0.01 ETH** — required only if you want to register an RLN membership key in order to publish messages.
+  * Need test ETH? Use the [Linea Sepolia faucet](https://www.infura.io/faucet/sepolia)  
+  * Already have ETH on Sepolia? Bridge it to Linea via the [official bridge](https://bridge.linea.build/native-bridge)
+
+<details>
+<summary><strong>🔐 (Optional) Register an RLN membership key</strong></summary>
+
+If you want your node to **publish** messages (not just relay/store), first register an RLN membership key on-chain:
+
+> **You will need one _TST_ token (Waku test token) to pay the registration fee.**
+> Ask for a TST token in the Waku Discord **[#lobby](https://discord.com/channels/1110799176264056863/1110799176796745771)** channel before running the script.
+
+Prepare your environment file with RLN variables:
+```
+cp .env.example.rln .env   # then open .env and fill in the required details
+```
+
+Run the registration script:
+```
+./register_rln.sh 
+```
+</details>
 
 ### 🚀 Starting your node
 
 | #     | Option               | Quick-start command           | What happens                                                                | 
 |-------|----------------------|-------------------------------|-----------------------------------------------------------------------------|
 | **A** | **script**           | Power user / CI               | setup a .env file manually and then start the node.                         |
-| **B** | **WIP setup-wizard** | Fastest one-command bootstrap | Generates `.env`, registers RLN, and spins up the whole stack automatically |
+| **B** | **setup-wizard**     | Fastest one-command bootstrap | Generates `.env`, can register RLN (optional), and spins up the whole stack automatically |
 
 <details>
-<summary>🧪 option A :- SCRIPT [ manual ] [ recommended ] </summary>
+<summary><strong> Option A :- SCRIPT [ manual ] [ recommended ] </strong></summary>
 
 ```
 cp .env.example .env  
 ```
-Edit the .env file and fill in all required parameters 
+Edit the .env file and fill in all required parameters.     
+**NOTE:** If you have registered an RLN membership key, don't need to setup .env here. 
 
 
 ### 💽 2. Select DB Parameters
@@ -63,7 +83,7 @@ Start all processes: nwaku node, database and grafana for metrics. Your [RLN](ht
 ```console
 docker-compose up -d
 ```
-⚠️ The node might take a few minutes the very first time it runs because it needs to build locally the RLN community membership tree.
+⚠️ If RLN is enabled, the node might take a few minutes on first run while it builds the RLN community membership tree.
 
 ###🏄🏼‍♂️ 4. Interact with your nwaku node
 
@@ -91,7 +111,7 @@ For advanced documentation, refer to [ADVANCED.md](https://github.com/waku-org/n
 </details>
 
 <details>
-<summary>⚙️ option B (not recommended at this time):- SETUP-WIZARD [ experimental ]</summary>
+<summary><strong> Option B :- SETUP-WIZARD [ experimental ]</strong></summary>
 
 Run the wizard script.
 Once the script is done, the node will be started for you, so there is nothing else to do.

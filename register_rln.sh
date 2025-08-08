@@ -26,36 +26,23 @@ if ! command -v cast >/dev/null 2>&1; then
   foundryup
 fi
 
-# default: do approve
-NEED_APPROVAL=1
-
-for arg in "$@"; do
-  case "$arg" in
-    --no-approve) NEED_APPROVAL=0 ;;
-    --approve)    NEED_APPROVAL=1 ;;
-  esac
-done
-
 RLN_CONTRACT_ADDRESS=0xB9cd878C90E49F797B4431fBF4fb333108CB90e6
 TST_AMOUNT_WEI=5000000000000000000 
 
-# Approve 
-if [ "$NEED_APPROVAL" = "1" ]; then
-  echo "Approve to spend TestStableToken"
-  if ! cast send "$TOKEN_CONTRACT_ADDRESS" "approve(address,uint256)" \
-          "$RLN_CONTRACT_ADDRESS" "$TST_AMOUNT_WEI" \
-          --private-key "$ETH_TESTNET_KEY" \
-          --rpc-url   "$RLN_RELAY_ETH_CLIENT_ADDRESS"
-  then
-    echo "Approve transaction failed."
-    exit 1
-  fi
+echo "Approve to spend TestStableToken"
+if ! cast send "$TOKEN_CONTRACT_ADDRESS" "approve(address,uint256)" \
+        "$RLN_CONTRACT_ADDRESS" "$TST_AMOUNT_WEI" \
+        --private-key "$ETH_TESTNET_KEY" \
+        --rpc-url   "$RLN_RELAY_ETH_CLIENT_ADDRESS"
+then
+  echo "Approve transaction failed."
+  exit 1
 fi
 
 docker run -v "$(pwd)/keystore":/keystore/:Z wakuorg/nwaku:v0.36.0 generateRlnKeystore \
 --rln-relay-eth-client-address=${RLN_RELAY_ETH_CLIENT_ADDRESS} \
 --rln-relay-eth-private-key=${ETH_TESTNET_KEY} \
---rln-relay-eth-contract-address=0xB9cd878C90E49F797B4431fBF4fb333108CB90e6 \
+--rln-relay-eth-contract-address=${RLN_CONTRACT_ADDRESS} \
 --rln-relay-cred-path=/keystore/keystore.json \
 --rln-relay-cred-password="${RLN_RELAY_CRED_PASSWORD}" \
 --rln-relay-user-message-limit=100 \
