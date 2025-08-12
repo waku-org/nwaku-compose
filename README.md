@@ -57,21 +57,17 @@ The script is experimental, feedback and pull requests are welcome.
 
 </details>
 
-<<<<<<< Updated upstream
+### 📌 Note
+RLN membership is your access key to The Waku Network. It is registered on-chain, enabling your nwaku node to send messages in a decentralized and privacy-preserving way while adhering to rate limits. Messages exceeding the rate limit will not be relayed by other peers.
 
-### 🛑 Shutting down your node
+If you just want to relay traffic (not publish), you don't need to perform the registration.
 
-To gracefully shut down your node:
-```shell
-docker compose down
-```
-
-=======
-### 🏄🏼‍♂️ 4. Monitor your nwaku node
+-----
+<details>
+<summary>Monitor your nwaku node </summary>
 
 - **Metrics (Grafana):**  
   Open [localhost:3000](http://localhost:3000/d/yns_4vFVk/nwaku-monitoring) to view node metrics.  
-  Metrics will appear **only if your node is running correctly**.
 
 - **Live logs:**  
   See what’s happening inside your node in real time:  
@@ -79,25 +75,20 @@ docker compose down
   docker compose logs nwaku -f --tail 100
   ```
 
-**📬 5. Use the REST API**
+- **Use the REST API**
 
-Your nwaku node exposes a [REST API](https://waku-org.github.io/waku-rest-api/) to interact with it.
-```
-# get nwaku version
-curl http://127.0.0.1:8645/debug/v1/version
-# get nwaku info
-curl http://127.0.0.1:8645/debug/v1/info
-```
+    Your nwaku node exposes a [REST API](https://waku-org.github.io/waku-rest-api/) to interact with it.
+    ```
+    # get nwaku version
+    curl http://127.0.0.1:8645/debug/v1/version
+    # get nwaku info
+    curl http://127.0.0.1:8645/debug/v1/info
+    ```
 
 For advanced documentation, refer to [ADVANCED.md](https://waku-org.github.io/waku-rest-api/).
 
->>>>>>> Stashed changes
-### 📌 Note
-RLN membership is your access key to The Waku Network. It is registered on-chain, enabling your nwaku node to send messages in a decentralized and privacy-preserving way while adhering to rate limits. Messages exceeding the rate limit will not be relayed by other peers.
+</details>
 
-If you just want to relay traffic (not publish), you don't need to perform the registration.
-
------
 <details>
 <summary>How to update to latest version</summary>
 
@@ -125,17 +116,6 @@ Updating the node is as simple as running the following:
 2. `docker-compose down`
 3. `git pull origin master`
 4. `docker-compose up -d`
-</details>
-
-<details>
-<summary>Set storage size (optional)</summary>
-
-To improve storage on the network, you can increase the allocated space for the database.
-To do so, you can simply run:
-
-```
-./set_storage_retention.sh
-```
 </details>
 
 <details>
