@@ -8,20 +8,7 @@ echocol()
 }
 
 RLN_CONTRACT_ADDRESS=0xB9cd878C90E49F797B4431fBF4fb333108CB90e6
-TOKEN_CONTRACT_ADDRESS=0x185A0015aC462a0aECb81beCc0497b649a64B9ea
-REQUIRED_AMOUNT=5
 
-check_eth_balance() {
-  # 0.01 ETH in wei
-  local MIN=10000000000000000
-  local BAL
-
-  BAL=$(cast balance "$ETH_TESTNET_ACCOUNT" --rpc-url "$RLN_RELAY_ETH_CLIENT_ADDRESS" 2>/dev/null | tr -d '[:space:]')
-  [ -z "$BAL" ] && { echocol "Couldn’t fetch ETH balance."; exit 1; }
-  [ "$BAL" -lt "$MIN" ] && { echocol "Need ≥ 0.01 Linea Sepolia ETH. Top up at https://www.infura.io/faucet/sepolia"; exit 1; }
-
-  echocol "✅ You have enough Linea Sepolia ETH to register."
-}
 
 if [ -f ./.env ]; then
   echocol ".env file already exists."
@@ -35,16 +22,6 @@ if [ -f ./.env ]; then
   fi
 fi
 
-if [ -f keystore/keystore.json ]; then
-  echocol "'keystore/keystore.json' already exists."
-  read -p "Do you want to delete and regenerate it? (y/N): " RECREATE_KEYSTORE
-  if [ "$RECREATE_KEYSTORE" = "y" ] || [ "$RECREATE_KEYSTORE" = "Y" ]; then
-    rm -f keystore/keystore.json
-    echocol "Old keystore/keystore.json removed. Generating a new one..."
-  else
-    echocol "Keeping existing keystore/keystore.json. Exiting wizard."
-  fi
-fi
 
 # Ensure Foundry (cast & foundryup) is available for token mint/approve calls
 if ! command -v cast >/dev/null 2>&1; then
@@ -84,33 +61,6 @@ if [ -z "$RLN_RELAY_ETH_CLIENT_ADDRESS" ] \
 fi
 
 echocol ""
-echocol "Now enter your Linea Sepolia Testnet account address (should start with 0x and be 42 characters)"
-read -p "ETH_TESTNET_ACCOUNT: " ETH_TESTNET_ACCOUNT
-
-if ! [[ "$ETH_TESTNET_ACCOUNT" =~ ^0x[0-9a-fA-F]{40}$ ]]; then
-  echo "Invalid value, received '$ETH_TESTNET_ACCOUNT'"
-  exit 1
-fi
-
-echocol ""
-echocol "Checking your Linea Sepolia Testnet balance..."
-check_eth_balance
-echocol ""
-
-echocol "Now enter your Linea Sepolia Testnet private key in hex format 0a...1f without 0x prefix"
-read -p "ETH_TESTNET_KEY: " ETH_TESTNET_KEY
-
-if ! [[ "$ETH_TESTNET_KEY" =~ ^[0-9a-fA-F]{64}$ ]]; then
-  echo "Invalid value, received '$ETH_TESTNET_KEY'"
-  exit 1
-fi
-
-echocol ""
-echocol "Generating a password for the RLN membership keystore file..."
-read -p "Press ENTER to continue..." foo
-RLN_RELAY_CRED_PASSWORD=$(LC_ALL=C < /dev/urandom tr -dc ',/.;:<>?!@#$%^&*()+\-_A-Z-a-z-0-9' | head -c${1:-16}; echo)
-
-echocol ""
 echocol "Estimating storage size for DB..."
 read -p "Press ENTER to continue..." foo
 STORAGE_SIZE=$(./set_storage_retention.sh echo-value)
@@ -136,51 +86,16 @@ echocol "They will be saved to '.env'. Press ENTER to confirm or CONTROL-C to ca
 
 echocol ""
 echocol "RLN_RELAY_ETH_CLIENT_ADDRESS: $RLN_RELAY_ETH_CLIENT_ADDRESS"
-echocol "ETH_TESTNET_KEY: $ETH_TESTNET_KEY"
-echocol "ETH_TESTNET_ACCOUNT: $ETH_TESTNET_ACCOUNT"
-echocol "RLN_RELAY_CRED_PASSWORD: $RLN_RELAY_CRED_PASSWORD"
+echocol "RLN_CONTRACT_ADDRESS: $RLN_CONTRACT_ADDRESS"
 echocol "STORAGE_SIZE: $STORAGE_SIZE"
 echocol "POSTGRES_SHM: $POSTGRES_SHM"
 
 read -p "Press ENTER to continue..." foo
 
 echo "RLN_RELAY_ETH_CLIENT_ADDRESS='$RLN_RELAY_ETH_CLIENT_ADDRESS'
-ETH_TESTNET_KEY=$ETH_TESTNET_KEY
-ETH_TESTNET_ACCOUNT=$ETH_TESTNET_ACCOUNT
-RLN_RELAY_CRED_PASSWORD='$RLN_RELAY_CRED_PASSWORD'
+RLN_CONTRACT_ADDRESS=$RLN_CONTRACT_ADDRESS
 STORAGE_SIZE=$STORAGE_SIZE
 POSTGRES_SHM=$POSTGRES_SHM" > ./.env
-
-echocol ""
-echocol "Checking your TTT token balance..."
-USER_BALANCE_RAW=$(cast call $TOKEN_CONTRACT_ADDRESS "balanceOf(address)(uint256)" $ETH_TESTNET_ACCOUNT --rpc-url $RLN_RELAY_ETH_CLIENT_ADDRESS 2>/dev/null)
-USER_BALANCE=$(echo "$USER_BALANCE_RAW" | awk '{print $1}')
-USER_BALANCE=$(echo "$USER_BALANCE / 10^18" | bc)
-
-if [ -z "$USER_BALANCE" ]; then
-  echocol "Could not fetch balance. Please ensure your RPC endpoint and account are correct."
-  exit 1
-fi
-
-echocol "Your current TTT token balance is: $USER_BALANCE"
-echocol "Required amount: $REQUIRED_AMOUNT"
-echocol ""
-
-MINT_CHOICE="y"
-if [ "$USER_BALANCE" -ge "$REQUIRED_AMOUNT" ]; then
-  echocol "You already have enough TTT tokens to register."
-  read -p "Do you want to mint more tokens? (y/N): " MINT_CHOICE
-fi
-
-if [ "$MINT_CHOICE" = "y" ] || [ "$MINT_CHOICE" = "Y" ]; then
-  ./register_rln.sh --mint;
-else
-  ./register_rln.sh --no-mint;
-fi
-
-echocol ""
-echocol "✅ RLN membership registered successfully!"
-echocol ""
 
 echocol "Your node is ready! enter the following command to start it:"
 read -p "Press ENTER to continue..." foo
