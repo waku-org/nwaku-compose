@@ -61,11 +61,12 @@ echo "POSTGRES_SHM=4g" >> .env
 
 Start all processes: nwaku node, database and grafana for metrics. Your [RLN](https://rate-limiting-nullifier.github.io/rln-docs/what_is_rln.html) membership is loaded into nwaku under the hood.
 ```console
-docker-compose up -d
+DOCKER_COMPOSE=$(which docker-compose > /dev/null 2>&1 && echo "docker-compose" || echo "docker compose")
+$DOCKER_COMPOSE up -d
 ```
 ⚠️ The node might take a few minutes the very first time it runs because it needs to build locally the RLN community membership tree.
 
-###🏄🏼‍♂️ 4. Interact with your nwaku node
+### 🏄🏼‍♂️ 4. Interact with your nwaku node
 
 * See [localhost:3000](http://localhost:3000/d/yns_4vFVk/nwaku-monitoring) for node metrics.
 
