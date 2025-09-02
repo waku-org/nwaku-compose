@@ -111,6 +111,7 @@ fi
 exec /usr/bin/wakunode\
     --relay=true\
     --filter=true\
+    --peer-exchange=true\
     ${LIGHTPUSH}\
     --keep-alive=true\
     --max-connections=150\
