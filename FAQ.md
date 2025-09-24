@@ -30,7 +30,7 @@ Your node should have at least 40 connected peers, and you should see some traff
 
 ### My node is not able to start properly
 If you are using Contabo, we recommend moving to a different VPS vendor.
-If not, remove the keystore and rln_tree folders, run the ./register_rln script again, and try to run your node again.
+If not, remove the `keystore` folder, run the `./register_rln.sh` script again, and try to run your node again.
 
 ### Does running a node have any incentives?
 There are currently no incentives in place, but it's something currently being researched and designed.
