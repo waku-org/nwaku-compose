@@ -100,11 +100,11 @@ Please review the latest https://github.com/waku-org/nwaku-compose/blob/master/.
 
 Also, move your Sepolia RPC client (e.g., Infura) to a Linea Sepolia RPC client.
 
-You will need to delete both the `keystore` and `rln_tree` folders, and register your membership again before using the new version by running the following commands:
+You will need to delete the `keystore` folder and register your membership again before using the new version by running the following commands:
 
 1. `cd nwaku-compose` ( go into the root's repository folder )
 2. `docker-compose down`
-3. `sudo rm -r keystore rln_tree`
+3. `sudo rm -r keystore`
 4. `git pull origin master`
 5. `./register_rln.sh`
 6. `docker-compose up -d`
