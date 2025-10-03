@@ -9,7 +9,7 @@
     ```
     cp dogfooding/.env.example.publisher .env
     ```
-2. Obtain test tokens.   
+2. Obtain test tokens.
     The total tokens minted is determined by the amount of ETH sent with the transaction.
 
     ```
