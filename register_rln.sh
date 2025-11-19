@@ -52,7 +52,7 @@ if [ "$NEED_APPROVAL" = "1" ]; then
   fi
 fi
 
-docker run -v "$(pwd)/keystore":/keystore/:Z wakuorg/nwaku:v0.36.0 generateRlnKeystore \
+docker run -v "$(pwd)/keystore":/keystore/:Z harbor.status.im/wakuorg/nwaku:v0.37.0-beta generateRlnKeystore \
 --rln-relay-eth-client-address=${RLN_RELAY_ETH_CLIENT_ADDRESS} \
 --rln-relay-eth-private-key=${ETH_TESTNET_KEY} \
 --rln-relay-eth-contract-address=0xB9cd878C90E49F797B4431fBF4fb333108CB90e6 \
